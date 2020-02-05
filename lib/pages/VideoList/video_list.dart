@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+import 'package:short_video_client1/models/Video.dart';
+import 'package:short_video_client1/pages/VideoList/video_player.dart';
+
+
 class VideoList extends StatelessWidget {
   VideoList({Key key}) : super(key: key);
 
@@ -27,7 +31,6 @@ class VideoList extends StatelessWidget {
 class MyVideoList extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new GridViewState();
-
 }
 
 class GridViewState extends State {
@@ -65,6 +68,7 @@ class GridViewState extends State {
 
 
   Widget getItemWidget() {
+    String url = getPhotoUrl();
     return Container(
 //      color: Colors.black,
       decoration: BoxDecoration(
@@ -75,7 +79,18 @@ class GridViewState extends State {
         children: <Widget>[
           new Container(
             alignment: Alignment.center,
-            child: Image.network(getPhotoUrl(), fit: BoxFit.cover),
+            child: Stack(
+              children: <Widget>[
+                Image.network(url, fit: BoxFit.cover),
+                RaisedButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => new VideoScreen(video: Video(Random().nextInt(10000000), url))
+                    ));
+                  },
+                ),
+              ],
+            ),
           ),
           new Container(
             alignment: Alignment.bottomLeft,
@@ -122,4 +137,8 @@ class GridViewState extends State {
     print(url);
     return url;
   }
+
 }
+
+
+

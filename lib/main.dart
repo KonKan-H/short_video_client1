@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:short_video_client1/pages/following_video.dart';
-import 'package:short_video_client1/pages/user_info.dart';
-import 'package:short_video_client1/pages/video_list.dart';
+import 'file:///D:/Flutter/project/short_video_client1/lib/pages/FollowingVideo/following_video.dart';
+import 'file:///D:/Flutter/project/short_video_client1/lib/pages/UserInfo/user_info.dart';
+import 'file:///D:/Flutter/project/short_video_client1/lib/pages/VideoList/video_list.dart';
 
 void main() {
   runApp(Home());
