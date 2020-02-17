@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:short_video_client1/models/Video.dart';
 import 'package:short_video_client1/pages/VideoList/video_player.dart';
+import 'package:short_video_client1/pages/VideoList/video_player1.dart';
 
 
 class VideoList extends StatelessWidget {
@@ -81,11 +82,12 @@ class GridViewState extends State {
             alignment: Alignment.center,
             child: Stack(
               children: <Widget>[
-                Image.network(url, fit: BoxFit.cover),
+                Image.network(url, fit: BoxFit.cover,),
                 RaisedButton(
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => new VideoScreen(video: Video(Random().nextInt(10000000), url))
+//                      builder: (context) => VideoScreen(video: Video(Random().nextInt(10000000), 'https://www.runoob.com/try/demo_source/mov_bbb.mp4', "作者"))
+                      builder: (context) => VideoPlayerPage(video: Video(Random().nextInt(10000000), 'https://www.runoob.com/try/demo_source/mov_bbb.mp4', "作者"))
                     ));
                   },
                 ),

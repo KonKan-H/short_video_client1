@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'login_page.dart';
+
 class UserInfo extends StatelessWidget {
   UserInfo({Key key}) : super(key: key);
 
@@ -13,7 +15,7 @@ class UserInfo extends StatelessWidget {
           centerTitle: true, //设置标题是否局中
         ),
         body: new Center(
-          child: new Text('用户页面'),
+          child: LoginPage(),
         ),
       ),
     );
