@@ -25,7 +25,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     _videoPlayerController = VideoPlayerController.network(video.url)
       ..initialize().then((_) {
         //确保在视频初始化后显示第一帧，甚至在按下播放按钮之前。
-        setState(() {});
+        setState(() {
+          _videoPlayerController.setLooping(true);
+        });
       });
   }
 
@@ -37,12 +39,16 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       ),
       body: Stack(
         children: <Widget>[
+          //视频播放
           Container(
-            height: 250,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(color: Colors.black),
             child: _videoPlayerController.value.initialized
-                ? AspectRatio(
-              aspectRatio: _videoPlayerController.value.aspectRatio,
-              child: VideoPlayer(_videoPlayerController),
+                ? Container(
+              child: AspectRatio(
+                aspectRatio: _videoPlayerController.value.aspectRatio,
+                child: VideoPlayer(_videoPlayerController),
+              ),
             )
                 : Center(
               child: CircularProgressIndicator(),
@@ -50,18 +56,34 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _videoPlayerController.value.isPlaying
-                ? _videoPlayerController.pause()
-                : _videoPlayerController.play();
-          });
-          print(_videoPlayerController.value);
-        },
-        child: Icon(_videoPlayerController.value.isPlaying
-            ? Icons.pause
-            : Icons.play_arrow),
+      floatingActionButton: Stack(
+        children: <Widget>[
+          Container(
+            alignment: Alignment.bottomRight,
+            child: FloatingActionButton(
+              onPressed: () {
+                setState(() {
+                  _videoPlayerController.value.isPlaying
+                      ? _videoPlayerController.pause()
+                      : _videoPlayerController.play();
+                });
+                print(_videoPlayerController.value);
+              },
+              child: Icon(_videoPlayerController.value.isPlaying
+                  ? Icons.pause
+                  : Icons.play_arrow),
+            ),
+          ),
+          Container(
+            alignment: Alignment.bottomLeft,
+            child: FloatingActionButton(
+              onPressed: (){
+                print("点击了喜欢");
+              },
+              child: Icon(Icons.favorite_border),
+            ),
+          )
+        ],
       ),
     );
   }
