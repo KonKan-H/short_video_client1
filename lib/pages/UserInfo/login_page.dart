@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
+import 'package:short_video_client1/pages/UserInfo/registration_page.dart';
+import 'layout/layout.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -13,15 +15,15 @@ class _LoginPageState extends State<LoginPage> {
   Color _eyeColor;
   List _loginMethod = [
     {
-      "title": "facebook",
+      "title": "wechat",
       "icon": GroovinMaterialIcons.wechat,
     },
     {
-      "title": "google",
+      "title": "facebook",
       "icon": GroovinMaterialIcons.facebook,
     },
     {
-      "title": "twitter",
+      "title": "qq",
       "icon": GroovinMaterialIcons.qqchat,
     },
   ];
@@ -37,10 +39,10 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   height: kToolbarHeight,
                 ),
-                buildTitle(),
-                buildTitleLine(),
+                buildTitle('Login'),
+                buildTitleLine(40.0),
                 SizedBox(height: 70.0),
-                buildEmailTextField(),
+                buildEmailTextField(_email),
                 SizedBox(height: 30.0),
                 buildPasswordTextField(context),
                 buildForgetPasswordText(context),
@@ -71,7 +73,9 @@ class _LoginPageState extends State<LoginPage> {
               onTap: () {
                 //TODO 跳转到注册页面
                 print('去注册');
-                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => RegistrationPage()
+                ));
               },
             ),
           ],
@@ -181,46 +185,6 @@ class _LoginPageState extends State<LoginPage> {
                       : Theme.of(context).iconTheme.color;
                 });
               })),
-    );
-  }
-
-  TextFormField buildEmailTextField() {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: 'Emall Address',
-      ),
-      validator: (String value) {
-        var emailReg = RegExp(
-            r"[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?");
-        if (!emailReg.hasMatch(value)) {
-          return '请输入正确的邮箱地址';
-        }
-      },
-      onSaved: (String value) => _email = value,
-    );
-  }
-
-  Padding buildTitleLine() {
-    return Padding(
-      padding: EdgeInsets.only(left: 12.0, top: 4.0),
-      child: Align(
-        alignment: Alignment.bottomLeft,
-        child: Container(
-          color: Colors.black,
-          width: 40.0,
-          height: 2.0,
-        ),
-      ),
-    );
-  }
-
-  Padding buildTitle() {
-    return Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        'Login',
-        style: TextStyle(fontSize: 42.0),
-      ),
     );
   }
 }

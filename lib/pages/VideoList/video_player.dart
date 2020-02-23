@@ -37,53 +37,32 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       appBar: AppBar(
         title: Text('视频：${video.id}'),
       ),
-      body: Stack(
-        children: <Widget>[
-          //视频播放
-          Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(color: Colors.black),
-            child: _videoPlayerController.value.initialized
-                ? Container(
-              child: AspectRatio(
-                aspectRatio: _videoPlayerController.value.aspectRatio,
-                child: VideoPlayer(_videoPlayerController),
-              ),
-            )
-                : Center(
-              child: CircularProgressIndicator(),
-            ),
+      body: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(color: Colors.black),
+        child: _videoPlayerController.value.initialized
+            ? Container(
+          child: AspectRatio(
+            aspectRatio: _videoPlayerController.value.aspectRatio,
+            child: VideoPlayer(_videoPlayerController),
           ),
-        ],
+        )
+            : Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
-      floatingActionButton: Stack(
-        children: <Widget>[
-          Container(
-            alignment: Alignment.bottomRight,
-            child: FloatingActionButton(
-              onPressed: () {
-                setState(() {
-                  _videoPlayerController.value.isPlaying
-                      ? _videoPlayerController.pause()
-                      : _videoPlayerController.play();
-                });
-                print(_videoPlayerController.value);
-              },
-              child: Icon(_videoPlayerController.value.isPlaying
-                  ? Icons.pause
-                  : Icons.play_arrow),
-            ),
-          ),
-          Container(
-            alignment: Alignment.bottomLeft,
-            child: FloatingActionButton(
-              onPressed: (){
-                print("点击了喜欢");
-              },
-              child: Icon(Icons.favorite_border),
-            ),
-          )
-        ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            _videoPlayerController.value.isPlaying
+                ? _videoPlayerController.pause()
+                : _videoPlayerController.play();
+          });
+          print(_videoPlayerController.value);
+        },
+        child: Icon(_videoPlayerController.value.isPlaying
+            ? Icons.pause
+            : Icons.play_arrow),
       ),
     );
   }

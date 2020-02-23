@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:short_video_client1/pages/common/video_list.dart';
 
 class FollowingVideo extends StatelessWidget {
   FollowingVideo({Key key}) : super(key: key);
@@ -14,7 +15,7 @@ class FollowingVideo extends StatelessWidget {
           centerTitle: true, //设置标题是否局中
         ),
         body: new Center(
-          child: new Text('关注视频'),
+          child: MyVideoList(),
         ),
       ),
     );
