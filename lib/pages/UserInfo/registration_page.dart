@@ -49,6 +49,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
             buildPasswordTextField(context),
             SizedBox(height: 30.0),
             buildPasswordTextFieldAgain(context),
+            SizedBox(height: 60.0),
+            buildLoginButton(context),
           ]
         )
       ),
@@ -90,8 +92,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
         if (value.isEmpty) {
           return '请输入密码';
         }
-        if(_password1 != _password2) {
-          return '两次密码输入不同';
+        if(_password2 != _password1) {
+          return '两次密码输入不一致';
         }
       },
       decoration: InputDecoration(
@@ -111,5 +113,31 @@ class _RegistrationPageState extends State<RegistrationPage> {
               })),
     );
   }
+
+  Align buildLoginButton(BuildContext context) {
+    return Align(
+      child: SizedBox(
+        height: 45.0,
+        width: 270.0,
+        child: RaisedButton(
+          child: Text(
+            'registered',
+            style: Theme.of(context).primaryTextTheme.headline,
+          ),
+          color: Colors.blueAccent,
+          onPressed: () {
+            if (_formKey.currentState.validate()) {
+              ///只有输入的内容符合要求通过才会到达此处
+              _formKey.currentState.save();
+              //TODO 执行登录方法
+              //print('email:$_email , assword:$_password');
+            }
+          },
+          shape: StadiumBorder(side: BorderSide()),
+        ),
+      ),
+    );
+  }
+
 
 }
