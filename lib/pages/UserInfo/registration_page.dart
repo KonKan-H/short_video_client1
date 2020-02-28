@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'layout/layout.dart';
 
@@ -15,6 +17,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   String _email, _password1, _password2;
   bool _isObscure = true;
   Color _eyeColor;
+
 
   @override
   void initState() {
@@ -44,7 +47,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             buildTitle('Registration'),
             buildTitleLine(100.0),
             SizedBox(height: 70.0),
-            buildEmailTextField(_email),
+            buildPhoneTextField(_email),
             SizedBox(height: 30.0),
             buildPasswordTextField(context),
             SizedBox(height: 30.0),

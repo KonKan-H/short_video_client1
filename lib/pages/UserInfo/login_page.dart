@@ -10,7 +10,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  String _email, _password;
+  String _mobilePhone, _password;
   bool _isObscure = true;
   Color _eyeColor;
   List _loginMethod = [
@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
                 buildTitle('Login'),
                 buildTitleLine(40.0),
                 SizedBox(height: 70.0),
-                buildEmailTextField(_email),
+                buildPhoneTextField(_mobilePhone),
                 SizedBox(height: 30.0),
                 buildPasswordTextField(context),
                 buildForgetPasswordText(context),
@@ -71,7 +71,6 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(color: Colors.green),
               ),
               onTap: () {
-                //TODO 跳转到注册页面
                 print('去注册');
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) => RegistrationPage()
@@ -134,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
               ///只有输入的内容符合要求通过才会到达此处
               _formKey.currentState.save();
               //TODO 执行登录方法
-              print('email:$_email , assword:$_password');
+              print('email:$_mobilePhone , assword:$_password');
             }
           },
           shape: StadiumBorder(side: BorderSide()),

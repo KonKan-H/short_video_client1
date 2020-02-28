@@ -26,19 +26,19 @@ Padding buildTitle(String title) {
   );
 }
 
-//邮箱输入框
-TextFormField buildEmailTextField(String _email) {
+//手机号输入框
+TextFormField buildPhoneTextField(String _mobilePhone) {
   return TextFormField(
     decoration: InputDecoration(
-      labelText: 'Emall Address',
+      labelText: 'MobilePhone',
     ),
     validator: (String value) {
-      var emailReg = RegExp(
-          r"[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?");
-      if (!emailReg.hasMatch(value)) {
-        return '请输入正确的邮箱地址';
+      var phoneReg = RegExp(
+          r"^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$");
+      if (!phoneReg.hasMatch(value)) {
+        return '请输入正确的手机号';
       }
     },
-    onSaved: (String value) => _email = value,
+    onSaved: (String value) => _mobilePhone = value,
   );
 }
