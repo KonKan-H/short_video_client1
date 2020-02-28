@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
                 buildTitle('Login'),
                 buildTitleLine(40.0),
                 SizedBox(height: 70.0),
-                buildPhoneTextField(_mobilePhone),
+                buildPhoneTextField(),
                 SizedBox(height: 30.0),
                 buildPasswordTextField(context),
                 buildForgetPasswordText(context),
@@ -54,6 +54,23 @@ class _LoginPageState extends State<LoginPage> {
                 buildRegisterText(context),
               ],
             )));
+  }
+
+  //手机号输入框
+  TextFormField buildPhoneTextField() {
+    return TextFormField(
+      decoration: InputDecoration(
+        labelText: 'MobilePhone',
+      ),
+      validator: (String value) {
+        var phoneReg = RegExp(
+            r"^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$");
+        if (!phoneReg.hasMatch(value)) {
+          return '请输入正确的手机号';
+        }
+      },
+      onSaved: (String value) => _mobilePhone = value,
+    );
   }
 
   Align buildRegisterText(BuildContext context) {

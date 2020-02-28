@@ -28,6 +28,7 @@ dependencies:
   font_awesome_flutter: ^8.2.0
   groovin_material_icons: ^1.1.5
   toast: ^0.1.5
+  dio: 3.0.9
 
 dev_dependencies:
   flutter_test:

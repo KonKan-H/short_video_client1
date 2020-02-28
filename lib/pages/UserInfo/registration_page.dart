@@ -1,6 +1,8 @@
-import 'dart:io';
 
+import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:short_video_client1/http/url_string.dart';
 import 'layout/layout.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -14,10 +16,9 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   final _formKey = GlobalKey<FormState>();
-  String _email, _password1, _password2;
+  String _mobilePhone, _password1, _password2;
   bool _isObscure = true;
   Color _eyeColor;
-
 
   @override
   void initState() {
@@ -47,7 +48,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             buildTitle('Registration'),
             buildTitleLine(100.0),
             SizedBox(height: 70.0),
-            buildPhoneTextField(_email),
+            buildPhoneTextField(),
             SizedBox(height: 30.0),
             buildPasswordTextField(context),
             SizedBox(height: 30.0),
@@ -57,6 +58,23 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ]
         )
       ),
+    );
+  }
+
+  //手机号输入框
+  TextFormField buildPhoneTextField() {
+    return TextFormField(
+      decoration: InputDecoration(
+        labelText: 'MobilePhone',
+      ),
+      validator: (String value) {
+        var phoneReg = RegExp(
+            r"^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$");
+        if (!phoneReg.hasMatch(value)) {
+          return '请输入正确的手机号';
+        }
+      },
+      onSaved: (String value) => _mobilePhone = value,
     );
   }
 
@@ -128,12 +146,24 @@ class _RegistrationPageState extends State<RegistrationPage> {
             style: Theme.of(context).primaryTextTheme.headline,
           ),
           color: Colors.blueAccent,
-          onPressed: () {
+          onPressed: () async {
+            print("mobilePhone: $_mobilePhone, password: $_password1");
             if (_formKey.currentState.validate()) {
               ///只有输入的内容符合要求通过才会到达此处
               _formKey.currentState.save();
               //TODO 执行登录方法
-              //print('email:$_email , assword:$_password');
+             try {
+               Response response;
+               Dio dio = new Dio();
+               dio.options.responseType = ResponseType.plain;
+               //dio.options.baseUrl = URL.url_base + "/v1/registration/api";
+               response = await dio.post(URL.url_base + "/v1/registration/api",
+                   data: {"mobilePhone": _mobilePhone, "password": _password1});
+               print(response.data.toString());
+             }
+             catch(e) {
+                print(e);
+             }
             }
           },
           shape: StadiumBorder(side: BorderSide()),
