@@ -1,9 +1,12 @@
-
+import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:short_video_client1/http/url_string.dart';
+import 'package:short_video_client1/models/Result.dart';
+import 'package:short_video_client1/tools.dart';
 import 'layout/layout.dart';
+
 
 class RegistrationPage extends StatefulWidget {
   RegistrationPage({Key key}) : super(key: key);
@@ -86,6 +89,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
         if (value.isEmpty) {
           return '请输入密码';
         }
+        if(value.length < 6 || value.length > 18) {
+          return '密码不能小于6个字符或大于18个字符';
+        }
       },
       decoration: InputDecoration(
           labelText: 'password',
@@ -153,13 +159,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
               _formKey.currentState.save();
               //TODO 执行登录方法
              try {
-               Response response;
-               Dio dio = new Dio();
-               dio.options.responseType = ResponseType.plain;
-               //dio.options.baseUrl = URL.url_base + "/v1/registration/api";
-               response = await dio.post(URL.url_base + "/v1/registration/api",
-                   data: {"mobilePhone": _mobilePhone, "password": _password1});
-               print(response.data.toString());
+               Map<String, dynamic> data = {
+                 "mobilePhone": _mobilePhone,
+                 "password": TsUtils.generateMd5(_password1)
+               };
+               Result result = await TsUtils.dioPost('/v1/registration/api', data);
+               print(result.msg);
+               TsUtils.showShort(result.msg);
              }
              catch(e) {
                 print(e);
