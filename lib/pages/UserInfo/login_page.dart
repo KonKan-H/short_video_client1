@@ -4,7 +4,8 @@ import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:short_video_client1/http/url_string.dart';
 import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/pages/UserInfo/registration_page.dart';
-import 'package:short_video_client1/tools.dart';
+import 'package:short_video_client1/resources/strings.dart';
+import 'file:///D:/Flutter/project/short_video_client1/lib/resources/tools.dart';
 import 'layout/layout.dart';
 
 class LoginPage extends StatefulWidget {
@@ -148,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
             'Login',
             style: Theme.of(context).primaryTextTheme.headline,
           ),
-          color: Colors.blueAccent,
+          color: ConstantData.MAIN_COLOR,
           onPressed: () async {
             if (_formKey.currentState.validate()) {
               ///只有输入的内容符合要求通过才会到达此处
@@ -157,13 +158,13 @@ class _LoginPageState extends State<LoginPage> {
 //              print('email:$_mobilePhone , assword:$_password');
               Map<String, dynamic> data = {
                 "mobilePhone": _mobilePhone,
-                "password": _password
+                "password": TsUtils.generateMd5(_password)
               };
               Result result = await TsUtils.dioPost('/v1/login/api', data);
               print(result.msg);
               TsUtils.showShort(result.msg);
               if(result.data != null) {
-
+//                Navigator.push(context, "");
               }
             }
           },

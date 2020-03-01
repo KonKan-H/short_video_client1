@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:short_video_client1/resources/strings.dart';
 
 import 'login_page.dart';
 
@@ -7,17 +8,15 @@ class UserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text("用户页面"),
-          backgroundColor: Color.fromARGB(255, 119, 136, 213), //设置appbar背景颜色
+          backgroundColor: ConstantData.MAIN_COLOR, //设置appbar背景颜色
           centerTitle: true, //设置标题是否局中
         ),
         body: Center(
           child: LoginPage(),
         ),
-      ),
     );
   }
 }

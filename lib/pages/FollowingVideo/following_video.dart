@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:short_video_client1/pages/common/video_list.dart';
+import 'package:short_video_client1/resources/strings.dart';
 
 class FollowingVideo extends StatelessWidget {
   FollowingVideo({Key key}) : super(key: key);
@@ -7,17 +8,16 @@ class FollowingVideo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return new MaterialApp(
-      home: new Scaffold(
+    return Scaffold(
         appBar: new AppBar(
           title: new Text("关注视频"),
-          backgroundColor: Color.fromARGB(255, 119, 136, 213), //设置appbar背景颜色
+          backgroundColor: ConstantData.MAIN_COLOR, //设置appbar背景颜色
           centerTitle: true, //设置标题是否局中
         ),
         body: new Center(
           child: MyVideoList(),
         ),
-      ),
+
     );
   }
 }

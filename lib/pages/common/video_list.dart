@@ -4,11 +4,14 @@ import 'package:short_video_client1/models/Video.dart';
 import 'package:short_video_client1/pages/VideoList/video_player.dart';
 
 class MyVideoList extends StatefulWidget {
+  MyVideoList({Key key}):super(key: key);
+
   @override
   State<StatefulWidget> createState() => new GridViewState();
 }
 
 class GridViewState extends State {
+
   @override
   Widget build(BuildContext context) =>
       new GridView(
@@ -58,9 +61,10 @@ class GridViewState extends State {
               children: <Widget>[
                 Image.network(url, fit: BoxFit.cover,),
                 // TODO: 取消按钮更改
-                RaisedButton(
-                  onPressed: () {
+                InkWell(
+                  onTap: () {
                     Navigator.push(context, MaterialPageRoute(
+//                  Navigator.of(parentContext).push(MaterialPageRoute(
 //                      builder: (context) => VideoScreen(video: Video(Random().nextInt(10000000), 'https://www.runoob.com/try/demo_source/mov_bbb.mp4', "作者"))
                         builder: (context) => VideoPlayerPage(video: Video(Random().nextInt(10000000), 'https://aweme.snssdk.com/aweme/v1/playwm/?s_vid=93f1b41336a8b7a442dbf1c29c6bbc560f641c6c47b7bd3078f5dfd249c38b4b04f03514ce6bab0456860d6cf65253383eeb760ecc50fb8dc6461e5fa7b82702&line=0', "作者"))
                     ));
@@ -71,7 +75,6 @@ class GridViewState extends State {
           ),
 
           new Container(
-            key: Key('头像'),
             alignment: Alignment.bottomLeft,
             child: new Container(
               width: 40,
