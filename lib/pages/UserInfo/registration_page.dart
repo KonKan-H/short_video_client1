@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:short_video_client1/http/url_string.dart';
 import 'package:short_video_client1/models/Result.dart';
+import 'package:short_video_client1/net/api.dart';
 import 'package:short_video_client1/resources/strings.dart';
 import 'file:///D:/Flutter/project/short_video_client1/lib/resources/tools.dart';
 import 'layout/layout.dart';
@@ -40,6 +40,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('注册页面'),
+        backgroundColor: ConstantData.MAIN_COLOR,
       ),
       body: Form(
         key: _formKey,
@@ -164,7 +165,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                  "mobilePhone": _mobilePhone,
                  "password": TsUtils.generateMd5(_password1)
                };
-               Result result = await TsUtils.dioPost('/v1/registration/api', data);
+               Result result = await TsUtils.dioPost(URL.USER_REGISTER, data);
                print(result.msg);
                TsUtils.showShort(result.msg);
              }
@@ -178,6 +179,4 @@ class _RegistrationPageState extends State<RegistrationPage> {
       ),
     );
   }
-
-
 }

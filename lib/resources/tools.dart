@@ -5,7 +5,6 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:short_video_client1/http/url_string.dart';
 import 'package:short_video_client1/models/Result.dart';
 class TsUtils{
   // md5 加密
@@ -20,7 +19,7 @@ class TsUtils{
     Response response;
     Dio dio = new Dio();
     dio.options.responseType = ResponseType.plain;
-    response = await dio.post(URL.url_base + url, data: data);
+    response = await dio.post(url, data: data);
     Result result = Result.formJson(json.decode(response.data));
     return result;
   }

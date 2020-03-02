@@ -43,12 +43,9 @@ class GridViewState extends State {
 
   //String url = "http://img5.mtime.cn/CMS/News/2020/02/03/125338.16865277_620X620.jpg";
 
-
-
   Widget getItemWidget() {
     String url = getPhotoUrl();
     return Container(
-//      color: Colors.black,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(3),///圆角
           border: Border.all(color: Colors.grey,width: 1)///边框颜色、宽

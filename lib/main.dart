@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'file:///D:/Flutter/project/short_video_client1/lib/pages/FollowingVideo/following_video.dart';
-import 'file:///D:/Flutter/project/short_video_client1/lib/pages/UserInfo/user_info.dart';
+import 'file:///D:/Flutter/project/short_video_client1/lib/pages/UserInfo/my_home_page.dart';
 import 'file:///D:/Flutter/project/short_video_client1/lib/pages/VideoList/video_list.dart';
 import 'package:short_video_client1/resources/strings.dart';
 
@@ -43,7 +43,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           children: <Widget>[
             new VideoList(),
             new FollowingVideo(),
-            new UserInfo(),
+            new MyHomePage(),
           ],
         ),
         bottomNavigationBar: new Material(

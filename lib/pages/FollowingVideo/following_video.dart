@@ -17,7 +17,6 @@ class FollowingVideo extends StatelessWidget {
         body: new Center(
           child: MyVideoList(),
         ),
-
     );
   }
 }
