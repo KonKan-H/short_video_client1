@@ -15,9 +15,7 @@ class MyHomePage extends StatelessWidget {
           backgroundColor: ConstantData.MAIN_COLOR, //设置appbar背景颜色
           centerTitle: true, //设置标题是否局中
         ),
-        body: Center(
-          child: LoginPage(),
-        ),
+        body: MyInfoPage(),
     );
   }
 }
