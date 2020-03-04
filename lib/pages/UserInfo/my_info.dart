@@ -20,7 +20,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
   //用户头像
   String userAvatar;
   String userName;
-  var titles = ['我的消息', '我的视频',  "我的问答", "我的活动", "我的团队", "邀请好友",];
+  var titles = ['我的消息', '我的视频',  "我的关注", "我的粉丝"];
 
   @override
   void initState() {
@@ -28,9 +28,11 @@ class _MyInfoPageState extends State<MyInfoPage> {
     _getUserInfo();
     OsApplication.eventBus.on<LoginEvent>().listen((event) {
       setState(() {
-        if(event != null && event.userName != null && event.userAvatar != null) {
+        if(event != null && event.userName != null) {
           userName = event.userName;
-          userAvatar = event.userAvatar;
+          if(event.userAvatar != null) {
+            userAvatar = event.userAvatar;
+          }
         } else {
           userName = null;
           userAvatar = null;
@@ -137,9 +139,11 @@ class _MyInfoPageState extends State<MyInfoPage> {
 
   _getUserInfo() {
     UserUntil.getUserInfo().then((user) {
-      if(user != null && user.userName != null && user.userAvatar != null) {
+      if(user != null && user.userName != null) {
         userName = user.userName;
-        userAvatar = user.userAvatar;
+        if(user.userAvatar != null) {
+          userAvatar = user.userAvatar;
+        }
       }
     });
   }

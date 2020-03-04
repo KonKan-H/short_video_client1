@@ -33,37 +33,53 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('视频：${video.id}'),
-      ),
-      body: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(color: Colors.black),
-        child: _videoPlayerController.value.initialized
-            ? Container(
-          child: AspectRatio(
-            aspectRatio: _videoPlayerController.value.aspectRatio,
-            child: VideoPlayer(_videoPlayerController),
+    //取得屏幕宽度
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    return Stack(
+      children: <Widget>[
+        Scaffold(
+          appBar: AppBar(
+              title: Text('视频：${video.id}'),
           ),
-        )
-            : Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _videoPlayerController.value.isPlaying
+          body: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(color: Colors.black),
+            child: _videoPlayerController.value.initialized
+              ? Container(
+                child: AspectRatio(
+                  aspectRatio: _videoPlayerController.value.aspectRatio,
+                  child: VideoPlayer(_videoPlayerController),
+                ),
+              )
+                  : Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              setState(() {
+              _videoPlayerController.value.isPlaying
                 ? _videoPlayerController.pause()
-                : _videoPlayerController.play();
-          });
-          print(_videoPlayerController.value);
-        },
-        child: Icon(_videoPlayerController.value.isPlaying
+                    : _videoPlayerController.play();
+                });
+              print(_videoPlayerController.value);
+            },
+            child: Icon(_videoPlayerController.value.isPlaying
             ? Icons.pause
-            : Icons.play_arrow),
-      ),
+                : Icons.play_arrow),
+          ),
+        ),
+        Positioned(
+          right: 0,
+          width: 0.20 * screenWidth,
+          height: 0.4 * screenHeight,
+          top: 0.32 * screenHeight,
+          child: Container(
+//            decoration: BoxDecoration(color: Colors.orange),
+            child: _getButtonList(),),
+        ),
+      ],
     );
   }
 
@@ -72,6 +88,58 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     super.dispose();
     _videoPlayerController.dispose();
   }
+
+  _getButtonList() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        Container(
+          width: 60,
+          height: 70,
+          child: Stack(children: <Widget>[
+            Container(
+              width: 60,
+              height: 60,
+              child: CircleAvatar(backgroundImage: NetworkImage("https:"
+                  "//dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/"
+                  "u=612723378,2699755568&fm=111&gp=0.jpg"),),
+            ),
+            Positioned(bottom: 0, left: 17.5,
+              child: Container(
+                width: 25,
+                height: 25,
+                decoration: BoxDecoration(
+                    color: Colors.redAccent,
+                    borderRadius: BorderRadius.circular(25)
+                ),
+                child: Icon(Icons.add, size: 20, color: Colors.white,),),)
+          ],),
+        ),
+        IconText(text: "999w", icon: Icon(Icons.favorite, size: 50, color: Colors.redAccent,),),
+        IconText(text: "评论", icon: Icon(Icons.feedback, size: 50, color: Colors.white,),),
+        IconText(text: "分享", icon: Icon(Icons.reply, size: 50, color: Colors.white,),),
+      ],
+    );
+  }
 }
+
+class IconText extends StatelessWidget {
+  IconText({Key key, this.icon, this.text}) : super(key: key);
+  final Icon icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          icon,
+          Text(text, style: TextStyle(color: Colors.white),),
+        ],),
+    );
+  }
+}
+
 
 
