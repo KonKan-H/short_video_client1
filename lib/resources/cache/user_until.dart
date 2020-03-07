@@ -13,7 +13,7 @@ class UserUntil{
   static const USER_COOKIE = 'user_cookie';
 
   //保存用户信息
-  static void saveUserInfo(User user) async {
+  static void saveUserInfo(UserInfo user) async {
     if(user != null){
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       sharedPreferences.setInt(USER_ID, user.id);
@@ -35,23 +35,23 @@ class UserUntil{
   }
 
   //获取用户信息
-  static Future<User> getUserInfo() async {
+  static Future<UserInfo> getUserInfo() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     int id = sharedPreferences.getInt(USER_ID);
     String userName = sharedPreferences.getString(USER_NAME);
     String userAvatar = sharedPreferences.getString(USER_AVATAR);
     String mobilePhone = sharedPreferences.getString(USER_MOBILEPHONE);
-    return User(id, userName, userAvatar, mobilePhone);
+    return UserInfo(id, userName, userAvatar, mobilePhone);
   }
 
   //把map转为User
-  static Future<User> map2User(Map<String, dynamic> map) async {
+  static Future<UserInfo> map2User(Map<String, dynamic> map) async {
     if(map != null) {
       int id = map['id'];
       String userName = map['userName'];
       String mobilePhone = map['mobilePhone'];
       String userAvatar = map['userAvatar'];
-      return User(id, userName, userAvatar, mobilePhone);
+      return UserInfo(id, userName, userAvatar, mobilePhone);
     } else {
       return null;
     }

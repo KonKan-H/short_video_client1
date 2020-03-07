@@ -1,9 +1,9 @@
-class User {
+class UserInfo {
   int id;
   String userName;
   String userAvatar;
   String mobilePhone;
 
-  User(this.id, this.userName, this.userAvatar, this.mobilePhone);
+  UserInfo(this.id, this.userName, this.userAvatar, this.mobilePhone);
 
 }

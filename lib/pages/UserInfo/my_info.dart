@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:short_video_client1/app/OsApplication.dart';
-import 'package:short_video_client1/event/LoginEvent.dart';
+import 'package:short_video_client1/event/login_event.dart';
 import 'package:short_video_client1/pages/UserInfo/user_detail_info_page.dart';
 import 'package:short_video_client1/resources/cache/user_until.dart';
 import 'package:short_video_client1/resources/strings.dart';
@@ -20,6 +20,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
   //用户头像
   String userAvatar;
   String userName;
+  String sex;
   var titles = ['我的消息', '我的视频',  "我的关注", "我的粉丝"];
 
   @override
@@ -79,7 +80,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                 ),
                 Container(
                   margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-                  child: Text(userAvatar == null ?
+                  child: Text(userName == null ?
                   '点击头像登录' : userName, style: TextStyle(color: Colors.white, fontSize: 16.0),),
                 ),
               ],
