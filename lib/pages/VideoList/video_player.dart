@@ -8,7 +8,7 @@ class VideoPlayerPage extends StatefulWidget {
 
   @override
   _VideoPlayerPageState createState() => _VideoPlayerPageState(
-      video: Video(video.id, video.url, video.author));
+      video: video);
 //        video: Video(Random().nextInt(100000000), AppString.VIDEO_URL_HEADER + "/hls/v4.m3u8"));
 
 }

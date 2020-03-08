@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/resources/net/api.dart';
+import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
 import 'file:///D:/Flutter/project/short_video_client1/lib/resources/tools.dart';
 import 'layout/layout.dart';
@@ -165,7 +166,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                  "mobilePhone": _mobilePhone,
                  "password": TsUtils.generateMd5(_password1)
                };
-               Result result = await TsUtils.dioPost(URL.USER_REGISTER, data);
+               Result result = await DioRequest.dioPost(URL.USER_REGISTER, data);
                print(result.msg);
                TsUtils.showShort(result.msg);
              }

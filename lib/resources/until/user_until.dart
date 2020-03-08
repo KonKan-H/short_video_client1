@@ -7,51 +7,51 @@ class UserUntil{
   static const USER_ID = 'user_id';
   static const USER_NAME = 'user_name';
   static const USER_AVATAR = 'user_avatar';
-  static const USER_MOBILEPHONE = 'user_mobile_phone';
+  static const USER_MOBILE_PHONE = 'user_mobile_phone';
   static const USER_TOKEN_TYPE = 'user_token_type';
   static const USER_EXPIRES_IN = 'user_expires_in';
   static const USER_COOKIE = 'user_cookie';
 
   //保存用户信息
-  static void saveUserInfo(UserInfo user) async {
+  static void saveUserInfo(User user) async {
     if(user != null){
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       sharedPreferences.setInt(USER_ID, user.id);
       sharedPreferences.setString(USER_NAME, user.userName);
-      sharedPreferences.setString(USER_MOBILEPHONE, user.mobilePhone);
+      sharedPreferences.setString(USER_MOBILE_PHONE, user.mobilePhone);
       sharedPreferences.setString(USER_AVATAR, user.userAvatar);
     }
   }
 
-  //清楚用户信息
+  //清除用户信息
   static Future<void> cleanUserInfo() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setInt(USER_ID, null);
     sharedPreferences.setString(USER_NAME, null);
-    sharedPreferences.setString(USER_MOBILEPHONE, null);
+    sharedPreferences.setString(USER_MOBILE_PHONE, null);
     sharedPreferences.setString(USER_AVATAR, null);
     saveUserInfo(null);
     OsApplication.cookie = null;
   }
 
   //获取用户信息
-  static Future<UserInfo> getUserInfo() async {
+  static Future<User> getUserInfo() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     int id = sharedPreferences.getInt(USER_ID);
     String userName = sharedPreferences.getString(USER_NAME);
     String userAvatar = sharedPreferences.getString(USER_AVATAR);
-    String mobilePhone = sharedPreferences.getString(USER_MOBILEPHONE);
-    return UserInfo(id, userName, userAvatar, mobilePhone);
+    String mobilePhone = sharedPreferences.getString(USER_MOBILE_PHONE);
+    return User(id, userName, userAvatar, mobilePhone);
   }
 
   //把map转为User
-  static Future<UserInfo> map2User(Map<String, dynamic> map) async {
+  static Future<User> map2User(Map<String, dynamic> map) async {
     if(map != null) {
       int id = map['id'];
       String userName = map['userName'];
       String mobilePhone = map['mobilePhone'];
       String userAvatar = map['userAvatar'];
-      return UserInfo(id, userName, userAvatar, mobilePhone);
+      return User(id, userName, userAvatar, mobilePhone);
     } else {
       return null;
     }

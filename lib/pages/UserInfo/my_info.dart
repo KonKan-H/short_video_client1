@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:short_video_client1/app/OsApplication.dart';
 import 'package:short_video_client1/event/login_event.dart';
+import 'package:short_video_client1/models/User.dart';
+import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/pages/UserInfo/user_detail_info_page.dart';
-import 'package:short_video_client1/resources/cache/user_until.dart';
 import 'package:short_video_client1/resources/strings.dart';
-
+import 'package:short_video_client1/resources/until/user_info_until.dart';
+import 'package:short_video_client1/resources/until/user_until.dart';
 import 'login_page.dart';
 
 class MyInfoPage extends StatefulWidget {
@@ -21,7 +23,10 @@ class _MyInfoPageState extends State<MyInfoPage> {
   String userAvatar;
   String userName;
   String sex;
-  var titles = ['我的消息', '我的视频',  "我的关注", "我的粉丝"];
+  String area;
+  String introduction;
+  int age;
+  var titles = ['我的消息', '我的视频',  "我的关注", "我的粉丝", '退出登录'];
 
   @override
   void initState() {
@@ -58,7 +63,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
           iconTheme: IconThemeData(color: Colors.transparent),
           flexibleSpace: InkWell(
             onTap: () {
-              userAvatar == null ? _loginPage(): _userDetail();
+              userName == null ? _loginPage(): _userDetail();
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -134,7 +139,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
 
   _userDetail() {
     Navigator.push(context, MaterialPageRoute(
-      builder: (context) => UserInfoPage()
+      builder: (context) => UserDetailInfoPage()
     ));
   }
 

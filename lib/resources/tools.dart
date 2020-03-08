@@ -15,15 +15,6 @@ class TsUtils{
     return hex.encode(digest.bytes);
   }
 
-  static Future<Result> dioPost(String url, Map<String, dynamic> data) async {
-    Response response;
-    Dio dio = new Dio();
-    dio.options.responseType = ResponseType.plain;
-    response = await dio.post(url, data: data);
-    Result result = Result.formJson(json.decode(response.data));
-    return result;
-  }
-
   static showShort(String msg){
     Fluttertoast.showToast(
         msg: msg,

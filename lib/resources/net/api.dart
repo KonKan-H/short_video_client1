@@ -7,4 +7,7 @@ class URL{
 
   //登录
   static const String USER_LOGIN = BASE_URL + '/v1/login/api';
+
+  //更新信息
+  static const String USER_INFO_UPDATE = BASE_URL + '/v1/userInfo/api';
 }

@@ -5,10 +5,13 @@ import 'package:short_video_client1/app/OsApplication.dart';
 import 'package:short_video_client1/event/login_event.dart';
 import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/models/User.dart';
+import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/pages/UserInfo/registration_page.dart';
-import 'package:short_video_client1/resources/cache/user_until.dart';
 import 'package:short_video_client1/resources/net/api.dart';
+import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
+import 'package:short_video_client1/resources/until/user_info_until.dart';
+import 'package:short_video_client1/resources/until/user_until.dart';
 import 'file:///D:/Flutter/project/short_video_client1/lib/resources/tools.dart';
 import 'layout/layout.dart';
 import 'my_home_page.dart';
@@ -161,19 +164,20 @@ class _LoginPageState extends State<LoginPage> {
             if (_formKey.currentState.validate()) {
               ///只有输入的内容符合要求通过才会到达此处
               _formKey.currentState.save();
-              //TODO 执行登录方法
               print('mobilePhone:$_mobilePhone , password:$_password');
               Map<String, dynamic> data = {
                 "mobilePhone": _mobilePhone,
                 "password": TsUtils.generateMd5(_password)
               };
-              Result result = await TsUtils.dioPost(URL.USER_LOGIN, data);
+              Result result = await DioRequest.dioPost(URL.USER_LOGIN, data);
               print(result.msg);
               TsUtils.showShort(result.msg);
               if(result.data != null) {
-                UserInfo user = await UserUntil.map2User(result.data);
-                OsApplication.eventBus.fire(LoginEvent(user.userName, user.userAvatar));
+                UserInfo userInfo = await UserInfoUntil.map2UserInfo(result.data);
+                User user = User(userInfo.userId, userInfo.userName, userInfo.userAvatar, userInfo.mobilePhone);
+                OsApplication.eventBus.fire(LoginEvent(userInfo.userId, user.userName, user.userAvatar, userInfo.age, userInfo.sex, userInfo.area, userInfo.introduction));
                 UserUntil.saveUserInfo(user);
+                UserInfoUntil.saveUserInfo(userInfo);
                 Navigator.pop(context);
               }
             }
