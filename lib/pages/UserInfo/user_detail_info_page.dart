@@ -22,8 +22,8 @@ class UserDetailInfoPage extends StatefulWidget {
 }
 
 class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
-  String userName, userAvatar, sex, area, introduction, age;
-  int userId;
+  String userName, userAvatar, sex, area, introduction, age, mobilePhone;
+  int userId, id;
   File _image;
 //  WidgetsUtils widgetsUtils;
 
@@ -41,19 +41,17 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
     super.initState();
     _getUserInfo();
     OsApplication.eventBus.on<LoginEvent>().listen((event) {
-      setState(() {
-        if(event != null) {
-          userName = event.userName;
-          userAvatar = event.userAvatar;
-          age = event.age.toString();
-          area = event.area;
-          sex = event.sex;
-          userAvatar = event.userAvatar;
-          userId = event.userId;
-        } else {
-          userName = null;
-        }
-      });
+      if(event != null) {
+        userName = event.userName;
+        userAvatar = event.userAvatar;
+        age = event.age.toString();
+        area = event.area;
+        sex = event.sex;
+        userAvatar = event.userAvatar;
+        userId = event.userId;
+      } else {
+        userName = null;
+      }
     });
   }
 
@@ -72,17 +70,11 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
   Widget initInputBody() {
     List<Widget> items = [];
     items.addAll(initHeaderItem(null));
-    items.addAll(initInputItem('用户名', '请输入用户名',
-        userName == null? _userNameController: _userNameController = TextEditingController.fromValue(TextEditingValue(text: userName))));
-    items.addAll(initInputItem('性别', '请输入性别',
-        sex == null? _userSexController:_userSexController = TextEditingController.fromValue(TextEditingValue(text: sex))));
-    items.addAll(initInputItem('年龄', '请输入年龄',
-        age == null? _userAgeController: _userAgeController = TextEditingController.fromValue(TextEditingValue(text: age))));
-    items.addAll(initInputItem('地区', '请输入地区',
-        area == null? _userAreaController: _userAreaController = TextEditingController.fromValue(TextEditingValue(text: area))));
-    items.addAll(
-        initInputItem('简介', '介绍下自己吧',
-            introduction == null? _userIntroController: _userIntroController = TextEditingController.fromValue(TextEditingValue(text: introduction)), maxLines: 5));
+    items.addAll(initInputItem('用户名', '请输入用户名', _userNameController, userName));
+    items.addAll(initInputItem('性别', '请输入性别', _userSexController, sex));
+    items.addAll(initInputItem('年龄', '请输入年龄', _userAgeController, age));
+    items.addAll(initInputItem('地区', '请输入地区', _userAreaController, area));
+    items.addAll(initInputItem('简介', '介绍下自己吧', _userIntroController, introduction, maxLines: 5));
     items.add(initSubmitBtn());
     return new Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -172,7 +164,7 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
   }
 
 //  初始化输入的item
-  List<Widget> initInputItem(var leftMsg, var hintMsg, var controller,
+  List<Widget> initInputItem(var leftMsg, var hintMsg, TextEditingController controller, var content,
       {var maxLines = 1}) {
     List<Widget> item = [];
     item.add(
@@ -198,7 +190,7 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
                     style: hintRes,
                     maxLines: maxLines,
                     textAlign: maxLines == 1 ? TextAlign.end : TextAlign.end,
-                    controller: controller,
+                    controller: content == null ? controller : controller = TextEditingController.fromValue(TextEditingValue(text: content)),
                     decoration: InputDecoration.collapsed(hintText: hintMsg),
                     obscureText: false,
                   ),
@@ -223,14 +215,18 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
         elevation: 2.0,
         child: new MaterialButton(
           onPressed: () async {
-//            print('=' + _userNameController.text + '=' + _userAgeController.text
-//                + '=' + _userSexController.text + '=' + _userAreaController.text
-//                + '=' + _userIntroController.text);
+          if(_userSexController.text != null) {
+            if(_userSexController.text != "男" && _userSexController.text != "女" ) {
+              print(_userSexController.text);
+              TsUtils.showShort("请输入正确格式的性别");
+              return;
+            }
+          }
             Map<String, dynamic> data = {
               'userId': userId,
               'age': _userAgeController.text,
               'userName': _userNameController.text,
-//              'userAvatar':,
+//              'userAvatar': ,
               'sex': _userSexController.text,
               'area': _userAreaController.text,
               'introducton': _userIntroController.text
@@ -238,6 +234,18 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
             Result result = await DioRequest.dioPut(URL.USER_INFO_UPDATE, data);
             print(result.msg);
             TsUtils.showShort(result.msg);
+            UserInfo userInfo = new UserInfo();
+            userInfo.id = id;
+            userInfo.userId = userId;
+            userInfo.userName = _userNameController.text;
+            userInfo.mobilePhone = mobilePhone;
+            userInfo.userAvatar = null;
+            userInfo.sex = _userSexController.text;
+            userInfo.area = _userAreaController.text;
+            userInfo.introduction = _userIntroController.text;
+            UserInfoUntil.saveUserInfo(userInfo);
+            OsApplication.eventBus.fire(LoginEvent(userInfo.userId, userInfo.userName, userInfo.userAvatar,
+                userInfo.age, userInfo.sex, userInfo.area, userInfo.introduction));
           },
           child: new Text(
             '确认修改',
@@ -301,16 +309,23 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
   }
 
   _getUserInfo() {
-      UserInfoUntil.getUserInfo().then((userInfo) {
-      if(userInfo != null) {
-        userName = userInfo.userName;
-        userAvatar = userInfo.userAvatar;
-        age = userInfo.age as String;
-        area = userInfo.area;
-        sex = userInfo.sex;
-        userAvatar = userInfo.userAvatar;
-        userId = userInfo.userId;
-      }
-    });
+     UserInfoUntil.getUserInfo().then((userInfo) {
+       if(userInfo != null) {
+         setState(() {
+           id = userInfo.id;
+           userName = userInfo.userName;
+           userAvatar = userInfo.userAvatar;
+           age = userInfo.age as String;
+           area = userInfo.area;
+           sex = userInfo.sex;
+           userAvatar = userInfo.userAvatar;
+           userId = userInfo.userId;
+           mobilePhone = userInfo.mobilePhone;
+         });
+//         if(userName != null) {
+//           _userNameController = TextEditingController.fromValue(TextEditingValue(text: userName));
+//         }
+       }
+     });
   }
 }

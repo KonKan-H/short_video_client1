@@ -26,7 +26,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
   String area;
   String introduction;
   int age;
-  var titles = ['我的消息', '我的视频',  "我的关注", "我的粉丝", '退出登录'];
+  var titles = ['我的消息', '我的视频',  '我的关注', '我的粉丝', '退出登录'];
 
   @override
   void initState() {
