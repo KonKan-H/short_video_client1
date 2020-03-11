@@ -1,15 +1,15 @@
 import 'package:short_video_client1/models/User.dart';
 
 class UserInfo {
-  int id;
-  int userId;
-  int age;
-  String userName;
-  String userAvatar;
-  String mobilePhone;
-  String sex;
-  String area;
-  String introduction;
+  var id;
+  var userId;
+  var age;
+  var userName;
+  var userAvatar;
+  var mobilePhone;
+  var sex;
+  var area;
+  var introduction;
 
   UserInfo();
 }

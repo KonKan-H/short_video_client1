@@ -1,8 +1,8 @@
 class User {
-  int id;
-  String userName;
-  String userAvatar;
-  String mobilePhone;
+  var id;
+  var userName;
+  var userAvatar;
+  var mobilePhone;
 
   User(this.id, this.userName, this.userAvatar, this.mobilePhone);
 

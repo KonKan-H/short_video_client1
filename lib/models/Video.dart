@@ -1,7 +1,7 @@
 class Video{
-  final int id;
-  final String url;
-  final String author;
+  var id;
+  var url;
+  var author;
 
   Video(this.id, this.url, this.author);
 }

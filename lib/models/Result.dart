@@ -1,7 +1,7 @@
 class Result<T> {
-  final int code;
-  final T data;
-  final String msg;
+  int code;
+  T data;
+  String msg;
 
   Result({this.code, this.data, this.msg});
 

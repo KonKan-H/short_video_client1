@@ -22,8 +22,8 @@ class UserDetailInfoPage extends StatefulWidget {
 }
 
 class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
-  String userName, userAvatar, sex, area, introduction, age, mobilePhone;
-  int userId, id;
+  var userName, userAvatar, sex, area, introduction, age, mobilePhone;
+  var userId, id;
   File _image;
 //  WidgetsUtils widgetsUtils;
 
@@ -70,11 +70,11 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
   Widget initInputBody() {
     List<Widget> items = [];
     items.addAll(initHeaderItem(null));
-    items.addAll(initInputItem('用户名', '请输入用户名', _userNameController, userName));
-    items.addAll(initInputItem('性别', '请输入性别', _userSexController, sex));
-    items.addAll(initInputItem('年龄', '请输入年龄', _userAgeController, age));
-    items.addAll(initInputItem('地区', '请输入地区', _userAreaController, area));
-    items.addAll(initInputItem('简介', '介绍下自己吧', _userIntroController, introduction, maxLines: 5));
+    items.addAll(initInputItem('用户名', '请输入用户名', userName == null ? _userNameController: _userNameController = TextEditingController.fromValue(TextEditingValue(text: userName)),));
+    items.addAll(initInputItem('性别', '请输入性别', sex == null ? _userSexController : _userSexController = TextEditingController.fromValue(TextEditingValue(text: sex)),));
+    items.addAll(initInputItem('年龄', '请输入年龄', age == null ? _userAgeController : _userAgeController = TextEditingController.fromValue(TextEditingValue(text: age)),));
+    items.addAll(initInputItem('地区', '请输入地区', area == null ? _userAreaController : _userAreaController = TextEditingController.fromValue(TextEditingValue(text: area)),));
+    items.addAll(initInputItem('简介', '介绍下自己吧', introduction == null ? _userIntroController : _userIntroController = TextEditingController.fromValue(TextEditingValue(text: introduction)), maxLines: 5));
     items.add(initSubmitBtn());
     return new Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -164,7 +164,7 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
   }
 
 //  初始化输入的item
-  List<Widget> initInputItem(var leftMsg, var hintMsg, TextEditingController controller, var content,
+  List<Widget> initInputItem(var leftMsg, var hintMsg, TextEditingController controller,
       {var maxLines = 1}) {
     List<Widget> item = [];
     item.add(
@@ -190,7 +190,8 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
                     style: hintRes,
                     maxLines: maxLines,
                     textAlign: maxLines == 1 ? TextAlign.end : TextAlign.end,
-                    controller: content == null ? controller : controller = TextEditingController.fromValue(TextEditingValue(text: content)),
+//                    controller: content == null ? controller : (controller = TextEditingController.fromValue(TextEditingValue(text: content))),
+                    controller: controller,
                     decoration: InputDecoration.collapsed(hintText: hintMsg),
                     obscureText: false,
                   ),
@@ -215,34 +216,34 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
         elevation: 2.0,
         child: new MaterialButton(
           onPressed: () async {
-          if(_userSexController.text != null) {
-            if(_userSexController.text != "男" && _userSexController.text != "女" ) {
-              print(_userSexController.text);
-              TsUtils.showShort("请输入正确格式的性别");
-              return;
-            }
-          }
+//          if(_userSexController.text != null) {
+//            print(_userNameController.text);
+//            if(_userSexController.text != "男" && _userSexController.text != "女" ) {
+//              print('===' + _userSexController.text);
+//              TsUtils.showShort("请输入正确格式的性别");
+//              return;
+//            }
+//          }
             Map<String, dynamic> data = {
               'userId': userId,
-              'age': _userAgeController.text,
-              'userName': _userNameController.text,
+              'age': (_userAgeController.text == null || _userAgeController.text == "") ? age : _userAgeController.text,
+              'userName': (_userNameController.text == null || _userNameController.text == "") ? userName : _userNameController.text ,
 //              'userAvatar': ,
-              'sex': _userSexController.text,
-              'area': _userAreaController.text,
-              'introducton': _userIntroController.text
+              'sex': (_userSexController.text == null || _userSexController.text == "") ? sex : _userSexController.text,
+              'area': (_userAreaController.text == null || _userAreaController.text == "") ? area : _userAreaController.text,
+              'introduction': (_userIntroController.text == null || _userIntroController.text == "") ? introduction : _userIntroController.text
             };
             Result result = await DioRequest.dioPut(URL.USER_INFO_UPDATE, data);
             print(result.msg);
             TsUtils.showShort(result.msg);
-            UserInfo userInfo = new UserInfo();
-            userInfo.id = id;
-            userInfo.userId = userId;
-            userInfo.userName = _userNameController.text;
-            userInfo.mobilePhone = mobilePhone;
-            userInfo.userAvatar = null;
-            userInfo.sex = _userSexController.text;
-            userInfo.area = _userAreaController.text;
-            userInfo.introduction = _userIntroController.text;
+            UserInfo userInfo = await UserInfoUntil.map2UserInfo(result.data);
+//            userInfo.id = id;
+//            userInfo.userId = userId;
+//            userInfo.userName = _userNameController.text;
+//            userInfo.userAvatar = null;
+//            userInfo.sex = _userSexController.text;
+//            userInfo.area = _userAreaController.text;
+//            userInfo.introduction = _userIntroController.text;
             UserInfoUntil.saveUserInfo(userInfo);
             OsApplication.eventBus.fire(LoginEvent(userInfo.userId, userInfo.userName, userInfo.userAvatar,
                 userInfo.age, userInfo.sex, userInfo.area, userInfo.introduction));
@@ -315,16 +316,14 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
            id = userInfo.id;
            userName = userInfo.userName;
            userAvatar = userInfo.userAvatar;
-           age = userInfo.age as String;
+           age = userInfo.age;
            area = userInfo.area;
            sex = userInfo.sex;
            userAvatar = userInfo.userAvatar;
            userId = userInfo.userId;
            mobilePhone = userInfo.mobilePhone;
+           introduction = userInfo.introduction;
          });
-//         if(userName != null) {
-//           _userNameController = TextEditingController.fromValue(TextEditingValue(text: userName));
-//         }
        }
      });
   }

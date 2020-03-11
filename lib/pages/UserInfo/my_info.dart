@@ -5,6 +5,7 @@ import 'package:short_video_client1/models/User.dart';
 import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/pages/UserInfo/user_detail_info_page.dart';
 import 'package:short_video_client1/resources/strings.dart';
+import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/until/user_info_until.dart';
 import 'package:short_video_client1/resources/until/user_until.dart';
 import 'login_page.dart';
@@ -100,6 +101,19 @@ class _MyInfoPageState extends State<MyInfoPage> {
               child: InkWell(
                 onTap: () {
                   print('this is the item of $title');
+                  if(title == "退出登录"){
+                    if(userName != null) {
+                      setState(() {
+                        UserUntil.cleanUserInfo();
+                        UserInfoUntil.cleanUserInfo();
+                        userName = null;
+                        userAvatar = null;
+                      });
+                      TsUtils.showShort("退出成功");
+                    } else {
+                      TsUtils.showShort("请先登录");
+                    }
+                  }
                 },
                 child: Column(
                   children: <Widget>[
@@ -146,10 +160,12 @@ class _MyInfoPageState extends State<MyInfoPage> {
   _getUserInfo() {
     UserUntil.getUserInfo().then((user) {
       if(user != null && user.userName != null) {
-        userName = user.userName;
-        if(user.userAvatar != null) {
-          userAvatar = user.userAvatar;
-        }
+        setState(() {
+          userName = user.userName;
+          if(user.userAvatar != null) {
+            userAvatar = user.userAvatar;
+          }
+        });
       }
     });
   }
