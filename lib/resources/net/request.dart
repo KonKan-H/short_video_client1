@@ -23,4 +23,14 @@ class DioRequest {
     Result result = Result.formJson(json.decode(response.data));
     return result;
   }
+
+  //post 上传文件
+  static Future<Result> uploadFile(String url, FormData formData) async {
+    Response response;
+    Dio dio = new Dio();
+    dio.options.responseType = ResponseType.plain;
+    response = await dio.post(url, data: formData);
+    Result result = Result.formJson(json.decode(response.data));
+    return result;
+  }
 }

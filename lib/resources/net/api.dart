@@ -10,4 +10,7 @@ class URL{
 
   //更新信息
   static const String USER_INFO_UPDATE = BASE_URL + '/v1/userInfo/api';
+
+  //上传文件
+  static const String UPLOAD_FILE = BASE_URL + '/v1/file/api';
 }

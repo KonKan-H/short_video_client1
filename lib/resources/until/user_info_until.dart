@@ -71,7 +71,7 @@ class UserInfoUntil{
       userInfo.age = map['age'];
       userInfo.userName = map['userName'];
       userInfo.mobilePhone = map['userMobilePhone'];
-      userInfo.userAvatar = map['user'];
+      userInfo.userAvatar = map['userAvatar'];
       userInfo.sex = map['sex'];
       userInfo.area = map['area'];
       userInfo.introduction = map['introduction'];

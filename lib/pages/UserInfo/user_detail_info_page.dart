@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
+import 'package:uuid/uuid.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -25,6 +27,7 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
   var userName, userAvatar, sex, area, introduction, age, mobilePhone;
   var userId, id;
   File _image;
+  var _imgServerPath;
 //  WidgetsUtils widgetsUtils;
 
   var _userNameController = new TextEditingController();
@@ -69,11 +72,11 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
 
   Widget initInputBody() {
     List<Widget> items = [];
-    items.addAll(initHeaderItem(null));
+    items.addAll(initHeaderItem(userAvatar));
     items.addAll(initInputItem('用户名', '请输入用户名', userName == null ? _userNameController: _userNameController = TextEditingController.fromValue(TextEditingValue(text: userName)),));
     items.addAll(initInputItem('性别', '请输入性别', sex == null ? _userSexController : _userSexController = TextEditingController.fromValue(TextEditingValue(text: sex)),));
     items.addAll(initInputItem('年龄', '请输入年龄', age == null ? _userAgeController : _userAgeController = TextEditingController.fromValue(TextEditingValue(text: age)),));
-    items.addAll(initInputItem('地区', '请输入地区', area == null ? _userAreaController : _userAreaController = TextEditingController.fromValue(TextEditingValue(text: area)),));
+    items.addAll(initInputItem('地区', '请输入地区', area == null ? _userAreaController : _userAreaController = TextEditingController.fromValue(TextEditingValue(text: area.toString())),));
     items.addAll(initInputItem('简介', '介绍下自己吧', introduction == null ? _userIntroController : _userIntroController = TextEditingController.fromValue(TextEditingValue(text: introduction)), maxLines: 5));
     items.add(initSubmitBtn());
     return new Column(
@@ -146,7 +149,7 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
               shape: BoxShape.circle,
               color: Colors.transparent,
               image: new DecorationImage(
-                  image: new NetworkImage(userAvatar), fit: BoxFit.cover),
+                  image: new FileImage(File(userAvatar)), fit: BoxFit.cover),
               border: new Border.all(color: Colors.white, width: 2.0)),
         );
       }
@@ -224,11 +227,14 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
 //              return;
 //            }
 //          }
+          if(_image != null) {
+            _uploadImage();
+          }
             Map<String, dynamic> data = {
               'userId': userId,
               'age': (_userAgeController.text == null || _userAgeController.text == "") ? age : _userAgeController.text,
               'userName': (_userNameController.text == null || _userNameController.text == "") ? userName : _userNameController.text ,
-//              'userAvatar': ,
+              'userAvatar': userAvatar,
               'sex': (_userSexController.text == null || _userSexController.text == "") ? sex : _userSexController.text,
               'area': (_userAreaController.text == null || _userAreaController.text == "") ? area : _userAreaController.text,
               'introduction': (_userIntroController.text == null || _userIntroController.text == "") ? introduction : _userIntroController.text
@@ -237,16 +243,9 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
             print(result.msg);
             TsUtils.showShort(result.msg);
             UserInfo userInfo = await UserInfoUntil.map2UserInfo(result.data);
-//            userInfo.id = id;
-//            userInfo.userId = userId;
-//            userInfo.userName = _userNameController.text;
-//            userInfo.userAvatar = null;
-//            userInfo.sex = _userSexController.text;
-//            userInfo.area = _userAreaController.text;
-//            userInfo.introduction = _userIntroController.text;
             UserInfoUntil.saveUserInfo(userInfo);
             OsApplication.eventBus.fire(LoginEvent(userInfo.userId, userInfo.userName, userInfo.userAvatar,
-                userInfo.age, userInfo.sex, userInfo.area, userInfo.introduction));
+                userInfo.area, userInfo.sex, userInfo.age, userInfo.introduction));
           },
           child: new Text(
             '确认修改',
@@ -276,9 +275,7 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
                 getImgPick(ImageSource.camera);
               }),
             ),
-            new Divider(
-              height: 1.0,
-            ),
+            new Divider(height: 1.0,),
             new InkWell(
               onTap: (() {
                 Navigator.of(context).pop();
@@ -307,6 +304,21 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
             )
           ],
         ));
+  }
+
+  _uploadImage() async {
+    var uuid = new Uuid();
+    String name = uuid.v1();
+    String suffix = _image.path.substring(_image.path.length - 4, _image.path.length);
+    FormData formData = FormData.from({
+//      'file' : MultipartFile.fromFile(_image.path, filename: name),
+      "file" : UploadFileInfo(_image, name + suffix),
+    });
+    Result result = await DioRequest.uploadFile(URL.UPLOAD_FILE, formData);
+    setState(() {
+      userAvatar = result.data;
+    });
+    print(userAvatar);
   }
 
   _getUserInfo() {

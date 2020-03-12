@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:short_video_client1/app/OsApplication.dart';
 import 'package:short_video_client1/event/login_event.dart';
@@ -78,7 +80,9 @@ class _MyInfoPageState extends State<MyInfoPage> {
                     shape: BoxShape.circle,
                     color: Colors.transparent,
                     image: DecorationImage(
-                      image: NetworkImage(userAvatar),
+                      // todo 布置到服务器上后换成
+//                      image: NetworkImage(userAvatar)
+                        image: new FileImage(new File(userAvatar)),
                       fit:BoxFit.cover
                     ),
                     border: Border.all(color: Colors.white, width: 2.0)
