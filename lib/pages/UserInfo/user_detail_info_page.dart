@@ -193,7 +193,6 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
                     style: hintRes,
                     maxLines: maxLines,
                     textAlign: maxLines == 1 ? TextAlign.end : TextAlign.end,
-//                    controller: content == null ? controller : (controller = TextEditingController.fromValue(TextEditingValue(text: content))),
                     controller: controller,
                     decoration: InputDecoration.collapsed(hintText: hintMsg),
                     obscureText: false,
@@ -228,6 +227,13 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
 //            }
 //          }
           if(_image != null) {
+            _image.length().then((value) {
+              if (value / 1024 > (5 * 1024)) {
+                TsUtils.showShort("头像选取过大，请重新选择");
+                return;
+              }  
+            }
+            );
             _uploadImage();
           }
             Map<String, dynamic> data = {
