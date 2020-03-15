@@ -46,10 +46,10 @@ class GridViewState extends State {
   Widget getItemWidget() {
     String url = getPhotoUrl();
     return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(3),///圆角
-          border: Border.all(color: Colors.grey,width: 1)///边框颜色、宽
-      ),
+//      decoration: BoxDecoration(
+//          borderRadius: BorderRadius.circular(3),///圆角
+//          border: Border.all(color: Colors.grey,width: 1)///边框颜色、宽
+//      ),
       child: new Stack(
         children: <Widget>[
           new Container(
@@ -70,7 +70,6 @@ class GridViewState extends State {
               ],
             ),
           ),
-
           new Container(
             alignment: Alignment.bottomLeft,
             child: new Container(
@@ -81,33 +80,35 @@ class GridViewState extends State {
                 radius: 100,
               ),
             ),
-          )
+          ),
+          new Container(
+            alignment: Alignment.bottomRight,
+            child: new Container(
+              width: 120,
+              height: 40,
+              alignment: Alignment.center,
+              child: Stack(
+                children: <Widget>[
+                  new Container(
+                    width: 60,
+                    height: 40,
+                    alignment: Alignment.centerLeft,
+                    child:  Icon(Icons.favorite, size: 30, color: Colors.red,),
+                  ),
+                  new Container(
+                    width: 60,
+                    height: 40,
+                    alignment: Alignment.centerRight,
+                    //todo 23 变量
+                    child: Text('23', style: TextStyle(color: Colors.white),),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
-    //BoxFit 可设置展示图片时 的填充方式
-//    return new Image(image: new NetworkImage(url), fit: BoxFit.cover);
-//    return Stack(
-//      children: <Widget>[
-//        new Container(
-//          child: Image.network(url, fit: BoxFit.contain,),
-//          decoration: BoxDecoration(
-//
-//          ),
-//        ),
-//        new Container(
-//            width: 50,
-//            height: 50,
-//            child: new CircleAvatar(
-//              backgroundImage: new NetworkImage("https://profile.csdnimg.cn/5/C/E/3_ww897532167"),
-//              radius: 100,
-//            ),
-//        )
-//      ],
-////      child: Container(
-////        color: Colors.black,
-////        child: Image.network(url, fit: BoxFit.contain,),
-//    );
   }
 
   String getPhotoUrl() {
