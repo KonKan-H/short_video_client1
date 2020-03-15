@@ -14,7 +14,6 @@ class VideoPlayerPage extends StatefulWidget {
   _VideoPlayerPageState createState() => _VideoPlayerPageState(
       video: video);
 //        video: Video(Random().nextInt(100000000), AppString.VIDEO_URL_HEADER + "/hls/v4.m3u8"));
-
 }
 
 class _VideoPlayerPageState extends State<VideoPlayerPage> {
@@ -164,4 +163,22 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       ],
     );
   }
+
+  Widget titleSection = Column(
+    children: <Widget>[
+      Container(
+        alignment: Alignment.topLeft,
+        padding: const EdgeInsets.all(4),
+        child: Text('@人民日报', style: TextStyle(color: Colors.white, fontSize: 17, decoration: TextDecoration.none),),
+      ),
+      Container(
+        padding: const EdgeInsets.fromLTRB(4, 0,  0, 0),
+        alignment: Alignment.topLeft,
+        child: Text('自从武汉决定迅速建设火神山医院和雷神山医院以来，'
+            '自从武汉决定迅速建设火神山医院和雷神山医院以来中联重科第一时间响应。',
+          style: TextStyle(color: Colors.white, fontSize: 14, decoration: TextDecoration.none),
+          maxLines: 4, overflow: TextOverflow.ellipsis,),
+      ),
+    ],
+  );
 }
