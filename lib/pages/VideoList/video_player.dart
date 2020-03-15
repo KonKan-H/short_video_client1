@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:short_video_client1/pages/VideoList/layout/video_layout.dart';
 import 'package:short_video_client1/pages/VideoList/likebutton/like_button.dart';
@@ -87,9 +88,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           width: 0.7 * screenWidth,
           height: 0.2 * screenHeight,
           child: Container(
-            decoration: BoxDecoration(color: Colors.redAccent),
+//            decoration: BoxDecoration(color: Colors.redAccent),
             child: Container(
-              child: BtnContent(),
+              child: Container(
+                child: titleSection,
+              ),
             ),
           ),
         ),

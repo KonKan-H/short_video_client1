@@ -40,3 +40,21 @@ class BtnContent extends StatelessWidget {
     );
   }
 }
+
+Widget titleSection = Column(
+  children: <Widget>[
+    Container(
+      alignment: Alignment.topLeft,
+      padding: const EdgeInsets.all(4),
+      child: Text('@人民日报', style: TextStyle(color: Colors.white, fontSize: 17, decoration: TextDecoration.none),),
+    ),
+    Container(
+      padding: const EdgeInsets.fromLTRB(4, 0,  0, 0),
+      alignment: Alignment.topLeft,
+      child: Text('自从武汉决定迅速建设火神山医院和雷神山医院以来，'
+          '自从武汉决定迅速建设火神山医院和雷神山医院以来中联重科第一时间响应。',
+        style: TextStyle(color: Colors.white, fontSize: 14, decoration: TextDecoration.none),
+        maxLines: 4, overflow: TextOverflow.ellipsis,),
+    ),
+  ],
+);
