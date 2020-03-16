@@ -1,9 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:short_video_client1/app/OsApplication.dart';
+import 'package:short_video_client1/event/login_event.dart';
+import 'package:short_video_client1/pages/VideoList/video_upload.dart';
 import 'file:///D:/Flutter/project/short_video_client1/lib/pages/FollowingVideo/following_video.dart';
 import 'file:///D:/Flutter/project/short_video_client1/lib/pages/UserInfo/my_home_page.dart';
 import 'file:///D:/Flutter/project/short_video_client1/lib/pages/VideoList/video_list.dart';
 import 'package:short_video_client1/resources/strings.dart';
+import 'package:short_video_client1/resources/tools.dart';
+import 'package:short_video_client1/resources/until/user_until.dart';
 
 void main() {
   runApp(Home());
@@ -21,10 +26,21 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   TabController controller;
   DateTime lastPopTime;
+  var userName;
 
   @override
   void initState() {
     controller = new TabController(length: 3, vsync: this);
+    _getUserInfo();
+    OsApplication.eventBus.on<LoginEvent>().listen((event) {
+      setState(() {
+        if(event != null && event.userName != null) {
+          userName = event.userName;
+        } else {
+          userName = null;
+        }
+      });
+    });
   }
 
   @override
@@ -67,7 +83,31 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ],
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+           if(userName == null) {
+             //_getUserInfo();
+             TsUtils.showShort("请先登录");
+           } else {
+             print('================');
+//             Navigator.push(context, MaterialPageRoute(
+//                 builder: (context) => UploadVideo()
+//             ));
+           }
+          },
+          child: Icon(Icons.videocam),
+        ),
       ),
     );
+  }
+
+  _getUserInfo() {
+    UserUntil.getUserInfo().then((user) {
+      if(user != null && user.userName != null) {
+        setState(() {
+          userName = user.userName;
+        });
+      }
+    });
   }
 }

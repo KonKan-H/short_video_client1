@@ -24,14 +24,6 @@ class GridViewState extends State {
         padding: const EdgeInsets.all(8.0),
         children: buildGridTileList(50),
       );
-//      new GridView.count(
-//        primary: false,
-//        padding: const EdgeInsets.all(8.0),
-//        mainAxisSpacing: 8.0,//竖向间距
-//        crossAxisCount: 2,//横向Item的个数
-//        crossAxisSpacing: 8.0,//横向间距
-//        children: buildGridTileList(50)
-//      );
 
   List<Widget> buildGridTileList(int number) {
     List<Widget> widgetList = new List();
