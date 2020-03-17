@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:short_video_client1/app/OsApplication.dart';
 import 'package:short_video_client1/event/login_event.dart';
+import 'package:short_video_client1/pages/VideoList/takeVideo/camera_home.dart';
 import 'package:short_video_client1/pages/VideoList/video_upload.dart';
 import 'file:///D:/Flutter/project/short_video_client1/lib/pages/FollowingVideo/following_video.dart';
 import 'file:///D:/Flutter/project/short_video_client1/lib/pages/UserInfo/my_home_page.dart';
@@ -67,11 +68,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes: {
+//      routes: {
 //        '/': (context) => CameraHome(),
 //        '/preview': (context) => PreviewRoute(),
 //        '/commit': (context) => CommitRoute(),
-      },
+//      },
       home: bodyLayout(controller: controller, userName: userName),
     );
   }
@@ -133,10 +134,10 @@ class bodyLayout extends StatelessWidget {
             TsUtils.showShort("请先登录");
           } else {
             print('================');
-//             Navigator.push(context, MaterialPageRoute(
-//                 builder: (context) => UploadVideo()
-//             ));
-            Navigator.pushNamed(context, '/');
+             Navigator.push(context, MaterialPageRoute(
+                 builder: (context) => CameraHome()
+             ));
+//            Navigator.pushNamed(context, '/');
           }
         },
         child: Icon(Icons.videocam),

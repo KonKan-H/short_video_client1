@@ -26,4 +26,8 @@ class TsUtils{
         fontSize: 16.0
     );
   }
+
+  static void logError(String code, [String message = ""]) =>
+      print('Error: $code\nError Message: $message');
+
 }
