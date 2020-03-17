@@ -216,7 +216,7 @@ class _CameraHomeState extends State<CameraHome> {
 
   void onNewCameraSelected() async {
     CameraDescription cameraDescription;
-    if (Video.cameras.isEmpty) {
+    if (Video.cameras != null) {
       return;
     }
     if (controller != null) {
