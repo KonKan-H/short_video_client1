@@ -25,7 +25,9 @@ class _UploadVideoState extends State<UploadVideo> {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(title: Text('上传视频'),),
-      body: new Container(),
+      body: new Center(
+        child: Text('视频上传'),
+      ),
     );
   }
 }

@@ -8,8 +8,8 @@ import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/pages/UserInfo/user_detail_info_page.dart';
 import 'package:short_video_client1/resources/strings.dart';
 import 'package:short_video_client1/resources/tools.dart';
-import 'package:short_video_client1/resources/until/user_info_until.dart';
-import 'package:short_video_client1/resources/until/user_until.dart';
+import 'package:short_video_client1/resources/util/user_info_until.dart';
+import 'package:short_video_client1/resources/util/user_until.dart';
 import 'login_page.dart';
 
 class MyInfoPage extends StatefulWidget {

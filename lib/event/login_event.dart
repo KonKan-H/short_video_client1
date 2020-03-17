@@ -1,5 +1,4 @@
 import 'package:short_video_client1/models/UserInfo.dart';
-import 'package:short_video_client1/resources/until/user_info_until.dart';
 
 class LoginEvent {
   var userName;

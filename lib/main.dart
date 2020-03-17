@@ -8,11 +8,26 @@ import 'file:///D:/Flutter/project/short_video_client1/lib/pages/UserInfo/my_hom
 import 'file:///D:/Flutter/project/short_video_client1/lib/pages/VideoList/video_list.dart';
 import 'package:short_video_client1/resources/strings.dart';
 import 'package:short_video_client1/resources/tools.dart';
-import 'package:short_video_client1/resources/until/user_until.dart';
+import 'package:short_video_client1/resources/util/user_until.dart';
 
 void main() {
+//  runApp(Home());
   runApp(Home());
 }
+
+class MyApp extends StatelessWidget {
+  MyApp({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return new MaterialApp(
+      home: Home(),
+
+    );
+  }
+}
+
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -52,52 +67,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        drawer: new VideoList(),
-        body: new TabBarView(
-          controller: controller,
-          children: <Widget>[
-            new VideoList(),
-            new FollowingVideo(),
-            new MyHomePage(),
-          ],
-        ),
-        bottomNavigationBar: new Material(
-            child: new TabBar(
-            controller: controller,
-            labelColor: ConstantData.MAIN_COLOR,
-            unselectedLabelColor: Colors.black26,
-            tabs: <Widget>[
-              new Tab(
-                text: "首页",
-                icon: new Icon(Icons.home),
-              ),
-              new Tab(
-                text: "关注",
-                icon: new Icon(Icons.favorite_border),
-              ),
-              new Tab(
-                text: "我的",
-                icon: new Icon(Icons.person),
-              ),
-            ],
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-           if(userName == null) {
-             //_getUserInfo();
-             TsUtils.showShort("请先登录");
-           } else {
-             print('================');
-//             Navigator.push(context, MaterialPageRoute(
-//                 builder: (context) => UploadVideo()
-//             ));
-           }
-          },
-          child: Icon(Icons.videocam),
-        ),
-      ),
+      routes: {
+//        '/': (context) => CameraHome(),
+//        '/preview': (context) => PreviewRoute(),
+//        '/commit': (context) => CommitRoute(),
+      },
+      home: bodyLayout(controller: controller, userName: userName),
     );
   }
 
@@ -110,4 +85,63 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       }
     });
   }
+}
+
+class bodyLayout extends StatelessWidget {
+  bodyLayout({Key key, this.controller, this.userName}): super(key: key);
+
+  final TabController controller;
+  final String userName;
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Scaffold(
+      body: new TabBarView(
+        controller: controller,
+        children: <Widget>[
+          new VideoList(),
+          new FollowingVideo(),
+          new MyInfoHomePage(),
+        ],
+      ),
+      bottomNavigationBar: new Material(
+        child: new TabBar(
+          controller: controller,
+          labelColor: ConstantData.MAIN_COLOR,
+          unselectedLabelColor: Colors.black26,
+          tabs: <Widget>[
+            new Tab(
+              text: "首页",
+              icon: new Icon(Icons.home),
+            ),
+            new Tab(
+              text: "关注",
+              icon: new Icon(Icons.favorite_border),
+            ),
+            new Tab(
+              text: "我的",
+              icon: new Icon(Icons.person),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if(userName == null) {
+            //_getUserInfo();
+            TsUtils.showShort("请先登录");
+          } else {
+            print('================');
+//             Navigator.push(context, MaterialPageRoute(
+//                 builder: (context) => UploadVideo()
+//             ));
+            Navigator.pushNamed(context, '/');
+          }
+        },
+        child: Icon(Icons.videocam),
+      ),
+    );
+  }
+
 }
