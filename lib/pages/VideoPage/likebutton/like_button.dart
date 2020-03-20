@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:short_video_client1/pages/VideoList/likebutton/model.dart';
+import 'package:short_video_client1/pages/VideoPage/likebutton/model.dart';
 import 'dot_painter.dart';
 import 'circle_painter.dart';
 

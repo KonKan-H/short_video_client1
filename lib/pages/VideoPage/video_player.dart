@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:short_video_client1/pages/VideoList/layout/video_layout.dart';
-import 'package:short_video_client1/pages/VideoList/likebutton/like_button.dart';
-import 'package:short_video_client1/pages/VideoList/likebutton/model.dart';
+import 'package:provider/provider.dart';
+import 'package:short_video_client1/pages/VideoPage/layout/video_layout.dart';
+import 'package:short_video_client1/pages/VideoPage/likebutton/like_button.dart';
+import 'package:short_video_client1/resources/tools.dart';
 import 'package:video_player/video_player.dart';
 import 'package:short_video_client1/models/Video.dart';
 
@@ -39,6 +40,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     //取得屏幕宽度
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    double rpx = MediaQuery.of(context).size.width / 750;
     return Stack(
       children: <Widget>[
         Scaffold(
@@ -76,12 +78,86 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         Positioned(
           right: 0,
           width: 0.20 * screenWidth,
-          height: 0.45 * screenHeight,
-          top: 0.32 * screenHeight,
+          height: 0.5 * screenHeight,
+          top: 0.28 * screenHeight,
           child: Container(
 //            decoration: BoxDecoration(color: Colors.orange),
-            child: _getButtonList(),),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Container(
+                  width: 60,
+                  height: 70,
+                  child: Stack(children: <Widget>[
+                    Container(
+                      width: 60,
+                      height: 60,
+                      //alignment: Alignment.bottomCenter,
+                      child: CircleAvatar(backgroundImage: NetworkImage("https:"
+                          "//dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/"
+                          "u=612723378,2699755568&fm=111&gp=0.jpg"),),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 17.5,
+                      child: Container(
+                        width: 25,
+                        height: 25,
+                        decoration: BoxDecoration(
+                            color: Colors.redAccent,
+                            borderRadius: BorderRadius.circular(25)
+                        ),
+                        child: Icon(Icons.add, size: 20, color: Colors.white,),),)
+                  ],),
+                ),
+                //IconText(text: "999w", icon: Icon(Icons.favorite, size: 40, color: Colors.redAccent,),),
+                //点赞爱心
+                Container(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            LikeButton(
+                              width: 72.0,
+                              duration: Duration(seconds: 2),
+                              circleStartColor: Color(0xffffff),
+                              //circleStartColor: Colors.white,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        child: Text('23', style: TextStyle(color: Colors.white,fontSize: 13.0, decoration: TextDecoration.none), ),
+                      ),
+                    ],
+                  ),
+                ),
+                //评论
+//                Container(
+//                  child: Container(
+//                    child: InkWell(
+//                      onTap: () {
+//                        print('=========');
+//                      },
+//                      child: Column(
+//                        children: <Widget>[
+//                          IconText(text: "评论", icon: Icon(Icons.comment, size: 30, color: Colors.white,),),
+//                        ],
+//                      ),
+//                    ),
+//                  )
+//                ),
+                IconText(text: "评论", icon: Icon(Icons.comment, size: 30, color: Colors.white,),),
+                //分享
+                IconText(text: "分享", icon: Icon(Icons.reply, size: 30, color: Colors.white,),),
+              ],
+            ),),
         ),
+        //标题
         Positioned(
           bottom: 0,
           width: 0.7 * screenWidth,
@@ -105,64 +181,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     _videoPlayerController.dispose();
   }
 
-  _getButtonList() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        Container(
-          width: 60,
-          height: 70,
-          child: Stack(children: <Widget>[
-            Container(
-              width: 60,
-              height: 60,
-              //alignment: Alignment.bottomCenter,
-              child: CircleAvatar(backgroundImage: NetworkImage("https:"
-                  "//dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/"
-                  "u=612723378,2699755568&fm=111&gp=0.jpg"),),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 17.5,
-              child: Container(
-                width: 25,
-                height: 25,
-                decoration: BoxDecoration(
-                    color: Colors.redAccent,
-                    borderRadius: BorderRadius.circular(25)
-                ),
-                child: Icon(Icons.add, size: 20, color: Colors.white,),),)
-          ],),
-        ),
-        //IconText(text: "999w", icon: Icon(Icons.favorite, size: 40, color: Colors.redAccent,),),
-        //点赞爱心
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  LikeButton(
-                    width: 72.0,
-                    duration: Duration(seconds: 2),
-                    circleStartColor: Color(0xffffff),
-                    //circleStartColor: Colors.white,
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              child: Text('23', style: TextStyle(color: Colors.white,fontSize: 13.0, decoration: TextDecoration.none), ),
-            ),
-          ],
-        ),
-        IconText(text: "评论", icon: Icon(Icons.comment, size: 30, color: Colors.white,),),
-        IconText(text: "分享", icon: Icon(Icons.reply, size: 30, color: Colors.white,),),
-      ],
-    );
-  }
+//  _getButtonList() {
+//    return ;
+//  }
 
   Widget titleSection = Column(
     children: <Widget>[
@@ -182,3 +203,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     ],
   );
 }
+
+
+
+

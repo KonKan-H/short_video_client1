@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:short_video_client1/models/Video.dart';
-import 'package:short_video_client1/pages/VideoList/video_player.dart';
+import 'package:short_video_client1/pages/VideoPage/video_player.dart';
 
 class MyVideoList extends StatefulWidget {
   MyVideoList({Key key}):super(key: key);

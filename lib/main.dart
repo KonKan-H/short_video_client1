@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:short_video_client1/app/OsApplication.dart';
 import 'package:short_video_client1/event/login_event.dart';
-import 'package:short_video_client1/pages/VideoList/takeVideo/camera_home.dart';
-import 'package:short_video_client1/pages/VideoList/video_upload.dart';
+import 'package:short_video_client1/pages/CameraPage/CameraHomePage.dart';
+import 'package:short_video_client1/pages/VideoPage/video_upload.dart';
 import 'file:///D:/Flutter/project/short_video_client1/lib/pages/FollowingVideo/following_video.dart';
 import 'file:///D:/Flutter/project/short_video_client1/lib/pages/UserInfo/my_home_page.dart';
-import 'file:///D:/Flutter/project/short_video_client1/lib/pages/VideoList/video_list.dart';
+import 'file:///D:/Flutter/project/short_video_client1/lib/pages/VideoPage/video_list_page.dart';
 import 'package:short_video_client1/resources/strings.dart';
 import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/util/user_until.dart';
@@ -24,7 +24,6 @@ class MyApp extends StatelessWidget {
     // TODO: implement build
     return new MaterialApp(
       home: Home(),
-
     );
   }
 }
@@ -135,7 +134,7 @@ class bodyLayout extends StatelessWidget {
           } else {
             print('================');
              Navigator.push(context, MaterialPageRoute(
-                 builder: (context) => CameraHome()
+                 builder: (context) => CameraExampleHome()
              ));
 //            Navigator.pushNamed(context, '/');
           }
