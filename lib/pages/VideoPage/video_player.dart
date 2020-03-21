@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:short_video_client1/pages/VideoPage/layout/BottomSheet.dart';
 import 'package:short_video_client1/pages/VideoPage/layout/video_layout.dart';
 import 'package:short_video_client1/pages/VideoPage/likebutton/like_button.dart';
 import 'package:short_video_client1/resources/tools.dart';
@@ -80,82 +81,95 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           width: 0.20 * screenWidth,
           height: 0.5 * screenHeight,
           top: 0.28 * screenHeight,
-          child: Container(
-//            decoration: BoxDecoration(color: Colors.orange),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Container(
-                  width: 60,
-                  height: 70,
-                  child: Stack(children: <Widget>[
-                    Container(
-                      width: 60,
-                      height: 60,
-                      //alignment: Alignment.bottomCenter,
-                      child: CircleAvatar(backgroundImage: NetworkImage("https:"
-                          "//dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/"
-                          "u=612723378,2699755568&fm=111&gp=0.jpg"),),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      left: 17.5,
-                      child: Container(
-                        width: 25,
-                        height: 25,
-                        decoration: BoxDecoration(
-                            color: Colors.redAccent,
-                            borderRadius: BorderRadius.circular(25)
-                        ),
-                        child: Icon(Icons.add, size: 20, color: Colors.white,),),)
-                  ],),
-                ),
-                //IconText(text: "999w", icon: Icon(Icons.favorite, size: 40, color: Colors.redAccent,),),
-                //点赞爱心
-                Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
+          child:
+            Container(
+  //            decoration: BoxDecoration(color: Colors.orange),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Container(
+                    width: 60,
+                    height: 70,
+                    child: Stack(children: <Widget>[
                       Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            LikeButton(
-                              width: 72.0,
-                              duration: Duration(seconds: 2),
-                              circleStartColor: Color(0xffffff),
-                              //circleStartColor: Colors.white,
-                            ),
-                          ],
-                        ),
+                        width: 60,
+                        height: 60,
+                        //alignment: Alignment.bottomCenter,
+                        child: CircleAvatar(backgroundImage: NetworkImage("https:"
+                            "//dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/"
+                            "u=612723378,2699755568&fm=111&gp=0.jpg"),),
                       ),
-                      Container(
-                        alignment: Alignment.center,
-                        child: Text('23', style: TextStyle(color: Colors.white,fontSize: 13.0, decoration: TextDecoration.none), ),
-                      ),
-                    ],
+                      Positioned(
+                        bottom: 0,
+                        left: 17.5,
+                        child: Container(
+                          width: 25,
+                          height: 25,
+                          decoration: BoxDecoration(
+                              color: Colors.redAccent,
+                              borderRadius: BorderRadius.circular(25)
+                          ),
+                          child: Icon(Icons.add, size: 20, color: Colors.white,),),)
+                    ],),
                   ),
-                ),
-                //评论
-//                Container(
-//                  child: Container(
-//                    child: InkWell(
-//                      onTap: () {
-//                        print('=========');
-//                      },
-//                      child: Column(
-//                        children: <Widget>[
-//                          IconText(text: "评论", icon: Icon(Icons.comment, size: 30, color: Colors.white,),),
-//                        ],
+                  //IconText(text: "999w", icon: Icon(Icons.favorite, size: 40, color: Colors.redAccent,),),
+                  //点赞爱心
+                  Container(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              LikeButton(
+                                width: 72.0,
+                                duration: Duration(seconds: 2),
+                                circleStartColor: Color(0xffffff),
+                                //circleStartColor: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          child: Text('23', style: TextStyle(color: Colors.white,fontSize: 13.0, decoration: TextDecoration.none), ),
+                        ),
+                      ],
+                    ),
+                  ),
+//                  Container(
+//                    child: Container(
+//                      child: InkWell(
+//                        onTap: () {
+//                          print('=========');
+//                        },
+//                        child: Column(
+//                          children: <Widget>[
+//                            IconText(text: "评论", icon: Icon(Icons.comment, size: 30, color: Colors.white,),),
+//                          ],
+//                        ),
 //                      ),
-//                    ),
-//                  )
-//                ),
-                IconText(text: "评论", icon: Icon(Icons.comment, size: 30, color: Colors.white,),),
-                //分享
-                IconText(text: "分享", icon: Icon(Icons.reply, size: 30, color: Colors.white,),),
-              ],
-            ),),
+//                    )
+//                  ),
+                  Container(
+                    child: RaisedButton(
+                      child: Text('评论', style: TextStyle(color: Colors.white),),
+                      color: Colors.black,
+                      onPressed: () {
+                        showBottom(context);
+                      },
+                      shape: CircleBorder(
+                        side: BorderSide(
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  ),
+                  //IconText(text: "评论", icon: Icon(Icons.comment, size: 30, color: Colors.white,),),
+                  IconText(text: "分享", icon: Icon(Icons.reply, size: 30, color: Colors.white,),),
+                ],
+              ),),
         ),
         //标题
         Positioned(
@@ -171,6 +185,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
             ),
           ),
         ),
+
       ],
     );
   }
@@ -204,6 +219,21 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   );
 }
 
-
+showBottom(context) {
+  showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusDirectional.circular(10)),
+      context: context,
+      builder: (_) {
+        return Container(
+            height: 600,
+            child: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                },
+                child: ReplyFullList(pCtx: context)
+            ));
+      });
+}
 
 

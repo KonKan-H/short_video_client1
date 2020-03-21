@@ -1,8 +1,6 @@
-import 'package:douyin_demo/pages/RecommendPage/FriendList.dart';
-import 'package:douyin_demo/providers/AtUserProvider.dart';
-import 'package:douyin_demo/providers/RecommendProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:short_video_client1/models/Reply.dart';
 
 class ReplyFullList extends StatelessWidget {
   const ReplyFullList({Key key,this.pCtx}) : super(key: key);
@@ -10,13 +8,13 @@ class ReplyFullList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double rpx = MediaQuery.of(context).size.width / 750;
-    RecommendProvider provider = Provider.of<RecommendProvider>(pCtx);
-    Reply reply = provider.reply;
+//    RecommendProvider provider = Provider.of<RecommendProvider>(pCtx);
+//    Reply reply = provider.reply;
     List<Reply> replies = List<Reply>();
 
-    replies.add(reply);
-    replies.add(reply);
-    replies.add(reply);
+//    replies.add(reply);
+//    replies.add(reply);
+//    replies.add(reply);
     ScrollController controller = ScrollController();
     return Scaffold(
         appBar: PreferredSize(
@@ -26,7 +24,6 @@ class ReplyFullList extends StatelessWidget {
             elevation:0,
             backgroundColor: Colors.grey[50],
             actions: <Widget>[
-              
               IconButton(
                 icon: Icon(
                   Icons.close,
@@ -228,7 +225,7 @@ class BottomReplyBar extends StatelessWidget {
             child: TextField(controller: _controller,decoration: InputDecoration(hintText: "留下你的精彩评论",border: InputBorder.none),),
           )
         ),
-        IconButton(icon: Icon(Icons.email,color: Colors.grey[500],size: 50*rpx,),onPressed: (){showAtFriendPage(pCtx);},),
+        //IconButton(icon: Icon(Icons.email,color: Colors.grey[500],size: 50*rpx,),onPressed: (){showAtFriendPage(pCtx);},),
         IconButton(icon: Icon(Icons.face,color: Colors.grey[500],size: 50*rpx),onPressed: (){},),
         SizedBox(width: 20*rpx,)
       ],),
@@ -236,14 +233,14 @@ class BottomReplyBar extends StatelessWidget {
   }
 }
 
-showAtFriendPage(BuildContext context){
-  Navigator.of(context).push(new MaterialPageRoute(
-      builder: (BuildContext context) {
-        return  MultiProvider(
-          providers: [ChangeNotifierProvider(builder:(context)=>AtUserProvider())],
-          child: AtFriendPage()
-        );
-      },
-    fullscreenDialog: true
-  ));
-}
+//showAtFriendPage(BuildContext context){
+//  Navigator.of(context).push(new MaterialPageRoute(
+//      builder: (BuildContext context) {
+//        return  MultiProvider(
+//          providers: [ChangeNotifierProvider(builder:(context)=>AtUserProvider())],
+//          child: AtFriendPage()
+//        );
+//      },
+//    fullscreenDialog: true
+//  ));
+//}

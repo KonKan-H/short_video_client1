@@ -93,6 +93,9 @@ class _MyInfoPageState extends State<MyInfoPage> {
                   child: Text(userName == null ?
                   '点击头像登录' : userName, style: TextStyle(color: Colors.white, fontSize: 16.0),),
                 ),
+                Container(
+                  child: Text('粉丝：0  关注：0', style: TextStyle(color: Colors.white, fontSize: 16.0),),
+                ),
               ],
             ),
           ),
