@@ -22,13 +22,7 @@ class MyInfoPage extends StatefulWidget {
 }
 
 class _MyInfoPageState extends State<MyInfoPage> {
-  //用户头像
-  String userAvatar;
-  String userName;
-  String sex;
-  String area;
-  String introduction;
-  int age;
+  var userId, id, userName, userAvatar, sex, area, introduction, age, mobilePhone;
   var titles = ['我的消息', '我的视频',  '我的关注', '我的粉丝', '退出登录'];
 
   @override
@@ -36,17 +30,38 @@ class _MyInfoPageState extends State<MyInfoPage> {
     super.initState();
     _getUserInfo();
     OsApplication.eventBus.on<LoginEvent>().listen((event) {
-      setState(() {
-        if(event != null && event.userName != null) {
+      OsApplication.eventBus.on<LoginEvent>().listen((event) {
+        if(event != null) {
           userName = event.userName;
-          if(event.userAvatar != null) {
-            userAvatar = event.userAvatar;
-          }
+          userAvatar = event.userAvatar;
+          age = event.age.toString();
+          area = event.area;
+          sex = event.sex;
+          userAvatar = event.userAvatar;
+          userId = event.userId;
         } else {
           userName = null;
-          userAvatar = null;
         }
       });
+    });
+  }
+
+  _getUserInfo() {
+    UserInfoUntil.getUserInfo().then((userInfo) {
+      if(userInfo != null && userInfo.userName != null) {
+        setState(() {
+          id = userInfo.id;
+          userName = userInfo.userName;
+          userAvatar = userInfo.userAvatar;
+          age = userInfo.age;
+          area = userInfo.area;
+          sex = userInfo.sex;
+          userAvatar = userInfo.userAvatar;
+          userId = userInfo.userId;
+          mobilePhone = userInfo.mobilePhone;
+          introduction = userInfo.introduction;
+        });
+      }
     });
   }
 
@@ -80,9 +95,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                     shape: BoxShape.circle,
                     color: Colors.transparent,
                     image: DecorationImage(
-                      // todo 布置到服务器上后换成
-//                      image: NetworkImage(userAvatar)
-                        image: new FileImage(new File(userAvatar)),
+                      image: NetworkImage(userAvatar),
                       fit:BoxFit.cover
                     ),
                     border: Border.all(color: Colors.white, width: 2.0)
@@ -94,7 +107,10 @@ class _MyInfoPageState extends State<MyInfoPage> {
                   '点击头像登录' : userName, style: TextStyle(color: Colors.white, fontSize: 16.0),),
                 ),
                 Container(
-                  child: Text('粉丝：0  关注：0', style: TextStyle(color: Colors.white, fontSize: 16.0),),
+                  child: Offstage(
+                    offstage: userName == null ? true : false,
+                    child: Text('粉丝：0  关注：0', style: TextStyle(color: Colors.white, fontSize: 16.0),),
+                  )
                 ),
               ],
             ),
@@ -164,16 +180,4 @@ class _MyInfoPageState extends State<MyInfoPage> {
     ));
   }
 
-  _getUserInfo() {
-    UserUntil.getUserInfo().then((user) {
-      if(user != null && user.userName != null) {
-        setState(() {
-          userName = user.userName;
-          if(user.userAvatar != null) {
-            userAvatar = user.userAvatar;
-          }
-        });
-      }
-    });
-  }
 }

@@ -13,4 +13,7 @@ class URL{
 
   //上传文件
   static const String UPLOAD_FILE = BASE_URL + '/v1/file/api';
+
+  //获取视频
+  static const String GET_VIDEO_LIST = BASE_URL + '/v1/video/api';
 }

@@ -24,8 +24,7 @@ class UserDetailInfoPage extends StatefulWidget {
 }
 
 class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
-  var userName, userAvatar, sex, area, introduction, age, mobilePhone;
-  var userId, id;
+  var userId, id, userName, userAvatar, sex, area, introduction, age, mobilePhone;
   File _image;
   var _imgServerPath;
 //  WidgetsUtils widgetsUtils;
@@ -149,7 +148,7 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
               shape: BoxShape.circle,
               color: Colors.transparent,
               image: new DecorationImage(
-                  image: new FileImage(File(userAvatar)), fit: BoxFit.cover),
+                  image: NetworkImage(userAvatar), fit: BoxFit.cover),
               border: new Border.all(color: Colors.white, width: 2.0)),
         );
       }

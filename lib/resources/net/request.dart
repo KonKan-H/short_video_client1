@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:short_video_client1/models/Result.dart';
 
@@ -20,6 +19,16 @@ class DioRequest {
     Dio dio = new Dio();
     dio.options.responseType = ResponseType.plain;
     response = await dio.put(url, data: data);
+    Result result = Result.formJson(json.decode(response.data));
+    return result;
+  }
+
+  //get请求
+  static Future<Result> dioGet(String url) async {
+    Response response;
+    Dio dio = new Dio();
+    dio.options.responseType = ResponseType.plain;
+    response = await dio.get(url);
     Result result = Result.formJson(json.decode(response.data));
     return result;
   }

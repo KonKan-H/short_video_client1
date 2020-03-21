@@ -95,9 +95,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                         width: 60,
                         height: 60,
                         //alignment: Alignment.bottomCenter,
-                        child: CircleAvatar(backgroundImage: NetworkImage("https:"
-                            "//dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/"
-                            "u=612723378,2699755568&fm=111&gp=0.jpg"),),
+                        child: CircleAvatar(backgroundImage: NetworkImage("https://dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=612723378,2699755568&fm=111&gp=0.jpg"),),
                       ),
                       Positioned(
                         bottom: 0,
@@ -138,20 +136,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                       ],
                     ),
                   ),
-//                  Container(
-//                    child: Container(
-//                      child: InkWell(
-//                        onTap: () {
-//                          print('=========');
-//                        },
-//                        child: Column(
-//                          children: <Widget>[
-//                            IconText(text: "评论", icon: Icon(Icons.comment, size: 30, color: Colors.white,),),
-//                          ],
-//                        ),
-//                      ),
-//                    )
-//                  ),
                   Container(
                     child: RaisedButton(
                       child: Text('评论', style: TextStyle(color: Colors.white),),
@@ -210,8 +194,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       Container(
         padding: const EdgeInsets.fromLTRB(4, 0,  0, 0),
         alignment: Alignment.topLeft,
-        child: Text('自从武汉决定迅速建设火神山医院和雷神山医院以来，'
-            '自从武汉决定迅速建设火神山医院和雷神山医院以来中联重科第一时间响应。',
+        child: Text('自从武汉决定迅速建设火神山医院和雷神山医院以来，自从武汉决定迅速建设火神山医院和雷神山医院以来中联重科第一时间响应。',
           style: TextStyle(color: Colors.white, fontSize: 14, decoration: TextDecoration.none),
           maxLines: 4, overflow: TextOverflow.ellipsis,),
       ),

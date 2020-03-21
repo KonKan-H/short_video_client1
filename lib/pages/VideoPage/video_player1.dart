@@ -8,8 +8,9 @@ class VideoScreen extends StatefulWidget {
   @override
   _VideoScreenState createState() {
     return _VideoScreenState(
-        video: Video(video.id, 'https://www.runoob.com/try/demo_source/mov_bbb.mp4', video.author));
+//        video: Video(video.id, 'https://www.runoob.com/try/demo_source/mov_bbb.mp4', video.authorName));
 //        video: Video(Random().nextInt(100000000), AppString.VIDEO_URL_HEADER + "/hls/v4.m3u8"));
+    video: null);
   }
 }
 
