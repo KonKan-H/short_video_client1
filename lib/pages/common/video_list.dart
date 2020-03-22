@@ -12,26 +12,47 @@ class MyVideoList extends StatefulWidget {
   MyVideoList({Key key}):super(key: key);
 
   @override
-  State<StatefulWidget> createState() => new GridViewState();
+  State<StatefulWidget> createState() {
+    return new GridViewState();
+  }
+}
+
+class ListUtil {
+  List<Video> videoList = List();
+  void getInitVideoList() async {
+    DioRequest.dioGet(URL.GET_VIDEO_LIST).then((result) {
+      print(result.data);
+      Video video;
+      for(Map<String, dynamic> map in result.data) {
+        video = Video.formJson(map);
+        videoList.add(video);
+      }
+    });
+  }
 }
 
 class GridViewState extends State {
-  var videoList = List();
-  _getInitVideoList() async {
-    Result result = await DioRequest.dioGet(URL.GET_VIDEO_LIST);
-    print(result.data);
-    TsUtils.showShort(result.msg);
-    Video video;
-    for(Map<String, dynamic> map in result.data) {
-        video = Video.formJson(map);
-        videoList.add(video);
-    }
-  }
+
+  List<Video> videoList = List();
 
   @override
   Widget build(BuildContext context) {
-    _getInitVideoList();
-    new GridView(
+    DioRequest.dioGet(URL.GET_VIDEO_LIST).then((result) {
+      List<Video> l = List();
+      print(result.data);
+      Video video;
+      for(Map<String, dynamic> map in result.data) {
+        video = Video.formJson(map);
+        l.add(video);
+      }
+      videoList = l;
+    });
+    setState(() {
+      videoList;
+    });
+    return (videoList == null || videoList.length == 0) ? Center(
+      child: CircularProgressIndicator(),
+    ): GridView(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisSpacing: 8.0,
@@ -39,11 +60,11 @@ class GridViewState extends State {
           childAspectRatio: 0.7
       ),
       padding: const EdgeInsets.all(8.0),
-      children: buildGridTileList(),
+      children: buildGridTileList(videoList),
     );
   }
 
-  List<Widget> buildGridTileList() {
+  List<Widget> buildGridTileList(List<Video> videoList) {
     List<Widget> widgetList = new List();
     int num = videoList.length != null? videoList.length : 0;
     print('===============');
@@ -51,11 +72,8 @@ class GridViewState extends State {
     for (int i = 0; i < num; i++) {
       widgetList.add(getItemWidget(videoList[i]));
     }
-    videoList = null;
     return widgetList;
   }
-
-  //String url = "http://img5.mtime.cn/CMS/News/2020/02/03/125338.16865277_620X620.jpg";
 
   Widget getItemWidget(Video video) {
     String url = getPhotoUrl();
@@ -71,13 +89,12 @@ class GridViewState extends State {
             child: Stack(
               children: <Widget>[
                 Image.network(url, fit: BoxFit.cover,),
-                // TODO:
+                // TODO
                 InkWell(
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(
 //                  Navigator.of(parentContext).push(MaterialPageRoute(
 //                      builder: (context) => VideoScreen(video: Video(Random().nextInt(10000000), 'https://www.runoob.com/try/demo_source/mov_bbb.mp4', "作者"))
-//                        builder: (context) => VideoPlayerPage(video: Video(Random().nextInt(10000000), 'https://aweme.snssdk.com/aweme/v1/playwm/?s_vid=93f1b41336a8b7a442dbf1c29c6bbc560f641c6c47b7bd3078f5dfd249c38b4b04f03514ce6bab0456860d6cf65253383eeb760ecc50fb8dc6461e5fa7b82702&line=0', "作者"))
                         builder: (context) => VideoPlayerPage(video: video)
                     ));
                   },
@@ -116,7 +133,7 @@ class GridViewState extends State {
                     height: 40,
                     alignment: Alignment.centerRight,
                     //todo 点赞 变量
-                    child: Text(video.likes, style: TextStyle(color: Colors.white),),
+                    child: Text(video.likes.toString(), style: TextStyle(color: Colors.white),),
                   ),
                 ],
               ),

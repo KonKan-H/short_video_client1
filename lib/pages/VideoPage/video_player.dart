@@ -46,7 +46,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       children: <Widget>[
         Scaffold(
           appBar: AppBar(
-              title: Text('视频：${video.id}'),
+              title: Text(video.authorName + '作品'),
           ),
           body: Container(
             alignment: Alignment.center,
@@ -69,7 +69,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                 ? _videoPlayerController.pause()
                     : _videoPlayerController.play();
                 });
-              print(_videoPlayerController.value);
+             // print(_videoPlayerController.value);
             },
             child: Icon(_videoPlayerController.value.isPlaying
             ? Icons.pause
@@ -95,7 +95,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                         width: 60,
                         height: 60,
                         //alignment: Alignment.bottomCenter,
-                        child: CircleAvatar(backgroundImage: NetworkImage("https://dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=612723378,2699755568&fm=111&gp=0.jpg"),),
+                        child: CircleAvatar(backgroundImage: NetworkImage(video.authorAvatar),),
                       ),
                       Positioned(
                         bottom: 0,
@@ -131,7 +131,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                         ),
                         Container(
                           alignment: Alignment.center,
-                          child: Text('23', style: TextStyle(color: Colors.white,fontSize: 13.0, decoration: TextDecoration.none), ),
+                          child: Text((video.likes == 0 || video.likes == null) ? '点赞': video.likes.toString(), style: TextStyle(color: Colors.white,fontSize: 13.0, decoration: TextDecoration.none), ),
                         ),
                       ],
                     ),
@@ -151,7 +151,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                     )
                   ),
                   //IconText(text: "评论", icon: Icon(Icons.comment, size: 30, color: Colors.white,),),
-                  IconText(text: "分享", icon: Icon(Icons.reply, size: 30, color: Colors.white,),),
+                  IconText(text: (video.downloads == 0 || video.downloads == null) ? '分享': video.downloads.toString(), icon: Icon(Icons.reply, size: 30, color: Colors.white,),),
                 ],
               ),),
         ),
@@ -164,7 +164,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 //            decoration: BoxDecoration(color: Colors.redAccent),
             child: Container(
               child: Container(
-                child: titleSection,
+                child: titleSection(),
               ),
             ),
           ),
@@ -184,22 +184,29 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 //    return ;
 //  }
 
-  Widget titleSection = Column(
-    children: <Widget>[
-      Container(
-        alignment: Alignment.topLeft,
-        padding: const EdgeInsets.all(4),
-        child: Text('@人民日报', style: TextStyle(color: Colors.white, fontSize: 17, decoration: TextDecoration.none),),
-      ),
-      Container(
-        padding: const EdgeInsets.fromLTRB(4, 0,  0, 0),
-        alignment: Alignment.topLeft,
-        child: Text('自从武汉决定迅速建设火神山医院和雷神山医院以来，自从武汉决定迅速建设火神山医院和雷神山医院以来中联重科第一时间响应。',
-          style: TextStyle(color: Colors.white, fontSize: 14, decoration: TextDecoration.none),
-          maxLines: 4, overflow: TextOverflow.ellipsis,),
-      ),
-    ],
-  );
+  Widget titleSection() {
+    return Column(
+      children: <Widget>[
+        Container(
+          alignment: Alignment.topLeft,
+          padding: const EdgeInsets.all(4),
+          child: Text('@' + video.authorName, style: TextStyle(
+              color: Colors.white,
+              fontSize: 17,
+              decoration: TextDecoration.none),),
+        ),
+        Container(
+          padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
+          alignment: Alignment.topLeft,
+          child: Text(video.description,
+            style: TextStyle(color: Colors.white,
+                fontSize: 14,
+                decoration: TextDecoration.none),
+            maxLines: 4, overflow: TextOverflow.ellipsis,),
+        ),
+      ],
+    );
+  }
 }
 
 showBottom(context) {
