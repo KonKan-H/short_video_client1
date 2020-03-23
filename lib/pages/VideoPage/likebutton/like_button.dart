@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:short_video_client1/models/UserInfo.dart';
+import 'package:short_video_client1/models/Video.dart';
 import 'package:short_video_client1/pages/VideoPage/likebutton/model.dart';
 import 'dot_painter.dart';
 import 'circle_painter.dart';
@@ -13,6 +15,9 @@ class LikeButton extends StatefulWidget {
   final Color circleStartColor;
   final Color circleEndColor;
   final LikeCallback onIconClicked;
+
+  final String looker;
+  final Video video;
 
   const LikeButton({
     Key key,
@@ -31,6 +36,8 @@ class LikeButton extends StatefulWidget {
     this.circleStartColor = const Color(0xFFFF5722),
     this.circleEndColor = const Color(0xFFFFC107),
     this.onIconClicked,
+    this.looker,
+    this.video,
   }) : super(key: key);
 
   @override
@@ -103,13 +110,16 @@ class _LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
   void _onTap() {
     if (_controller.isAnimating) return;
     isLiked = !isLiked;
+    widget.video;
+    widget.looker;
     if (isLiked) {
       _controller.reset();
       _controller.forward();
     } else {
       setState(() {});
     }
-    if (widget.onIconClicked != null) widget.onIconClicked(isLiked);
+    if (widget.onIconClicked != null)
+      widget.onIconClicked(isLiked);
   }
 
   void _initAllAmimations() {

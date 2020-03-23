@@ -30,4 +30,7 @@ class TsUtils{
   static void logError(String code, [String message = ""]) =>
       print('Error: $code\nError Message: $message');
 
+  static void logInfo(String message) =>
+      print('Info: {Infor Message: $message }');
+
 }

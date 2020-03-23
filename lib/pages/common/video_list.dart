@@ -50,7 +50,7 @@ class GridViewState extends State {
     setState(() {
       videoList;
     });
-    return (videoList == null || videoList.length == 0) ? Center(
+    Widget layout = (videoList == null || videoList.length == 0) ? Center(
       child: CircularProgressIndicator(),
     ): GridView(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -62,13 +62,15 @@ class GridViewState extends State {
       padding: const EdgeInsets.all(8.0),
       children: buildGridTileList(videoList),
     );
+    setState(() {
+      layout;
+    });
+    return layout;
   }
 
   List<Widget> buildGridTileList(List<Video> videoList) {
     List<Widget> widgetList = new List();
     int num = videoList.length != null? videoList.length : 0;
-    print('===============');
-    print(videoList.length);
     for (int i = 0; i < num; i++) {
       widgetList.add(getItemWidget(videoList[i]));
     }

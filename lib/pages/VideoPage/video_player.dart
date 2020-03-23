@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:short_video_client1/app/OsApplication.dart';
+import 'package:short_video_client1/event/login_event.dart';
+import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/pages/VideoPage/layout/BottomSheet.dart';
 import 'package:short_video_client1/pages/VideoPage/layout/video_layout.dart';
 import 'package:short_video_client1/pages/VideoPage/likebutton/like_button.dart';
 import 'package:short_video_client1/resources/tools.dart';
+import 'package:short_video_client1/resources/util/user_info_until.dart';
 import 'package:video_player/video_player.dart';
 import 'package:short_video_client1/models/Video.dart';
 
@@ -15,12 +19,14 @@ class VideoPlayerPage extends StatefulWidget {
   @override
   _VideoPlayerPageState createState() => _VideoPlayerPageState(
       video: video);
-//        video: Video(Random().nextInt(100000000), AppString.VIDEO_URL_HEADER + "/hls/v4.m3u8"));
 }
 
 class _VideoPlayerPageState extends State<VideoPlayerPage> {
   _VideoPlayerPageState({Key key, @required this.video});
   final Video video;
+  var userId, id, userName, userAvatar, sex, area, introduction, age, mobilePhone;
+  bool isLiked = false;
+  UserInfo userInfo;
 
   VideoPlayerController _videoPlayerController;
 
@@ -34,6 +40,42 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           _videoPlayerController.setLooping(true);
         });
       });
+    _getUserInfo();
+    OsApplication.eventBus.on<LoginEvent>().listen((event) {
+      OsApplication.eventBus.on<LoginEvent>().listen((event) {
+        if(event != null) {
+          userName = event.userName;
+          userAvatar = event.userAvatar;
+          age = event.age.toString();
+          area = event.area;
+          sex = event.sex;
+          userAvatar = event.userAvatar;
+          userId = event.userId;
+        } else {
+          userName = null;
+        }
+      });
+    });
+
+  }
+
+  _getUserInfo() {
+    UserInfoUntil.getUserInfo().then((userInfo) {
+      if(userInfo != null && userInfo.userName != null) {
+        setState(() {
+          id = userInfo.id;
+          userName = userInfo.userName;
+          userAvatar = userInfo.userAvatar;
+          age = userInfo.age;
+          area = userInfo.area;
+          sex = userInfo.sex;
+          userAvatar = userInfo.userAvatar;
+          userId = userInfo.userId;
+          mobilePhone = userInfo.mobilePhone;
+          introduction = userInfo.introduction;
+        });
+      }
+    });
   }
 
   @override
@@ -46,7 +88,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       children: <Widget>[
         Scaffold(
           appBar: AppBar(
-              title: Text(video.authorName + '作品'),
+              title: Text(video.authorName.toString()),
           ),
           body: Container(
             alignment: Alignment.center,
@@ -124,6 +166,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                                 width: 72.0,
                                 duration: Duration(seconds: 2),
                                 circleStartColor: Color(0xffffff),
+                                //looker: userId.toString(),
+                                video: video,
+                                //onIconClicked: likeButton(isLiked),
                                 //circleStartColor: Colors.white,
                               ),
                             ],
@@ -169,7 +214,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
             ),
           ),
         ),
-
       ],
     );
   }
@@ -179,10 +223,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     super.dispose();
     _videoPlayerController.dispose();
   }
-
-//  _getButtonList() {
-//    return ;
-//  }
 
   Widget titleSection() {
     return Column(
