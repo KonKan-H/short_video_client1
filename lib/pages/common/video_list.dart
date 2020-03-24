@@ -45,23 +45,25 @@ class GridViewState extends State {
         video = Video.formJson(map);
         l.add(video);
       }
+      setState(() {
+        l;
+      });
       videoList = l;
     });
     Widget layout;
-    setState(() {
-      layout = (videoList == null || videoList.length == 0) ? Center(
-        child: CircularProgressIndicator(),
-      ): GridView(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 8.0,
-            crossAxisSpacing: 8.0,
-            childAspectRatio: 0.7
-        ),
-        padding: const EdgeInsets.all(8.0),
-        children: buildGridTileList(videoList),
-      );
-    });
+
+    layout = (videoList == null || videoList.length == 0) ? Center(
+      child: CircularProgressIndicator(),
+    ): GridView(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 8.0,
+          crossAxisSpacing: 8.0,
+          childAspectRatio: 0.7
+      ),
+      padding: const EdgeInsets.all(8.0),
+      children: buildGridTileList(videoList),
+    );
     return layout;
   }
 
@@ -87,7 +89,7 @@ class GridViewState extends State {
             alignment: Alignment.center,
             child: Stack(
               children: <Widget>[
-                Image.network(url, fit: BoxFit.cover,),
+                Image.network(video.cover, fit: BoxFit.cover,),
                 // TODO
                 InkWell(
                   onTap: () {

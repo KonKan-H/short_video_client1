@@ -26,7 +26,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   final Video video;
   var userId, id, userName, userAvatar, sex, area, introduction, age, mobilePhone;
   bool isLiked = false;
-  UserInfo userInfo;
 
   VideoPlayerController _videoPlayerController;
 
