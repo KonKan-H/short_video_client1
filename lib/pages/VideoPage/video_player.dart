@@ -84,6 +84,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double rpx = MediaQuery.of(context).size.width / 750;
+
     return Stack(
       children: <Widget>[
         Scaffold(
@@ -166,7 +167,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                                 width: 72.0,
                                 duration: Duration(seconds: 2),
                                 circleStartColor: Color(0xffffff),
-                                //looker: userId.toString(),
+                                looker: userId,
                                 video: video,
                                 //onIconClicked: likeButton(isLiked),
                                 //circleStartColor: Colors.white,

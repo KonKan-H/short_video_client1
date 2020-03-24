@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/models/Video.dart';
 import 'package:short_video_client1/pages/VideoPage/likebutton/model.dart';
+import 'package:short_video_client1/resources/net/api.dart';
+import 'package:short_video_client1/resources/net/request.dart';
+import 'package:short_video_client1/resources/tools.dart';
 import 'dot_painter.dart';
 import 'circle_painter.dart';
 
@@ -16,7 +20,7 @@ class LikeButton extends StatefulWidget {
   final Color circleEndColor;
   final LikeCallback onIconClicked;
 
-  final String looker;
+  final int looker;
   final Video video;
 
   const LikeButton({
@@ -107,21 +111,43 @@ class _LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
     );
   }
 
-  void _onTap() {
+  void _onTap() async {
+    Video video = widget.video;
+    int looker = widget.looker;
+    if(looker == null) {
+      TsUtils.showShort('请先登录');
+      return;
+    }
+
     if (_controller.isAnimating) return;
     isLiked = !isLiked;
-    widget.video;
-    widget.looker;
+
+    Map<String, dynamic> data = {
+      'video' : Video.model2map(video),
+      'looker' : looker,
+      'isLiked' : isLiked
+    };
+
+    try {
+      Result result = await DioRequest.dioPut(URL.VIDEO_LIKE, data);
+      if(result.code.toString() != "1") {
+        throw "Error:后台错误{${result.code}, ${result.data}, ${result.msg}";
+      }
+    } on Exception {
+      TsUtils.showShort('通讯错误，请重试');
+      return;
+    }
     if (isLiked) {
       _controller.reset();
       _controller.forward();
     } else {
       setState(() {});
     }
+
     if (widget.onIconClicked != null)
       widget.onIconClicked(isLiked);
   }
-
+  
   void _initAllAmimations() {
     outerCircle = new Tween<double>(
       begin: 0.1,

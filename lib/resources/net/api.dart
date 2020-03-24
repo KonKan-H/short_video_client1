@@ -16,4 +16,7 @@ class URL{
 
   //获取视频
   static const String GET_VIDEO_LIST = BASE_URL + '/v1/video/api';
+
+  //点赞
+  static const String VIDEO_LIKE = BASE_URL + '/v1/like/api';
 }

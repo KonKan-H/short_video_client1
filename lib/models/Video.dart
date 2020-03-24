@@ -42,20 +42,22 @@ class Video{
         downloads:json['downloads']
     );
   }
-//  factory Video.formJson(Map<String, dynamic> json) {
-//    Video video;
-//    video.id = json['id'];
-//    video.url = json['url'];
-//    video.authorName = json['authorName'];
-//    video.authorAvatar = json['authorAvatar'];
-//    video.createTime = json['createTime'];
-//    video.authorId = json['authorId'];
-//    video.cover = json['cover'];
-//    video.description = json['description'];
-//    video.duration = json['duration'];
-//    video.likes = json['likes'];
-//    video.downloads = json['downloads'];
-//    return video;
-//  }
 
+  static Map<String, dynamic> model2map(Video video) {
+      Map<String, dynamic> map = {
+      'id' : video.id,
+      'authorId' : video.authorId,
+      'url' : video.url,
+      'authorName' : video.authorName,
+      'authorAvatar' : video.authorAvatar,
+      'createTime' : video.createTime,
+      'authorId' : video.authorId,
+      'cover' : video.cover,
+      'description' : video.description,
+      'duration' : video.duration,
+      'likes' : video.likes,
+      'downloads' : video.downloads
+      };
+      return map;
+  }
 }

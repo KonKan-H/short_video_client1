@@ -47,23 +47,20 @@ class GridViewState extends State {
       }
       videoList = l;
     });
+    Widget layout;
     setState(() {
-      videoList;
-    });
-    Widget layout = (videoList == null || videoList.length == 0) ? Center(
-      child: CircularProgressIndicator(),
-    ): GridView(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 8.0,
-          crossAxisSpacing: 8.0,
-          childAspectRatio: 0.7
-      ),
-      padding: const EdgeInsets.all(8.0),
-      children: buildGridTileList(videoList),
-    );
-    setState(() {
-      layout;
+      layout = (videoList == null || videoList.length == 0) ? Center(
+        child: CircularProgressIndicator(),
+      ): GridView(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 8.0,
+            crossAxisSpacing: 8.0,
+            childAspectRatio: 0.7
+        ),
+        padding: const EdgeInsets.all(8.0),
+        children: buildGridTileList(videoList),
+      );
     });
     return layout;
   }
