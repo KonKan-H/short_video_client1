@@ -122,6 +122,8 @@ class _LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
     if (_controller.isAnimating) return;
     isLiked = !isLiked;
 
+    isLiked == true ? video.likes = video.likes + 1 : video.likes = video.likes - 1;
+
     Map<String, dynamic> data = {
       'video' : Video.model2map(video),
       'looker' : looker,

@@ -33,4 +33,14 @@ class TsUtils{
   static void logInfo(String message) =>
       print('Info: {Infor Message: $message }');
 
+  static String dataDeal(int data) {
+    if(data == null) {
+      return 0.toString();
+    }
+    if(data > 9999) {
+      return (data/1000).toString() + 'w';
+    }
+    return data.toString();
+  }
+
 }

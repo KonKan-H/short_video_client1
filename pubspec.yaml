@@ -37,6 +37,9 @@ dependencies:
   path_provider: ^1.6.5
   path: ^1.6.4
   provider: ^4.0.3
+  permission_handler: ^4.4.0+hotfix.2
+  flutter_downloader: ^1.4.1
+  progress_dialog: ^1.1.0+1
 
 dev_dependencies:
   flutter_test:

@@ -45,9 +45,9 @@ class GridViewState extends State {
         video = Video.formJson(map);
         l.add(video);
       }
-      setState(() {
-        l;
-      });
+//      setState(() {
+//        l;
+//      });
       videoList = l;
     });
     Widget layout;
@@ -77,7 +77,6 @@ class GridViewState extends State {
   }
 
   Widget getItemWidget(Video video) {
-    String url = getPhotoUrl();
     return Container(
 //      decoration: BoxDecoration(
 //          borderRadius: BorderRadius.circular(3),///圆角
@@ -145,11 +144,10 @@ class GridViewState extends State {
     );
   }
 
-  String getPhotoUrl() {
-    int id = Random().nextInt(999);
-    String url = "https://i.picsum.photos/id/$id/200/300.jpg";
-    print(url);
-    return url;
-  }
-
+//  String getPhotoUrl() {
+//    int id = Random().nextInt(999);
+//    String url = "https://i.picsum.photos/id/$id/200/300.jpg";
+//    print(url);
+//    return url;
+//  }
 }

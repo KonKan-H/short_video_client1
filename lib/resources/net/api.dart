@@ -19,4 +19,7 @@ class URL{
 
   //点赞
   static const String VIDEO_LIKE = BASE_URL + '/v1/like/api';
+
+  //下载视频
+  static const String VIDEO_DOWNLOAD = BASE_URL + 'v1/video/api';
 }

@@ -312,8 +312,7 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
   }
 
   _uploadImage() async {
-    var uuid = new Uuid();
-    String name = uuid.v1();
+    String name = Uuid().v1();
     String suffix = _image.path.substring(_image.path.length - 4, _image.path.length);
     FormData formData = FormData.from({
 //      'file' : MultipartFile.fromFile(_image.path, filename: name),

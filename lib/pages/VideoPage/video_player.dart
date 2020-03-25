@@ -1,14 +1,25 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:short_video_client1/app/OsApplication.dart';
 import 'package:short_video_client1/event/login_event.dart';
+import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/pages/VideoPage/layout/BottomSheet.dart';
 import 'package:short_video_client1/pages/VideoPage/layout/video_layout.dart';
 import 'package:short_video_client1/pages/VideoPage/likebutton/like_button.dart';
+import 'package:short_video_client1/resources/net/api.dart';
+import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/util/user_info_until.dart';
+import 'package:uuid/uuid.dart';
 import 'package:video_player/video_player.dart';
 import 'package:short_video_client1/models/Video.dart';
 
@@ -176,27 +187,55 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                         ),
                         Container(
                           alignment: Alignment.center,
-                          child: Text((video.likes == 0 || video.likes == null) ? '点赞': video.likes.toString(), style: TextStyle(color: Colors.white,fontSize: 13.0, decoration: TextDecoration.none), ),
+                          child: Text((video.likes == 0 || video.likes == null) ? '点赞': TsUtils.dataDeal(video.likes), style: TextStyle(color: Colors.white,fontSize: 13.0, decoration: TextDecoration.none), ),
                         ),
                       ],
                     ),
                   ),
                   Container(
-                    child: RaisedButton(
-                      child: Text('评论', style: TextStyle(color: Colors.white),),
-                      color: Colors.black,
-                      onPressed: () {
-                        showBottom(context);
-                      },
-                      shape: CircleBorder(
-                        side: BorderSide(
-                          color: Colors.white,
+                    child: Column(
+                      children: <Widget>[
+                        RaisedButton(
+                          child: Text('评论', style: TextStyle(color: Colors.white),),
+                          color: Colors.black,
+                          onPressed: () {
+                            showBottom(context);
+                          },
+                          shape: CircleBorder(
+                            side: BorderSide(
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                      ),
+                        Container(
+                          child: Text(TsUtils.dataDeal(video.comments), style: TextStyle(color: Colors.white, fontSize: 13, decoration: TextDecoration.none),),
+                        )
+                      ],
                     )
                   ),
+                  Container(
+                      child: Column(
+                        children: <Widget>[
+                          RaisedButton(
+                            child: Text('下载', style: TextStyle(color: Colors.white),),
+                            color: Colors.black,
+                            onPressed: () {
+                              _downLoadVideo(video);
+                            },
+                            shape: CircleBorder(
+                              side: BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            child: Text(TsUtils.dataDeal(video.downloads), style: TextStyle(color: Colors.white, fontSize: 13, decoration: TextDecoration.none),),
+                          )
+                        ],
+                      )
+                  ),
                   //IconText(text: "评论", icon: Icon(Icons.comment, size: 30, color: Colors.white,),),
-                  IconText(text: (video.downloads == 0 || video.downloads == null) ? '分享': video.downloads.toString(), icon: Icon(Icons.reply, size: 30, color: Colors.white,),),
+                  //IconText(text: (video.downloads == 0 || video.downloads == null) ? '分享': video.downloads.toString(), icon: Icon(Icons.reply, size: 30, color: Colors.white,),),
                 ],
               ),),
         ),
@@ -247,6 +286,66 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       ],
     );
   }
+
+  _downLoadVideo(Video video) async {
+    WidgetsFlutterBinding.ensureInitialized();
+    FlutterDownloader.initialize();
+    // 获取存储路径
+    var _localPath = (await _findLocalPath()) + '/shortVideo';
+    final savedDir = Directory(_localPath);
+    // 判断下载路径是否存在
+    bool hasExisted = await savedDir.exists();
+    // 不存在就新建路径
+    if (!hasExisted) {
+      savedDir.create();
+    }
+
+    String fileName = Uuid().v1() + '.mp4';
+    await FlutterDownloader.enqueue(
+      url: video.url,
+      fileName: fileName,
+      savedDir: _localPath,
+      showNotification: true,
+      // show download progress in status bar (for Android)
+      openFileFromNotification: true, // click on notification to open downloaded file (for Android)
+    );
+//    ProgressDialog pr = new ProgressDialog(context, type: ProgressDialogType.Download);
+//    FlutterDownloader.registerCallback((id, status, progress) {
+//      // 打印输出下载信息
+//      print('Download task ($id) is in status ($status) and process ($progress)');
+//      if (!pr.isShowing()) {
+//        pr.show();
+//      }
+//      if (status == DownloadTaskStatus.running) {
+//        pr.update(progress: progress.toDouble(), message: "下载中，请稍后…");
+//      }
+//      if (status == DownloadTaskStatus.failed) {
+//        TsUtils.showShort("下载异常，请稍后重试");
+//        if (pr.isShowing()) {
+//          pr.hide();
+//        }
+//      }
+//      if (status == DownloadTaskStatus.complete) {
+//        print(pr.isShowing());
+//        if (pr.isShowing()) {
+//          pr.hide();
+//        }
+//      }
+//    });
+    TsUtils.showShort('下载成功');
+//    Map<String, dynamic> data = Video.model2map(video);
+//    Result result = await DioRequest.dioPut(URL.VIDEO_DOWNLOAD, data);
+  }
+
+  // 获取存储路径
+  Future<String> _findLocalPath() async {
+    // 如果是android，使用getExternalStorageDirectory
+    // 如果是iOS，使用getApplicationSupportDirectory
+    final directory = Theme.of(context).platform == TargetPlatform.android
+        ? await getExternalStorageDirectory()
+        : await getApplicationSupportDirectory();
+    return directory.path;
+  }
 }
 
 showBottom(context) {
@@ -265,5 +364,6 @@ showBottom(context) {
             ));
       });
 }
+
 
 

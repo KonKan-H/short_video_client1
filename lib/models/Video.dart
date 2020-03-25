@@ -12,6 +12,7 @@ class Video{
   var duration;
   var likes;
   var downloads;
+  var comments;
 
   Video({
     this.id,
@@ -25,6 +26,7 @@ class Video{
     this.duration,
     this.likes,
     this.downloads,
+    this.comments,
   });
 
   factory Video.formJson(Map<String, dynamic> json) {
@@ -39,7 +41,8 @@ class Video{
         description:json['description'],
         duration:json['duration'],
         likes:json['likes'],
-        downloads:json['downloads']
+        downloads:json['downloads'],
+        comments:json['comments'],
     );
   }
 
@@ -56,7 +59,8 @@ class Video{
       'description' : video.description,
       'duration' : video.duration,
       'likes' : video.likes,
-      'downloads' : video.downloads
+      'downloads' : video.downloads,
+        'commentss': video.comments,
       };
       return map;
   }
