@@ -21,5 +21,8 @@ class URL{
   static const String VIDEO_LIKE = BASE_URL + '/v1/like/api';
 
   //下载视频
-  static const String VIDEO_DOWNLOAD = BASE_URL + 'v1/video/api';
+  static const String VIDEO_DOWNLOAD = BASE_URL + '/v1/video/api';
+
+  //更新密码
+  static const String UPDATE_PASSWORD = BASE_URL + '/v1/password/api';
 }

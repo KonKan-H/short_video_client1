@@ -7,6 +7,7 @@ import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/models/User.dart';
 import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/pages/UserInfo/registration_page.dart';
+import 'package:short_video_client1/pages/UserInfo/update_password.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
@@ -27,20 +28,20 @@ class _LoginPageState extends State<LoginPage> {
   String _mobilePhone, _password;
   bool _isObscure = true;
   Color _eyeColor;
-  List _loginMethod = [
-    {
-      "title": "wechat",
-      "icon": GroovinMaterialIcons.wechat,
-    },
-    {
-      "title": "facebook",
-      "icon": GroovinMaterialIcons.facebook,
-    },
-    {
-      "title": "qq",
-      "icon": GroovinMaterialIcons.qqchat,
-    },
-  ];
+//  List _loginMethod = [
+//    {
+//      "title": "wechat",
+//      "icon": GroovinMaterialIcons.wechat,
+//    },
+//    {
+//      "title": "facebook",
+//      "icon": GroovinMaterialIcons.facebook,
+//    },
+//    {
+//      "title": "qq",
+//      "icon": GroovinMaterialIcons.qqchat,
+//    },
+//  ];
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +64,8 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 60.0),
                 buildLoginButton(context),
                 SizedBox(height: 30.0),
-                buildOtherLoginText(),
-                buildOtherMethod(context),
+//                buildOtherLoginText(),
+//                buildOtherMethod(context),
                 buildRegisterText(context),
               ],
             )));
@@ -102,7 +103,6 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(color: Colors.green),
               ),
               onTap: () {
-                print('去注册');
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) => RegistrationPage()
                 ));
@@ -114,39 +114,40 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  ButtonBar buildOtherMethod(BuildContext context) {
-    return ButtonBar(
-      alignment: MainAxisAlignment.center,
-      children: _loginMethod
-          .map((item) => Builder(
-        builder: (context) {
-          return IconButton(
-              icon: Icon(item['icon'],
-                  color: Theme.of(context).iconTheme.color),
-              onPressed: () {
-                //TODO : 第三方登录方法
-                Scaffold.of(context).showSnackBar(new SnackBar(
-                  content: new Text("${item['title']}登录"),
-                  action: new SnackBarAction(
-                    label: "取消",
-                    onPressed: () {},
-                  ),
-                ));
-              });
-        },
-      ))
-          .toList(),
-    );
-  }
-
-  Align buildOtherLoginText() {
-    return Align(
-        alignment: Alignment.center,
-        child: Text(
-          '其他账号登录',
-          style: TextStyle(color: Colors.grey, fontSize: 14.0),
-        ));
-  }
+  //第三方登录
+//  ButtonBar buildOtherMethod(BuildContext context) {
+//    return ButtonBar(
+//      alignment: MainAxisAlignment.center,
+//      children: _loginMethod
+//          .map((item) => Builder(
+//        builder: (context) {
+//          return IconButton(
+//              icon: Icon(item['icon'],
+//                  color: Theme.of(context).iconTheme.color),
+//              onPressed: () {
+//                //TODO : 第三方登录方法
+//                Scaffold.of(context).showSnackBar(new SnackBar(
+//                  content: new Text("${item['title']}登录"),
+//                  action: new SnackBarAction(
+//                    label: "取消",
+//                    onPressed: () {},
+//                  ),
+//                ));
+//              });
+//        },
+//      ))
+//          .toList(),
+//    );
+//  }
+//
+//  Align buildOtherLoginText() {
+//    return Align(
+//        alignment: Alignment.center,
+//        child: Text(
+//          '其他账号登录',
+//          style: TextStyle(color: Colors.grey, fontSize: 14.0),
+//        ));
+//  }
 
   Align buildLoginButton(BuildContext context) {
     return Align(
@@ -195,11 +196,13 @@ class _LoginPageState extends State<LoginPage> {
         alignment: Alignment.centerRight,
         child: FlatButton(
           child: Text(
-            '忘记密码？',
+            '修改密码 ',
             style: TextStyle(fontSize: 14.0, color: Colors.grey),
           ),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) => UpdatePassword()
+            ));
           },
         ),
       ),

@@ -22,6 +22,7 @@ class LikeButton extends StatefulWidget {
 
   final int looker;
   final Video video;
+  final bool isLike;
 
   const LikeButton({
     Key key,
@@ -42,20 +43,23 @@ class LikeButton extends StatefulWidget {
     this.onIconClicked,
     this.looker,
     this.video,
+    this.isLike,
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _LikeButtonState();
+  State<StatefulWidget> createState() => _LikeButtonState(isLiked: isLike);
 }
 
 class _LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
+  _LikeButtonState({Key key, @required this.isLiked});
+
   AnimationController _controller;
   Animation<double> outerCircle;
   Animation<double> innerCircle;
   Animation<double> scale;
   Animation<double> dots;
 
-  bool isLiked = false;
+  bool isLiked;
 
   @override
   void initState() {
@@ -66,6 +70,10 @@ class _LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
             setState(() {});
           });
     _initAllAmimations();
+    if(isLiked) {
+      _controller.reset();
+      _controller.forward();
+    }
   }
 
   @override
@@ -118,11 +126,10 @@ class _LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
       TsUtils.showShort('请先登录');
       return;
     }
-
     if (_controller.isAnimating) return;
     isLiked = !isLiked;
 
-    isLiked == true ? video.likes = video.likes + 1 : video.likes = video.likes - 1;
+    isLiked == true ? video.likes ++ : video.likes --;
 
     Map<String, dynamic> data = {
       'video' : Video.model2map(video),

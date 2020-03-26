@@ -17,6 +17,7 @@ import 'package:short_video_client1/pages/VideoPage/layout/video_layout.dart';
 import 'package:short_video_client1/pages/VideoPage/likebutton/like_button.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
+import 'package:short_video_client1/resources/strings.dart';
 import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/util/user_info_until.dart';
 import 'package:uuid/uuid.dart';
@@ -179,8 +180,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                                 circleStartColor: Color(0xffffff),
                                 looker: userId,
                                 video: video,
-                                //onIconClicked: likeButton(isLiked),
-                                //circleStartColor: Colors.white,
+                                isLike: true,
                               ),
                             ],
                           ),
@@ -291,7 +291,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     WidgetsFlutterBinding.ensureInitialized();
     FlutterDownloader.initialize();
     // 获取存储路径
-    var _localPath = (await _findLocalPath()) + '/shortVideo';
+    var _localPath = (await _findLocalPath()) + ConstantData.VIDEO_LOCALHOST;
     final savedDir = Directory(_localPath);
     // 判断下载路径是否存在
     bool hasExisted = await savedDir.exists();
@@ -299,7 +299,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     if (!hasExisted) {
       savedDir.create();
     }
-
     String fileName = Uuid().v1() + '.mp4';
     await FlutterDownloader.enqueue(
       url: video.url,
@@ -309,32 +308,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       // show download progress in status bar (for Android)
       openFileFromNotification: true, // click on notification to open downloaded file (for Android)
     );
-//    ProgressDialog pr = new ProgressDialog(context, type: ProgressDialogType.Download);
-//    FlutterDownloader.registerCallback((id, status, progress) {
-//      // 打印输出下载信息
-//      print('Download task ($id) is in status ($status) and process ($progress)');
-//      if (!pr.isShowing()) {
-//        pr.show();
-//      }
-//      if (status == DownloadTaskStatus.running) {
-//        pr.update(progress: progress.toDouble(), message: "下载中，请稍后…");
-//      }
-//      if (status == DownloadTaskStatus.failed) {
-//        TsUtils.showShort("下载异常，请稍后重试");
-//        if (pr.isShowing()) {
-//          pr.hide();
-//        }
-//      }
-//      if (status == DownloadTaskStatus.complete) {
-//        print(pr.isShowing());
-//        if (pr.isShowing()) {
-//          pr.hide();
-//        }
-//      }
-//    });
     TsUtils.showShort('下载成功');
-//    Map<String, dynamic> data = Video.model2map(video);
-//    Result result = await DioRequest.dioPut(URL.VIDEO_DOWNLOAD, data);
+    setState(() {
+      video.downloads ++;
+    });
+    Map<String, dynamic> data = Video.model2map(video);
+    Result result = await DioRequest.dioPut(URL.VIDEO_DOWNLOAD, data);
   }
 
   // 获取存储路径

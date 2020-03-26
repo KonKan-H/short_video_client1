@@ -56,6 +56,24 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
       }
     });
   }
+  _getUserInfo() {
+    UserInfoUntil.getUserInfo().then((userInfo) {
+      if(userInfo != null) {
+        setState(() {
+          id = userInfo.id;
+          userName = userInfo.userName;
+          userAvatar = userInfo.userAvatar;
+          age = userInfo.age;
+          area = userInfo.area;
+          sex = userInfo.sex;
+          userAvatar = userInfo.userAvatar;
+          userId = userInfo.userId;
+          mobilePhone = userInfo.mobilePhone;
+          introduction = userInfo.introduction;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -323,24 +341,5 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
       userAvatar = result.data;
     });
     print(userAvatar);
-  }
-
-  _getUserInfo() {
-     UserInfoUntil.getUserInfo().then((userInfo) {
-       if(userInfo != null) {
-         setState(() {
-           id = userInfo.id;
-           userName = userInfo.userName;
-           userAvatar = userInfo.userAvatar;
-           age = userInfo.age;
-           area = userInfo.area;
-           sex = userInfo.sex;
-           userAvatar = userInfo.userAvatar;
-           userId = userInfo.userId;
-           mobilePhone = userInfo.mobilePhone;
-           introduction = userInfo.introduction;
-         });
-       }
-     });
   }
 }
