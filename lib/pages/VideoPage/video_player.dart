@@ -94,7 +94,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     //取得屏幕宽度
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    double rpx = MediaQuery.of(context).size.width / 750;
 
     return Stack(
       children: <Widget>[
@@ -164,7 +163,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                           child: Icon(Icons.add, size: 20, color: Colors.white,),),)
                     ],),
                   ),
-                  //IconText(text: "999w", icon: Icon(Icons.favorite, size: 40, color: Colors.redAccent,),),
                   //点赞爱心
                   Container(
                     child: Column(
@@ -180,7 +178,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                                 circleStartColor: Color(0xffffff),
                                 looker: userId,
                                 video: video,
-                                isLike: true,
+                                isLike: isLiked,
                               ),
                             ],
                           ),
@@ -234,8 +232,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                         ],
                       )
                   ),
-                  //IconText(text: "评论", icon: Icon(Icons.comment, size: 30, color: Colors.white,),),
-                  //IconText(text: (video.downloads == 0 || video.downloads == null) ? '分享': video.downloads.toString(), icon: Icon(Icons.reply, size: 30, color: Colors.white,),),
                 ],
               ),),
         ),

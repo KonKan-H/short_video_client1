@@ -1,6 +1,4 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:short_video_client1/app/OsApplication.dart';
 import 'package:short_video_client1/event/login_event.dart';
 import 'package:short_video_client1/models/Result.dart';
@@ -15,8 +13,6 @@ import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/util/user_info_until.dart';
 import 'package:short_video_client1/resources/util/user_until.dart';
 import 'layout/layout.dart';
-import 'my_home_page.dart';
-import 'my_info.dart';
 
 class LoginPage extends StatefulWidget {
   @override

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:short_video_client1/models/Result.dart';
-import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/models/Video.dart';
 import 'package:short_video_client1/pages/VideoPage/likebutton/model.dart';
 import 'package:short_video_client1/resources/net/api.dart';
