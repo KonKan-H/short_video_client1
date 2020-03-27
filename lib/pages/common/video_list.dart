@@ -1,12 +1,9 @@
-import 'dart:math';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/models/Video.dart';
 import 'package:short_video_client1/pages/VideoPage/video_player.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
-import 'package:short_video_client1/resources/tools.dart';
+import 'package:short_video_client1/resources/util/user_info_until.dart';
 
 class MyVideoList extends StatefulWidget {
   MyVideoList({Key key}):super(key: key);
@@ -20,7 +17,7 @@ class MyVideoList extends StatefulWidget {
 class ListUtil {
   List<Video> videoList = List();
   void getInitVideoList() async {
-    DioRequest.dioGet(URL.GET_VIDEO_LIST).then((result) {
+    DioRequest.dioGetNoA(URL.GET_VIDEO_LIST).then((result) {
       print(result.data);
       Video video;
       for(Map<String, dynamic> map in result.data) {
@@ -32,12 +29,18 @@ class ListUtil {
 }
 
 class GridViewState extends State {
-
+  var userId;
   List<Video> videoList = List();
 
   @override
   Widget build(BuildContext context) {
-    DioRequest.dioGet(URL.GET_VIDEO_LIST).then((result) {
+    UserInfoUntil.getUserInfo().then((userInfo) {
+      if(userInfo != null && userInfo.userName != null) {
+        userId = userInfo.userId;
+      }
+    });
+
+    DioRequest.dioGetNoA(URL.GET_VIDEO_LIST).then((result) {
       List<Video> l = List();
       print(result.data);
       Video video;
@@ -45,9 +48,9 @@ class GridViewState extends State {
         video = Video.formJson(map);
         l.add(video);
       }
-//      setState(() {
-//        l;
-//      });
+      setState(() {
+        l;
+      });
       videoList = l;
     });
     Widget layout;
@@ -92,6 +95,7 @@ class GridViewState extends State {
                 // TODO
                 InkWell(
                   onTap: () {
+                    video.looker = userId;
                     Navigator.push(context, MaterialPageRoute(
 //                  Navigator.of(parentContext).push(MaterialPageRoute(
 //                      builder: (context) => VideoScreen(video: Video(Random().nextInt(10000000), 'https://www.runoob.com/try/demo_source/mov_bbb.mp4', "作者"))

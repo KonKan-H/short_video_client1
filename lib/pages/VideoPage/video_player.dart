@@ -1,19 +1,12 @@
 import 'dart:io';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:progress_dialog/progress_dialog.dart';
-import 'package:provider/provider.dart';
 import 'package:short_video_client1/app/OsApplication.dart';
 import 'package:short_video_client1/event/login_event.dart';
 import 'package:short_video_client1/models/Result.dart';
-import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/pages/VideoPage/layout/BottomSheet.dart';
-import 'package:short_video_client1/pages/VideoPage/layout/video_layout.dart';
 import 'package:short_video_client1/pages/VideoPage/likebutton/like_button.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
@@ -37,12 +30,13 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   _VideoPlayerPageState({Key key, @required this.video});
   final Video video;
   var userId, id, userName, userAvatar, sex, area, introduction, age, mobilePhone;
-  bool isLiked = false;
+  bool isLiked;
 
   VideoPlayerController _videoPlayerController;
 
   @override
   void initState() {
+    _getLikeOrNot();
     super.initState();
     _videoPlayerController = VideoPlayerController.network(video.url)
       ..initialize().then((_) {
@@ -67,7 +61,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         }
       });
     });
-
   }
 
   _getUserInfo() {
@@ -86,6 +79,24 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           introduction = userInfo.introduction;
         });
       }
+    });
+  }
+
+  _getLikeOrNot() async {
+//    var uid;
+//    UserInfoUntil.getUserInfo().then((userInfo) {
+//      if(userInfo != null && userInfo.userName != null) {
+//        uid = userInfo.userId;
+//      }
+//    });
+//    Map<String, dynamic> data = {
+//      "userId" : uid,
+//      "videoId" : video.id
+//    };
+    Result result = await DioRequest.dioPost(URL.VIDEO_LIKE_OR_NOT, Video.model2map(video));
+    isLiked = result.data;
+    setState(() {
+      isLiked;
     });
   }
 
@@ -168,20 +179,17 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              LikeButton(
-                                width: 72.0,
-                                duration: Duration(seconds: 2),
-                                circleStartColor: Color(0xffffff),
-                                looker: userId,
-                                video: video,
-                                isLike: isLiked,
-                              ),
-                            ],
+                        isLiked != null ? Container(
+                          child: LikeButton(
+                            width: 72.0,
+                            duration: Duration(seconds: 2),
+                            circleStartColor: Color(0xffffff),
+                            looker: userId,
+                            video: video,
+                            isLike: isLiked,
                           ),
+                        ):Container(
+                          child: Icon(Icons.favorite, color: Colors.white,)
                         ),
                         Container(
                           alignment: Alignment.center,
@@ -283,6 +291,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     );
   }
 
+  //下载视频
   _downLoadVideo(Video video) async {
     WidgetsFlutterBinding.ensureInitialized();
     FlutterDownloader.initialize();

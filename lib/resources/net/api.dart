@@ -1,5 +1,5 @@
 class URL{
-  //192.168.31.81为pc IP地址
+  //192.168.31.81为服务端 IP地址
   static const String BASE_URL = 'http://192.168.31.81:9250/v3';
 
   //注册
@@ -25,4 +25,7 @@ class URL{
 
   //更新密码
   static const String UPDATE_PASSWORD = BASE_URL + '/v1/password/api';
+
+  //判断喜欢
+  static const String VIDEO_LIKE_OR_NOT = BASE_URL + '/v1/like/api';
 }

@@ -13,6 +13,7 @@ class Video{
   var likes;
   var downloads;
   var comments;
+  var looker;
 
   Video({
     this.id,
@@ -27,6 +28,7 @@ class Video{
     this.likes,
     this.downloads,
     this.comments,
+    this.looker
   });
 
   factory Video.formJson(Map<String, dynamic> json) {
@@ -43,6 +45,7 @@ class Video{
         likes:json['likes'],
         downloads:json['downloads'],
         comments:json['comments'],
+        looker:json['looker']
     );
   }
 
@@ -61,6 +64,7 @@ class Video{
       'likes' : video.likes,
       'downloads' : video.downloads,
         'commentss': video.comments,
+        'looker' : video.looker
       };
       return map;
   }

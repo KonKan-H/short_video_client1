@@ -6,7 +6,6 @@ import 'package:short_video_client1/resources/strings.dart';
 import 'package:short_video_client1/resources/tools.dart';
 import 'layout/layout.dart';
 
-
 class RegistrationPage extends StatefulWidget {
   RegistrationPage({Key key}) : super(key: key);
 
@@ -34,7 +33,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         title: Text('注册页面'),

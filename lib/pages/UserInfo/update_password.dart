@@ -6,7 +6,6 @@ import 'package:short_video_client1/resources/strings.dart';
 import 'package:short_video_client1/resources/tools.dart';
 import 'layout/layout.dart';
 
-
 class UpdatePassword extends StatefulWidget {
   UpdatePassword({Key key}) : super(key: key);
 
@@ -34,7 +33,6 @@ class _UpdatePasswordState extends State<UpdatePassword> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         title: Text('修改密码'),

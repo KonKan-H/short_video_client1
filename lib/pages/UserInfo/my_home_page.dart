@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:short_video_client1/pages/UserInfo/my_info.dart';
 import 'package:short_video_client1/resources/strings.dart';
 
-import 'login_page.dart';
-
 class MyInfoHomePage extends StatelessWidget {
   MyInfoHomePage({Key key}) : super(key: key);
 

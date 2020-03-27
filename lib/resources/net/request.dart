@@ -28,8 +28,8 @@ class DioRequest {
     return result;
   }
 
-  //get请求
-  static Future<Result> dioGet(String url) async {
+  //get请求 无参
+  static Future<Result> dioGetNoA(String url) async {
     TsUtils.logInfo('Get: $url');
     Response response;
     Dio dio = new Dio();
