@@ -38,7 +38,7 @@ class TsUtils{
       return 0.toString();
     }
     if(data > 9999) {
-      return (data/1000).toString() + 'w';
+      return (data/1000).toString().substring(0, (data/1000).toString().length-2) + 'w';
     }
     return data.toString();
   }

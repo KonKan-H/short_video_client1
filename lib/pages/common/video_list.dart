@@ -3,6 +3,7 @@ import 'package:short_video_client1/models/Video.dart';
 import 'package:short_video_client1/pages/VideoPage/video_player.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
+import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/util/user_info_until.dart';
 
 class MyVideoList extends StatefulWidget {
@@ -48,9 +49,9 @@ class GridViewState extends State {
         video = Video.formJson(map);
         l.add(video);
       }
-      setState(() {
-        l;
-      });
+//      setState(() {
+//        l;
+//      });
       videoList = l;
     });
     Widget layout;
@@ -123,11 +124,12 @@ class GridViewState extends State {
             child: new Container(
               width: 120,
               height: 40,
-              alignment: Alignment.center,
-              child: Stack(
+              alignment: Alignment.centerRight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   new Container(
-                    width: 60,
+                    width: 30,
                     height: 40,
                     alignment: Alignment.centerLeft,
                     child:  Icon(Icons.favorite, size: 30, color: Colors.red,),
@@ -136,8 +138,9 @@ class GridViewState extends State {
                     width: 60,
                     height: 40,
                     alignment: Alignment.centerRight,
-                    //todo 点赞 变量
-                    child: Text(video.likes.toString(), style: TextStyle(color: Colors.white),),
+                    child: Center(
+                      child: Text(TsUtils.dataDeal(video.likes), style: TextStyle(color: Colors.white),),
+                    )
                   ),
                 ],
               ),

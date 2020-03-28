@@ -8,7 +8,6 @@ class VideoList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         appBar: new AppBar(
           title: new Text("视频列表"),

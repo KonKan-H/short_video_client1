@@ -51,7 +51,6 @@ class LikeButton extends StatefulWidget {
 
 class _LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
   _LikeButtonState({Key key, @required this.isLiked});
-
   AnimationController _controller;
   Animation<double> outerCircle;
   Animation<double> innerCircle;
@@ -59,7 +58,6 @@ class _LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
   Animation<double> dots;
 
   bool isLiked;
-
   @override
   void initState() {
     super.initState();
@@ -114,20 +112,24 @@ class _LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
             ),
           ),
         ),
+        Container(
+          padding: EdgeInsets.fromLTRB(0, 45, 0, 0),
+          alignment: Alignment.center,
+          child: Text((widget.video.likes == 0 || widget.video.likes == null) ? '点赞': TsUtils.dataDeal(widget.video.likes), style: TextStyle(color: Colors.white,fontSize: 13.0, decoration: TextDecoration.none), ),
+        ),
       ],
     );
   }
 
   void _onTap() async {
-    Video video = widget.video;
     int looker = widget.looker;
+    Video video = widget.video;
     if(looker == null) {
       TsUtils.showShort('请先登录');
       return;
     }
     if (_controller.isAnimating) return;
     isLiked = !isLiked;
-
     isLiked == true ? video.likes ++ : video.likes --;
 
     Map<String, dynamic> data = {
@@ -135,7 +137,6 @@ class _LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
       'looker' : looker,
       'isLiked' : isLiked
     };
-
     try {
       Result result = await DioRequest.dioPut(URL.VIDEO_LIKE, data);
       if(result.code.toString() != "1") {
@@ -151,7 +152,6 @@ class _LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
     } else {
       setState(() {});
     }
-
     if (widget.onIconClicked != null)
       widget.onIconClicked(isLiked);
   }

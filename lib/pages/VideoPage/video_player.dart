@@ -83,16 +83,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   }
 
   _getLikeOrNot() async {
-//    var uid;
-//    UserInfoUntil.getUserInfo().then((userInfo) {
-//      if(userInfo != null && userInfo.userName != null) {
-//        uid = userInfo.userId;
-//      }
-//    });
-//    Map<String, dynamic> data = {
-//      "userId" : uid,
-//      "videoId" : video.id
-//    };
     Result result = await DioRequest.dioPost(URL.VIDEO_LIKE_OR_NOT, Video.model2map(video));
     isLiked = result.data;
     setState(() {
@@ -191,10 +181,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                         ):Container(
                           child: Icon(Icons.favorite, color: Colors.white,)
                         ),
-                        Container(
-                          alignment: Alignment.center,
-                          child: Text((video.likes == 0 || video.likes == null) ? '点赞': TsUtils.dataDeal(video.likes), style: TextStyle(color: Colors.white,fontSize: 13.0, decoration: TextDecoration.none), ),
-                        ),
+
                       ],
                     ),
                   ),
@@ -215,7 +202,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                         ),
                         Container(
                           child: Text(TsUtils.dataDeal(video.comments), style: TextStyle(color: Colors.white, fontSize: 13, decoration: TextDecoration.none),),
-                        )
+                        ),
                       ],
                     )
                   ),
