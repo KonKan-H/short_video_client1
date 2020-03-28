@@ -63,7 +63,7 @@ flutter:
   fonts:
     - family: MyIcon
       fonts:
-        - asset: icons/iconfont.ttf
+        - asset: fonts/iconfont.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:
