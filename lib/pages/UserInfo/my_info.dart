@@ -34,7 +34,6 @@ class _MyInfoPageState extends State<MyInfoPage> {
             age = event.age.toString();
             area = event.area;
             sex = event.sex;
-            userAvatar = event.userAvatar;
             userId = event.userId;
           });
         } else {
@@ -70,7 +69,6 @@ class _MyInfoPageState extends State<MyInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return CustomScrollView(reverse: false, shrinkWrap: false,slivers: <Widget>[
         SliverAppBar(
           pinned: false,
@@ -101,14 +99,46 @@ class _MyInfoPageState extends State<MyInfoPage> {
                 ),
                 Container(
                   margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-                  child: Text(userName == null ?
-                  '点击头像登录' : userName, style: TextStyle(color: Colors.white, fontSize: 16.0),),
+                  alignment: Alignment.center,
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          child: sex == null ? null :
+                          Icon(sex == '女' ? IconData(0xe605, fontFamily: 'MyIcon',) : IconData(0xe606,  fontFamily: 'MyIcon',),
+                          size: 20, color: Colors.white,),
+                        ),
+                        Container(
+                          child: Text(userName == null ?
+                          '点击头像登录' : ' ' + userName + '  ' + age,
+                            style: TextStyle(color: Colors.white, fontSize: 16.0),),
+                        ),
+                      ],
+                    )
+                  )
                 ),
                 Container(
                   child: Offstage(
                     offstage: userName == null ? true : false,
                     child: Text('粉丝：0  关注：0', style: TextStyle(color: Colors.white, fontSize: 16.0),),
                   )
+                ),
+                Container(
+                  child: area == null ? Container(child: null,) : Offstage(
+                    offstage: area == null ? true : false,
+                    child:  Text(area, style: TextStyle(color: Colors.white, fontSize: 16.0),),
+                  ),
+//                    child: Offstage(
+//                      offstage: area == null ? true : false,
+//                      child:  Text(area, style: TextStyle(color: Colors.white, fontSize: 16.0),),
+//                    )
+                ),
+                Container(
+                  child: introduction == null ? Container(child: null,) : Offstage(
+                    offstage: introduction == null ? true : false,
+                    child:  Text(introduction, style: TextStyle(color: Colors.white, fontSize: 16.0),),
+                  ),
                 ),
               ],
             ),
@@ -177,5 +207,4 @@ class _MyInfoPageState extends State<MyInfoPage> {
       builder: (context) => UserDetailInfoPage()
     ));
   }
-
 }

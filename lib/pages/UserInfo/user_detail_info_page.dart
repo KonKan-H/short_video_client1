@@ -93,7 +93,7 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
     items.addAll(initInputItem('性别', '请输入性别', sex == null ? _userSexController : _userSexController = TextEditingController.fromValue(TextEditingValue(text: sex)),));
     items.addAll(initInputItem('年龄', '请输入年龄', age == null ? _userAgeController : _userAgeController = TextEditingController.fromValue(TextEditingValue(text: age)),));
     items.addAll(initInputItem('地区', '请输入地区', area == null ? _userAreaController : _userAreaController = TextEditingController.fromValue(TextEditingValue(text: area.toString())),));
-    items.addAll(initInputItem('简介', '介绍下自己吧', introduction == null ? _userIntroController : _userIntroController = TextEditingController.fromValue(TextEditingValue(text: introduction)), maxLines: 5));
+    items.addAll(initInputItem('简介', '介绍下自己吧(最多15个字符)', introduction == null ? _userIntroController : _userIntroController = TextEditingController.fromValue(TextEditingValue(text: introduction)), maxLines: 5));
     items.add(initSubmitBtn());
     return new Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -234,14 +234,6 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
         elevation: 2.0,
         child: new MaterialButton(
           onPressed: () async {
-//          if(_userSexController.text != null) {
-//            print(_userNameController.text);
-//            if(_userSexController.text != "男" && _userSexController.text != "女" ) {
-//              print('===' + _userSexController.text);
-//              TsUtils.showShort("请输入正确格式的性别");
-//              return;
-//            }
-//          }
           if(_image != null) {
             _image.length().then((value) {
               if (value / 1024 > (5 * 1024)) {
@@ -264,10 +256,12 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
             Result result = await DioRequest.dioPut(URL.USER_INFO_UPDATE, data);
             print(result.msg);
             TsUtils.showShort(result.msg);
-            UserInfo userInfo = await UserInfoUntil.map2UserInfo(result.data);
-            UserInfoUntil.saveUserInfo(userInfo);
-            OsApplication.eventBus.fire(LoginEvent(userInfo.userId, userInfo.userName, userInfo.userAvatar,
-                userInfo.area, userInfo.sex, userInfo.age, userInfo.introduction));
+            if(result.data != null) {
+              UserInfo userInfo = await UserInfoUntil.map2UserInfo(result.data);
+              UserInfoUntil.saveUserInfo(userInfo);
+              OsApplication.eventBus.fire(LoginEvent(userInfo.userId, userInfo.userName, userInfo.userAvatar,
+                  userInfo.area, userInfo.sex, userInfo.age, userInfo.introduction));
+            }
           },
           child: new Text(
             '确认修改',
