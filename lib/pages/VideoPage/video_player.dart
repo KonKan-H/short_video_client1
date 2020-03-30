@@ -178,7 +178,17 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                                   color: Color(0x00FFFFFF),
                                   shape: CircleBorder(),
                                   child: InkWell(
-                                    //onTap: _attentionUser(video),
+                                    onTap: () async {
+                                      bool flag = await attentionUser(video);
+                                      if(flag) {
+                                        TsUtils.showShort('关注成功');
+                                        setState(() {
+                                          isAttention = flag;
+                                        });
+                                      } else {
+                                        TsUtils.showShort('关注失败');
+                                      }
+                                    },
                                     child:  Container(
                                       width: 25,
                                       height: 25,
@@ -272,15 +282,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     );
   }
 
-  //关注用户
-  _attentionUser(Video video) async {
-    Attention attention = new Attention();
-    attention.userId = video.authorId;
-    attention.fansId = video.looker;
-    Result result = await DioRequest.dioPost(URL.USER_ATTENTION,Attention.model2map(attention));
-
-  }
-
   @override
   void dispose() {
     super.dispose();
@@ -351,6 +352,14 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         : await getApplicationSupportDirectory();
     return directory.path;
   }
+}
+
+Future<bool> attentionUser(Video video) async {
+  Attention attention = new Attention();
+  attention.userId = video.authorId;
+  attention.fansId = video.looker;
+  Result result = await DioRequest.dioPost(URL.USER_ATTENTION,Attention.model2map(attention));
+  return result.data;
 }
 
 showBottom(context) {
