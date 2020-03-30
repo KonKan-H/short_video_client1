@@ -5,9 +5,12 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:short_video_client1/app/OsApplication.dart';
 import 'package:short_video_client1/event/login_event.dart';
+import 'package:short_video_client1/models/Attention.dart';
 import 'package:short_video_client1/models/Result.dart';
+import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/pages/VideoPage/layout/BottomSheet.dart';
 import 'package:short_video_client1/pages/VideoPage/likebutton/like_button.dart';
+import 'package:short_video_client1/pages/common/user_info_page.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
@@ -85,7 +88,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   _getLikeAndAttention() async {
     Result likeResult = await DioRequest.dioPost(URL.VIDEO_LIKE_OR_NOT, Video.model2map(video));
     isLiked = likeResult.data;
-    Result attentionResult = await DioRequest.dioPost(URL.USER_ATTENTION, Video.model2map(video));
+    Attention attention = new Attention();
+    attention.userId = video.authorId;
+    attention.fansId = video.looker;
+    Result attentionResult = await DioRequest.dioPost(URL.USER_ATTENTION,Attention.model2map(attention));
     isAttention = attentionResult.data;
     setState(() {
       isLiked;
@@ -148,6 +154,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                     color: Color(0x00FFFFFF),
                     shape: CircleBorder(),
                     child: InkWell(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => UserInfoPage(userId : video.authorId)
+                        ));
+                      },
                       child: Container(
                         width: 60,
                         height: 70,
@@ -163,18 +174,18 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                               left: 17.5,
                               child: Offstage(
                                 offstage: isAttention == null ? false : isAttention,
-                                child: Container(
-                                  width: 25,
-                                  height: 25,
-                                  decoration: BoxDecoration(
-                                      color: Colors.redAccent,
-                                      borderRadius: BorderRadius.circular(25)
-                                  ),
-                                  child: RaisedButton(
-                                    color: Colors.redAccent,
-                                    shape: CircleBorder(),
-                                    padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
-                                    child: Container(
+                                child: Material(
+                                  color: Color(0x00FFFFFF),
+                                  shape: CircleBorder(),
+                                  child: InkWell(
+                                    //onTap: _attentionUser(video),
+                                    child:  Container(
+                                      width: 25,
+                                      height: 25,
+                                      decoration: BoxDecoration(
+                                          color: Colors.redAccent,
+                                          borderRadius: BorderRadius.circular(25)
+                                      ),
                                       child: Icon(Icons.add, size: 20, color: Colors.white,),
                                     ),
                                   ),
@@ -209,7 +220,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                     child: Column(
                       children: <Widget>[
                         RaisedButton(
-//                          child: Text('评论', style: TextStyle(color: Colors.white),),
                           child: Icon(Icons.comment, color: Colors.white, size: 35,),
                           color: Color(0x00FFFFFF),
                           onPressed: () {
@@ -262,12 +272,22 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     );
   }
 
+  //关注用户
+  _attentionUser(Video video) async {
+    Attention attention = new Attention();
+    attention.userId = video.authorId;
+    attention.fansId = video.looker;
+    Result result = await DioRequest.dioPost(URL.USER_ATTENTION,Attention.model2map(attention));
+
+  }
+
   @override
   void dispose() {
     super.dispose();
     _videoPlayerController.dispose();
   }
 
+  //标题
   Widget titleSection() {
     return Column(
       children: <Widget>[

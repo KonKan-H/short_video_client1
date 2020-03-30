@@ -31,4 +31,10 @@ class URL{
 
   //判断关注
   static const String USER_ATTENTION = BASE_URL + '/v1/attention/api';
+
+  //取得用户信息
+  static const String GET_USER_INFO = BASE_URL + '/v1/userInfo/id/api';
+
+  //关注用户
+  static const String ATTENTION_USER = BASE_URL + '/v1/attention/user/api';
 }

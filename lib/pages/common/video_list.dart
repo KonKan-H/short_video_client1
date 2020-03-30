@@ -15,19 +15,6 @@ class MyVideoList extends StatefulWidget {
   }
 }
 
-class ListUtil {
-  List<Video> videoList = List();
-  void getInitVideoList() async {
-    DioRequest.dioGetNoA(URL.GET_VIDEO_LIST).then((result) {
-      print(result.data);
-      Video video;
-      for(Map<String, dynamic> map in result.data) {
-        video = Video.formJson(map);
-        videoList.add(video);
-      }
-    });
-  }
-}
 
 class GridViewState extends State {
   var userId;
@@ -41,7 +28,7 @@ class GridViewState extends State {
       }
     });
 
-    DioRequest.dioGetNoA(URL.GET_VIDEO_LIST).then((result) {
+    DioRequest.dioGet(URL.GET_VIDEO_LIST).then((result) {
       List<Video> l = List();
       print(result.data);
       Video video;

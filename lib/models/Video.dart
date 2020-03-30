@@ -1,5 +1,3 @@
-import 'package:camera/camera.dart';
-
 class Video{
   var id;
   var url;
