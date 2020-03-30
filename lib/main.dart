@@ -22,13 +22,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return new MaterialApp(
       home: Home(),
     );
   }
 }
-
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);

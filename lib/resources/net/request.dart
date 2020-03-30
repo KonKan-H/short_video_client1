@@ -28,7 +28,7 @@ class DioRequest {
     return result;
   }
 
-  //get请求 无参
+  //get请求
   static Future<Result> dioGetNoA(String url) async {
     TsUtils.logInfo('Get: $url');
     Response response;

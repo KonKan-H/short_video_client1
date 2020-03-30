@@ -30,13 +30,13 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   _VideoPlayerPageState({Key key, @required this.video});
   final Video video;
   var userId, id, userName, userAvatar, sex, area, introduction, age, mobilePhone;
-  bool isLiked;
+  bool isLiked, isAttention;
 
   VideoPlayerController _videoPlayerController;
 
   @override
   void initState() {
-    _getLikeOrNot();
+    _getLikeAndAttention();
     super.initState();
     _videoPlayerController = VideoPlayerController.network(video.url)
       ..initialize().then((_) {
@@ -82,11 +82,14 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     });
   }
 
-  _getLikeOrNot() async {
-    Result result = await DioRequest.dioPost(URL.VIDEO_LIKE_OR_NOT, Video.model2map(video));
-    isLiked = result.data;
+  _getLikeAndAttention() async {
+    Result likeResult = await DioRequest.dioPost(URL.VIDEO_LIKE_OR_NOT, Video.model2map(video));
+    isLiked = likeResult.data;
+    Result attentionResult = await DioRequest.dioPost(URL.USER_ATTENTION, Video.model2map(video));
+    isAttention = attentionResult.data;
     setState(() {
       isLiked;
+      isAttention;
     });
   }
 
@@ -141,28 +144,46 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Container(
-                    width: 60,
-                    height: 70,
-                    child: Stack(children: <Widget>[
-                      Container(
+                  Material(
+                    color: Color(0x00FFFFFF),
+                    shape: CircleBorder(),
+                    child: InkWell(
+                      child: Container(
                         width: 60,
-                        height: 60,
-                        //alignment: Alignment.bottomCenter,
-                        child: CircleAvatar(backgroundImage: NetworkImage(video.authorAvatar),),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        left: 17.5,
-                        child: Container(
-                          width: 25,
-                          height: 25,
-                          decoration: BoxDecoration(
-                              color: Colors.redAccent,
-                              borderRadius: BorderRadius.circular(25)
+                        height: 70,
+                        child: Stack(children: <Widget>[
+                          Container(
+                            width: 60,
+                            height: 60,
+                            //alignment: Alignment.bottomCenter,
+                            child: CircleAvatar(backgroundImage: NetworkImage(video.authorAvatar),),
                           ),
-                          child: Icon(Icons.add, size: 20, color: Colors.white,),),)
-                    ],),
+                          Positioned(
+                              bottom: 0,
+                              left: 17.5,
+                              child: Offstage(
+                                offstage: isAttention == null ? false : isAttention,
+                                child: Container(
+                                  width: 25,
+                                  height: 25,
+                                  decoration: BoxDecoration(
+                                      color: Colors.redAccent,
+                                      borderRadius: BorderRadius.circular(25)
+                                  ),
+                                  child: RaisedButton(
+                                    color: Colors.redAccent,
+                                    shape: CircleBorder(),
+                                    padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
+                                    child: Container(
+                                      child: Icon(Icons.add, size: 20, color: Colors.white,),
+                                    ),
+                                  ),
+                                ),
+                              )
+                          )
+                        ],),
+                      ),
+                    ),
                   ),
                   //点赞爱心
                   Container(
@@ -181,7 +202,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                         ):Container(
                           child: Icon(Icons.favorite, color: Colors.white,)
                         ),
-
                       ],
                     ),
                   ),
@@ -189,16 +209,13 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                     child: Column(
                       children: <Widget>[
                         RaisedButton(
-                          child: Text('评论', style: TextStyle(color: Colors.white),),
-                          color: Colors.black,
+//                          child: Text('评论', style: TextStyle(color: Colors.white),),
+                          child: Icon(Icons.comment, color: Colors.white, size: 35,),
+                          color: Color(0x00FFFFFF),
                           onPressed: () {
                             showBottom(context);
                           },
-                          shape: CircleBorder(
-                            side: BorderSide(
-                              color: Colors.white,
-                            ),
-                          ),
+                          shape: CircleBorder(),
                         ),
                         Container(
                           child: Text(TsUtils.dataDeal(video.comments), style: TextStyle(color: Colors.white, fontSize: 13, decoration: TextDecoration.none),),
@@ -210,16 +227,13 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                       child: Column(
                         children: <Widget>[
                           RaisedButton(
-                            child: Text('下载', style: TextStyle(color: Colors.white),),
-                            color: Colors.black,
+//                            child: Text('下载', style: TextStyle(color: Colors.white),),
+                            child: Icon(Icons.share, color: Colors.white, size: 35,),
+                            color: Color(0x00FFFFFF),
                             onPressed: () {
                               _downLoadVideo(video);
                             },
-                            shape: CircleBorder(
-                              side: BorderSide(
-                                color: Colors.white,
-                              ),
-                            ),
+                            shape: CircleBorder(),
                           ),
                           Container(
                             child: Text(TsUtils.dataDeal(video.downloads), style: TextStyle(color: Colors.white, fontSize: 13, decoration: TextDecoration.none),),

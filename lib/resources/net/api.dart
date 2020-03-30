@@ -28,4 +28,7 @@ class URL{
 
   //判断喜欢
   static const String VIDEO_LIKE_OR_NOT = BASE_URL + '/v1/like/api';
+
+  //判断关注
+  static const String USER_ATTENTION = BASE_URL + '/v1/attention/api';
 }
