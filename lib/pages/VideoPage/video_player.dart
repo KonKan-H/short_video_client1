@@ -151,6 +151,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   Material(
+                    //透明色
                     color: Color(0x00FFFFFF),
                     shape: CircleBorder(),
                     child: InkWell(

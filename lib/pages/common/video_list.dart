@@ -7,28 +7,33 @@ import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/util/user_info_until.dart';
 
 class MyVideoList extends StatefulWidget {
-  MyVideoList({Key key}):super(key: key);
+  MyVideoList({Key key, @required this.userId}):super(key: key);
+  var userId;
 
   @override
   State<StatefulWidget> createState() {
-    return new GridViewState();
+    return new GridViewState(userId: userId);
   }
 }
 
-
 class GridViewState extends State {
+  GridViewState({Key key, this.userId});
   var userId;
   List<Video> videoList = List();
 
   @override
   Widget build(BuildContext context) {
-    UserInfoUntil.getUserInfo().then((userInfo) {
-      if(userInfo != null && userInfo.userName != null) {
-        userId = userInfo.userId;
-      }
-    });
-
-    DioRequest.dioGet(URL.GET_VIDEO_LIST).then((result) {
+    if(userId == null ) {
+      UserInfoUntil.getUserInfo().then((userInfo) {
+        if (userInfo != null && userInfo.userName != null) {
+          userId = userInfo.userId;
+        }
+      });
+    }
+    Map<String, dynamic> data = {
+      "userId" : userId
+    };
+    DioRequest.dioPost(URL.GET_VIDEO_LIST, data).then((result) {
       List<Video> l = List();
       print(result.data);
       Video video;
@@ -80,7 +85,6 @@ class GridViewState extends State {
             child: Stack(
               children: <Widget>[
                 Image.network(video.cover, fit: BoxFit.cover,),
-                // TODO
                 InkWell(
                   onTap: () {
                     video.looker = userId;
