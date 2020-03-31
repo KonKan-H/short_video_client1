@@ -41,9 +41,9 @@ class GridViewState extends State {
         video = Video.formJson(map);
         l.add(video);
       }
-//      setState(() {
-//        l;
-//      });
+      setState(() {
+        l;
+      });
       videoList = l;
     });
     Widget layout;
@@ -74,10 +74,6 @@ class GridViewState extends State {
 
   Widget getItemWidget(Video video) {
     return Container(
-//      decoration: BoxDecoration(
-//          borderRadius: BorderRadius.circular(3),///圆角
-//          border: Border.all(color: Colors.grey,width: 1)///边框颜色、宽
-//      ),
       child: new Stack(
         children: <Widget>[
           new Container(

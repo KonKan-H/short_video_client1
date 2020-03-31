@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/models/UserInfo.dart';
+import 'package:short_video_client1/models/Video.dart';
+import 'package:short_video_client1/pages/VideoPage/video_player.dart';
 import 'package:short_video_client1/pages/common/video_list.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
+import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/util/user_info_until.dart';
 
 class UserInfoPage extends StatefulWidget {
@@ -22,6 +25,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
   var userId;
   UserInfo userInfo;
   bool isMyself = false, isAttention;
+  List<Video> videoList = new List();
 
   @override
   void initState() {
@@ -42,6 +46,8 @@ class _UserInfoPageState extends State<UserInfoPage> {
     });
   }
 
+
+
   @override
   void dispose() {
     super.dispose();
@@ -49,6 +55,30 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
   @override
   Widget build(BuildContext context) {
+    if(userId == null ) {
+      UserInfoUntil.getUserInfo().then((userInfo) {
+        if (userInfo != null && userInfo.userName != null) {
+          userId = userInfo.userId;
+        }
+      });
+    }
+    Map<String, dynamic> data = {
+      "userId" : userId
+    };
+    DioRequest.dioPost(URL.GET_VIDEO_LIST, data).then((result) {
+      List<Video> l = List();
+      print(result.data);
+      Video video;
+      for(Map<String, dynamic> map in result.data) {
+        video = Video.formJson(map);
+        l.add(video);
+      }
+      setState(() {
+        l;
+      });
+      videoList = l;
+    });
+
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -136,38 +166,90 @@ class _UserInfoPageState extends State<UserInfoPage> {
                 crossAxisCount: 2, //Grid按两列显示
                 mainAxisSpacing: 10.0,
                 crossAxisSpacing: 10.0,
-                childAspectRatio: 4.0,
+                childAspectRatio: 2/3,
               ),
-              delegate: new SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                  //创建子widget
+              delegate: new SliverChildBuilderDelegate((BuildContext context, int index) {
+                  Video video = videoList[index];
+                //创建子widget
                   return new Container(
                     alignment: Alignment.center,
-                    color: Colors.cyan[100 * (index % 9)],
-                    child: new Text('grid item $index'),
+                    //color: Colors.cyan[100 * (index % 9)],
+                    child: getItemWidget(video),
                   );
                 },
-                childCount: 20,
+                childCount: videoList.length,
               ),
             ),
           ),
           //List
-          new SliverFixedExtentList(
-            itemExtent: 50.0,
-            delegate: new SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                  //创建列表项
-                  return new Container(
-                    alignment: Alignment.center,
-                    color: Colors.lightBlue[100 * (index % 9)],
-                    child: new Text('list item $index'),
-                  );
-                },
-                childCount: 50 //50个列表项
+        ],
+        ),
+      ),
+    );
+  }
+
+  Widget getItemWidget(Video video) {
+    return Container(
+      child: new Stack(
+        children: <Widget>[
+          new Container(
+            alignment: Alignment.center,
+            child: Stack(
+              children: <Widget>[
+                Image.network(video.cover, fit: BoxFit.cover,),
+                InkWell(
+                  onTap: () {
+                    video.looker = userId;
+                    Navigator.push(context, MaterialPageRoute(
+//                  Navigator.of(parentContext).push(MaterialPageRoute(
+//                      builder: (context) => VideoScreen(video: Video(Random().nextInt(10000000), 'https://www.runoob.com/try/demo_source/mov_bbb.mp4', "作者"))
+                        builder: (context) => VideoPlayerPage(video: video)
+                    ));
+                  },
+                ),
+              ],
+            ),
+          ),
+          //头像
+          new Container(
+            alignment: Alignment.bottomLeft,
+            child: new Container(
+              width: 40,
+              height: 40,
+              child: new CircleAvatar(
+                backgroundImage: new NetworkImage(video.authorAvatar),
+                radius: 100,
+              ),
+            ),
+          ),
+          new Container(
+            alignment: Alignment.bottomRight,
+            child: new Container(
+              width: 120,
+              height: 40,
+              alignment: Alignment.centerRight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  new Container(
+                    width: 30,
+                    height: 40,
+                    alignment: Alignment.centerLeft,
+                    child:  Icon(Icons.favorite, size: 30, color: Colors.red,),
+                  ),
+                  new Container(
+                      width: 60,
+                      height: 40,
+                      alignment: Alignment.centerRight,
+                      child: Center(
+                        child: Text(TsUtils.dataDeal(video.likes), style: TextStyle(color: Colors.white),),
+                      )
+                  ),
+                ],
+              ),
             ),
           ),
         ],
-        ),
       ),
     );
   }
