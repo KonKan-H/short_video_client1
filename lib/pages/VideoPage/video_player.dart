@@ -359,8 +359,9 @@ Future<bool> attentionUser(Video video) async {
   Attention attention = new Attention();
   attention.userId = video.authorId;
   attention.fansId = video.looker;
-  Result result = await DioRequest.dioPost(URL.USER_ATTENTION,Attention.model2map(attention));
-  return result.data;
+  Result result = await DioRequest.dioPost(URL.ATTENTION_USER,Attention.model2map(attention));
+  print(result.data);
+  return result.data as bool;
 }
 
 showBottom(context) {
