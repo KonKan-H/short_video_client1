@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:short_video_client1/models/Attention.dart';
 import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/models/Video.dart';
@@ -10,20 +11,24 @@ import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/util/user_info_until.dart';
 
 class UserInfoPage extends StatefulWidget {
-  UserInfoPage({Key key, @required this.userId}) : super(key: key);
-  final userId;
+  UserInfoPage({Key key, @required this.authorId, @required this.looker}) : super(key: key);
+  final authorId;
+  final looker;
 
   @override
   _UserInfoPageState createState() {
-    return _UserInfoPageState(userId: userId);
+    return _UserInfoPageState(authorId: authorId, looker: looker);
   }
 }
 
 class _UserInfoPageState extends State<UserInfoPage> {
-  _UserInfoPageState({Key key, @required this.userId});
-  var userId;
+  _UserInfoPageState({Key key, @required this.authorId, @required this.looker});
+  //当页用户id
+  var authorId;
+  var looker;
+  //当页用户信息
   UserInfo userInfo;
-  bool isMyself = false, isAttention;
+  bool isMyself = false, isAttention = false;
   List<Video> videoList = new List();
 
   @override
@@ -32,17 +37,27 @@ class _UserInfoPageState extends State<UserInfoPage> {
     super.initState();
   }
 
+  //取得当页用户信息
   _getUserInfo() async {
     Map<String, dynamic> data = {
-      "userId" : userId
+      "userId" : authorId
     };
     Result result = await DioRequest.dioPost(URL.GET_USER_INFO, data);
     userInfo = await UserInfoUntil.map2UserInfo(result.data);
-    isMyself = userId == userInfo.userId;
+    isMyself = (authorId == looker);
     setState(() {
       userInfo;
       isMyself;
     });
+    if(userInfo != null) {
+      Attention attention = new Attention();
+      attention.userId = authorId;
+      attention.fansId = looker;
+      Result r = await DioRequest.dioPost(URL.USER_ATTENTION_OR_NOT, Attention.model2map(attention));
+      setState(() {
+        isAttention = r.data as bool;
+      });
+    }
   }
 
   @override
@@ -52,15 +67,16 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    if(userId == null ) {
-      UserInfoUntil.getUserInfo().then((userInfo) {
-        if (userInfo != null && userInfo.userName != null) {
-          userId = userInfo.userId;
-        }
-      });
-    }
+    //取得视频列表
+//    if(authorId == null ) {
+//      UserInfoUntil.getUserInfo().then((userInfo) {
+//        if (userInfo != null && userInfo.userName != null) {
+//          authorId = userInfo.userId;
+//        }
+//      });
+//    }
     Map<String, dynamic> data = {
-      "userId" : userId
+      "userId" : authorId
     };
     DioRequest.dioPost(URL.GET_VIDEO_LIST, data).then((result) {
       List<Video> l = List();
@@ -76,7 +92,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
       videoList = l;
     });
 
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
@@ -84,13 +99,35 @@ class _UserInfoPageState extends State<UserInfoPage> {
             offstage: isMyself,
             child: IconButton(
               alignment: Alignment.centerRight,
-              icon: Icon(Icons.search),
+              icon: isAttention ? Icon(IconData(0xe6fe, fontFamily: 'MyIcon',), size: 30,) :
+              Icon(IconData(0xe700, fontFamily: 'MyIcon',), size: 30,),
+              onPressed: () async {
+                Attention attention = new Attention();
+                attention.userId = authorId;
+                attention.fansId = looker;
+                bool flag = await attentionUserYON(attention, isAttention);
+                setState(() {
+                  flag;
+                });
+                if(flag != null) {
+                  if(flag) {
+                    if(isAttention) {
+                      TsUtils.showShort("取消关注");
+                    } else {
+                      TsUtils.showShort("关注成功");
+                    }
+                    setState(() {
+                      isAttention = !isAttention;
+                    });
+                  }
+                }
+              },
             ),
           )
         ],
       ),
       body: Center(
-        child:  CustomScrollView(reverse: false, shrinkWrap: false,slivers: <Widget>[
+        child: CustomScrollView(reverse: false, shrinkWrap: false,slivers: <Widget>[
           SliverAppBar(
             pinned: false,
             backgroundColor: ConstantData.MAIN_COLOR,
@@ -123,7 +160,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                           children: <Widget>[
                             Container(
                               child: (userInfo == null || userInfo.sex == null) ? Container(child: Icon(IconData(0xe605, fontFamily: 'MyIcon',)),) :
-                              Icon(userInfo.sex == '女' ? IconData(0xe605, fontFamily: 'MyIcon',) : IconData(0xe606,  fontFamily: 'MyIcon',),
+                              Icon(userInfo.sex == '女' ? IconData(0xe605, fontFamily: 'MyIcon',) : IconData(0xe606, fontFamily: 'MyIcon',),
                                 size: 20, color: Colors.white,),
                             ),
                             Container(
@@ -199,7 +236,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                 Image.network(video.cover, fit: BoxFit.cover,),
                 InkWell(
                   onTap: () {
-                    video.looker = userId;
+                    video.looker = authorId;
                     Navigator.push(context, MaterialPageRoute(
 //                  Navigator.of(parentContext).push(MaterialPageRoute(
 //                      builder: (context) => VideoScreen(video: Video(Random().nextInt(10000000), 'https://www.runoob.com/try/demo_source/mov_bbb.mp4', "作者"))
@@ -254,4 +291,22 @@ class _UserInfoPageState extends State<UserInfoPage> {
     );
   }
 
+}
+
+Future<bool> attentionUserYON(Attention attention, bool isAttention) async {
+  Result result;
+  bool flag = false;
+  if(!isAttention) {
+    //关注
+    result = await DioRequest.dioPost(URL.ATTENTION_USER_INSERT, Attention.model2map(attention));
+    flag = result.data as bool;
+  } else {
+    //取消关注
+    result = await DioRequest.dioPost(URL.ATTENTION_USER_CANCEL, Attention.model2map(attention));
+    flag = result.data as bool;
+  }
+  if(flag) {
+    flag = true;
+  }
+  return flag;
 }

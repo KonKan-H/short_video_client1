@@ -31,14 +31,16 @@ class _MyInfoPageState extends State<MyInfoPage> {
     _getUserInfo();
     OsApplication.eventBus.on<LoginEvent>().listen((event) {
       if(event != null) {
-        setState(() {
-          userName = event.userName;
-          userAvatar = event.userAvatar;
-          age = event.age.toString();
-          area = event.area;
-          sex = event.sex;
-          userId = event.userId;
-        });
+        if(mounted) {
+          setState(() {
+            userName = event.userName;
+            userAvatar = event.userAvatar;
+            age = event.age.toString();
+            area = event.area;
+            sex = event.sex;
+            userId = event.userId;
+          });
+        }
       } else {
         userName = null;
       }
@@ -53,27 +55,31 @@ class _MyInfoPageState extends State<MyInfoPage> {
     };
     Result result = await DioRequest.dioPost(URL.USER_FANS_ATTENTION, data);
     AttentionsFans attentionsFans = AttentionsFans.formJson(result.data);
-    setState(() {
-      fans = attentionsFans.fans;
-      attentions = attentionsFans.attentions;
-    });
+    if(mounted) {
+      setState(() {
+        fans = attentionsFans.fans.toString();
+        attentions = attentionsFans.attentions.toString();
+      });
+    }
   }
 
   _getUserInfo() {
     UserInfoUntil.getUserInfo().then((userInfo) {
       if(userInfo != null && userInfo.userName != null) {
-        setState(() {
-          id = userInfo.id;
-          userName = userInfo.userName;
-          userAvatar = userInfo.userAvatar;
-          age = userInfo.age;
-          area = userInfo.area;
-          sex = userInfo.sex;
-          userAvatar = userInfo.userAvatar;
-          userId = userInfo.userId;
-          mobilePhone = userInfo.mobilePhone;
-          introduction = userInfo.introduction;
-        });
+        if(mounted) {
+          setState(() {
+            id = userInfo.id;
+            userName = userInfo.userName;
+            userAvatar = userInfo.userAvatar;
+            age = userInfo.age;
+            area = userInfo.area;
+            sex = userInfo.sex;
+            userAvatar = userInfo.userAvatar;
+            userId = userInfo.userId;
+            mobilePhone = userInfo.mobilePhone;
+            introduction = userInfo.introduction;
+          });
+        }
       }
     });
   }
@@ -126,8 +132,8 @@ class _MyInfoPageState extends State<MyInfoPage> {
                           size: 20, color: Colors.white,),
                         ),
                         Container(
-                          child: userName == null? null : Text((userName == null ? null : userName) +
-                              '  ' + (age == null ? null: age.toString()),
+                          child: userName == null? Text('点击头像登录', style: TextStyle(color: Colors.white, fontSize: 16.0),) :
+                          Text((userName == null ? null : userName) + '  ' + (age == null ? null: age.toString()),
                             style: TextStyle(color: Colors.white, fontSize: 16.0),),
                         ),
                       ],
@@ -135,17 +141,17 @@ class _MyInfoPageState extends State<MyInfoPage> {
                   )
                 ),
                 Container(
-                  child: Offstage(
+                  child:
+                  Offstage(
                     offstage: userName == null ? true : false,
-                    child: (fans == null && attentions == null) ? Text('粉丝：0  关注：0',
-                      style: TextStyle(color: Colors.white, fontSize: 16.0),):
-                    Text('粉丝：$fans  关注：$attentions', style: TextStyle(color: Colors.white, fontSize: 16.0),),
+                    child: (fans == null && attentions == null) ? Text('粉丝：0  关注：0', style: TextStyle(color: Colors.white, fontSize: 16.0),):
+                    Text('粉丝：${fans.toString()} 关注：${attentions.toString()}', style: TextStyle(color: Colors.white, fontSize: 16.0),),
                   )
                 ),
                 Container(
                   child: area == null ? Container(child: null,) : Offstage(
                     offstage: area == null ? true : false,
-                    child:  Text(area, style: TextStyle(color: Colors.white, fontSize: 16.0),),
+                    child:  Text(area.toString(), style: TextStyle(color: Colors.white, fontSize: 16.0),),
                   ),
 //                    child: Offstage(
 //                      offstage: area == null ? true : false,
@@ -172,12 +178,17 @@ class _MyInfoPageState extends State<MyInfoPage> {
                   print('this is the item of $title');
                   if(title == "退出登录"){
                     if(userName != null) {
-                      setState(() {
-                        UserUntil.cleanUserInfo();
-                        UserInfoUntil.cleanUserInfo();
-                        userName = null;
-                        userAvatar = null;
-                      });
+                      if(mounted) {
+                        setState(() {
+                          UserUntil.cleanUserInfo();
+                          UserInfoUntil.cleanUserInfo();
+                          userName = null;
+                          userAvatar = null;
+                          sex = null;
+                          area = null;
+                          introduction = null;
+                        });
+                      }
                       TsUtils.showShort("退出成功");
                     } else {
                       TsUtils.showShort("请先登录");

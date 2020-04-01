@@ -7,7 +7,6 @@ import 'package:short_video_client1/app/OsApplication.dart';
 import 'package:short_video_client1/event/login_event.dart';
 import 'package:short_video_client1/models/Attention.dart';
 import 'package:short_video_client1/models/Result.dart';
-import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/pages/VideoPage/layout/BottomSheet.dart';
 import 'package:short_video_client1/pages/VideoPage/likebutton/like_button.dart';
 import 'package:short_video_client1/pages/common/user_info_page.dart';
@@ -91,7 +90,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     Attention attention = new Attention();
     attention.userId = video.authorId;
     attention.fansId = video.looker;
-    Result attentionResult = await DioRequest.dioPost(URL.USER_ATTENTION,Attention.model2map(attention));
+    Result attentionResult = await DioRequest.dioPost(URL.USER_ATTENTION_OR_NOT,Attention.model2map(attention));
     isAttention = attentionResult.data;
     setState(() {
       isLiked;
@@ -157,7 +156,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                     child: InkWell(
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => UserInfoPage(userId : video.authorId)
+                          builder: (context) => UserInfoPage(authorId : video.authorId, looker: video.looker,)
                         ));
                       },
                       child: Container(
@@ -359,7 +358,7 @@ Future<bool> attentionUser(Video video) async {
   Attention attention = new Attention();
   attention.userId = video.authorId;
   attention.fansId = video.looker;
-  Result result = await DioRequest.dioPost(URL.ATTENTION_USER,Attention.model2map(attention));
+  Result result = await DioRequest.dioPost(URL.ATTENTION_USER_INSERT,Attention.model2map(attention));
   print(result.data);
   return result.data as bool;
 }

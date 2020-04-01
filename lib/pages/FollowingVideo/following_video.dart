@@ -14,7 +14,7 @@ class FollowingVideo extends StatelessWidget {
           centerTitle: true, //设置标题是否局中
         ),
         body: new Center(
-          child: MyVideoList(),
+          child: MyVideoList(userId: null,),
         ),
     );
   }

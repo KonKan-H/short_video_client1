@@ -28,8 +28,8 @@ class UserInfoUntil{
       sharedPreferences.setString(USER_INFO_AREA, userInfo.area);
       sharedPreferences.setString(USER_INFO_INTRODUCTION, userInfo.introduction);
       sharedPreferences.setString(USER_INFO_AGE, userInfo.age.toString());
-      sharedPreferences.setString(USER_INFO_FANS, userInfo.fans);
-      sharedPreferences.setString(USER_INFO_ATTENTIONS, userInfo.attentions);
+      sharedPreferences.setString(USER_INFO_FANS, userInfo.fans.toString());
+      sharedPreferences.setString(USER_INFO_ATTENTIONS, userInfo.attentions.toString());
     } else {
       return null;
     }

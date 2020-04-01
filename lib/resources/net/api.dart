@@ -30,13 +30,16 @@ class URL{
   static const String VIDEO_LIKE_OR_NOT = BASE_URL + '/v1/like/api';
 
   //判断关注
-  static const String USER_ATTENTION = BASE_URL + '/v1/attention/api';
+  static const String USER_ATTENTION_OR_NOT = BASE_URL + '/v1/attention/api';
 
   //取得用户信息
   static const String GET_USER_INFO = BASE_URL + '/v1/userInfo/id/api';
 
   //关注用户
-  static const String ATTENTION_USER = BASE_URL + '/v1/attention/user/api';
+  static const String ATTENTION_USER_INSERT = BASE_URL + '/v1/attention/user/insert/api';
+
+  //取消关注
+  static const String ATTENTION_USER_CANCEL = BASE_URL + '/v1/attention/user/cancel/api';
 
   //取得关注数和粉丝数
   static const String USER_FANS_ATTENTION = BASE_URL + '/v1/fans/attention/api';
