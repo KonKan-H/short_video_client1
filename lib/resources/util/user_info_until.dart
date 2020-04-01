@@ -12,6 +12,8 @@ class UserInfoUntil{
   static const USER_INFO_AREA = 'user_info_area';
   static const USER_INFO_INTRODUCTION = 'user_info_introduction';
   static const USER_INFO_AGE = 'user_info_age';
+  static const USER_INFO_FANS = 'user_info_fans';
+  static const USER_INFO_ATTENTIONS = 'user_info_attentions';
 
   //存储userInfo
   static void saveUserInfo(UserInfo userInfo) async {
@@ -26,6 +28,8 @@ class UserInfoUntil{
       sharedPreferences.setString(USER_INFO_AREA, userInfo.area);
       sharedPreferences.setString(USER_INFO_INTRODUCTION, userInfo.introduction);
       sharedPreferences.setString(USER_INFO_AGE, userInfo.age.toString());
+      sharedPreferences.setString(USER_INFO_FANS, userInfo.fans);
+      sharedPreferences.setString(USER_INFO_ATTENTIONS, userInfo.attentions);
     } else {
       return null;
     }
@@ -43,6 +47,8 @@ class UserInfoUntil{
     sharedPreferences.setString(USER_INFO_AREA, null);
     sharedPreferences.setString(USER_INFO_INTRODUCTION, null);
     sharedPreferences.setString(USER_INFO_AGE, null);
+    sharedPreferences.setString(USER_INFO_FANS, null);
+    sharedPreferences.setString(USER_INFO_ATTENTIONS, null);
     saveUserInfo(null);
   }
 
@@ -59,6 +65,8 @@ class UserInfoUntil{
     userInfo.area = sharedPreferences.getString(USER_INFO_AREA);
     userInfo.introduction = sharedPreferences.getString(USER_INFO_INTRODUCTION);
     userInfo.age = sharedPreferences.get(USER_INFO_AGE);
+    userInfo.fans = sharedPreferences.getString(USER_INFO_FANS);
+    userInfo.attentions = sharedPreferences.getString(USER_INFO_ATTENTIONS);
     return userInfo;
   }
 
@@ -75,6 +83,8 @@ class UserInfoUntil{
       userInfo.sex = map['sex'];
       userInfo.area = map['area'];
       userInfo.introduction = map['introduction'];
+      userInfo.fans = map['fans'];
+      userInfo.attentions = map['attentions'];
       return userInfo;
     } else {
       return null;

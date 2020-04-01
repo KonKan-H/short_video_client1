@@ -172,7 +172,9 @@ class _LoginPageState extends State<LoginPage> {
               if(result.data != null) {
                 UserInfo userInfo = await UserInfoUntil.map2UserInfo(result.data);
                 User user = User(userInfo.userId, userInfo.userName, userInfo.userAvatar, userInfo.mobilePhone);
-                OsApplication.eventBus.fire(LoginEvent(userInfo.userId, user.userName, user.userAvatar, userInfo.age, userInfo.sex, userInfo.area, userInfo.introduction));
+                OsApplication.eventBus.fire(
+                    LoginEvent(userInfo.userId, user.userName, user.userAvatar, userInfo.age,
+                        userInfo.sex, userInfo.area, userInfo.introduction));
                 UserUntil.saveUserInfo(user);
                 UserInfoUntil.saveUserInfo(userInfo);
                 Navigator.pop(context);

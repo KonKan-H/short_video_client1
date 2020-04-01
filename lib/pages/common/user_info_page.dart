@@ -3,7 +3,6 @@ import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/models/Video.dart';
 import 'package:short_video_client1/pages/VideoPage/video_player.dart';
-import 'package:short_video_client1/pages/common/video_list.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
@@ -45,8 +44,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
       isMyself;
     });
   }
-
-
 
   @override
   void dispose() {
@@ -141,7 +138,10 @@ class _UserInfoPageState extends State<UserInfoPage> {
                 Container(
                     child: Offstage(
                       offstage: (userInfo == null || userInfo.userName == null) ? true : false,
-                      child: Text('粉丝：0  关注：0', style: TextStyle(color: Colors.white, fontSize: 16.0),),
+                      child: userInfo == null ? null :
+                      (userInfo.fans == null && userInfo.attentions == null) ? Text('粉丝：0  关注：0',
+                        style: TextStyle(color: Colors.white, fontSize: 16.0),):
+                      Text('粉丝：${userInfo.fans}  关注：${userInfo.attentions}', style: TextStyle(color: Colors.white, fontSize: 16.0),),
                     )
                 ),
                 Container(

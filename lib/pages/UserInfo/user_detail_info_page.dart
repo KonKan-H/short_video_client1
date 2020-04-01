@@ -93,7 +93,7 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
     items.addAll(initInputItem('性别', '请输入性别', sex == null ? _userSexController : _userSexController = TextEditingController.fromValue(TextEditingValue(text: sex)),));
     items.addAll(initInputItem('年龄', '请输入年龄', age == null ? _userAgeController : _userAgeController = TextEditingController.fromValue(TextEditingValue(text: age)),));
     items.addAll(initInputItem('地区', '请输入地区', area == null ? _userAreaController : _userAreaController = TextEditingController.fromValue(TextEditingValue(text: area.toString())),));
-    items.addAll(initInputItem('简介', '介绍下自己吧(最多15个字符)', introduction == null ? _userIntroController : _userIntroController = TextEditingController.fromValue(TextEditingValue(text: introduction)), maxLines: 5));
+    items.addAll(initInputItem('简介', '介绍下自己吧(最多25个字符)', introduction == null ? _userIntroController : _userIntroController = TextEditingController.fromValue(TextEditingValue(text: introduction)), maxLines: 5));
     items.add(initSubmitBtn());
     return new Column(
       mainAxisAlignment: MainAxisAlignment.start,

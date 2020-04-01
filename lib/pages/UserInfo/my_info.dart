@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:short_video_client1/app/OsApplication.dart';
 import 'package:short_video_client1/event/login_event.dart';
+import 'package:short_video_client1/models/AttentionsFans.dart';
+import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/pages/UserInfo/user_detail_info_page.dart';
+import 'package:short_video_client1/resources/net/api.dart';
+import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
 import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/util/user_info_until.dart';
@@ -18,7 +22,7 @@ class MyInfoPage extends StatefulWidget {
 }
 
 class _MyInfoPageState extends State<MyInfoPage> {
-  var userId, id, userName, userAvatar, sex, area, introduction, age, mobilePhone;
+  var userId, id, userName, userAvatar, sex, area, introduction, age, mobilePhone, fans, attentions;
   var titles = ['我的消息', '我的视频',  '我的关注', '我的粉丝', '退出登录'];
 
   @override
@@ -26,20 +30,32 @@ class _MyInfoPageState extends State<MyInfoPage> {
     super.initState();
     _getUserInfo();
     OsApplication.eventBus.on<LoginEvent>().listen((event) {
-      OsApplication.eventBus.on<LoginEvent>().listen((event) {
-        if(event != null) {
-          setState(() {
-            userName = event.userName;
-            userAvatar = event.userAvatar;
-            age = event.age.toString();
-            area = event.area;
-            sex = event.sex;
-            userId = event.userId;
-          });
-        } else {
-          userName = null;
-        }
-      });
+      if(event != null) {
+        setState(() {
+          userName = event.userName;
+          userAvatar = event.userAvatar;
+          age = event.age.toString();
+          area = event.area;
+          sex = event.sex;
+          userId = event.userId;
+        });
+      } else {
+        userName = null;
+      }
+    });
+    _getFansAndAttentions();
+  }
+
+  //取得关注数和粉丝数
+  _getFansAndAttentions() async {
+    Map<String, dynamic> data = {
+      "userId" : userId
+    };
+    Result result = await DioRequest.dioPost(URL.USER_FANS_ATTENTION, data);
+    AttentionsFans attentionsFans = AttentionsFans.formJson(result.data);
+    setState(() {
+      fans = attentionsFans.fans;
+      attentions = attentionsFans.attentions;
     });
   }
 
@@ -110,8 +126,8 @@ class _MyInfoPageState extends State<MyInfoPage> {
                           size: 20, color: Colors.white,),
                         ),
                         Container(
-                          child: Text(userName == null ?
-                          '点击头像登录' : ' ' + userName + '  ' + age,
+                          child: userName == null? null : Text((userName == null ? null : userName) +
+                              '  ' + (age == null ? null: age.toString()),
                             style: TextStyle(color: Colors.white, fontSize: 16.0),),
                         ),
                       ],
@@ -121,7 +137,9 @@ class _MyInfoPageState extends State<MyInfoPage> {
                 Container(
                   child: Offstage(
                     offstage: userName == null ? true : false,
-                    child: Text('粉丝：0  关注：0', style: TextStyle(color: Colors.white, fontSize: 16.0),),
+                    child: (fans == null && attentions == null) ? Text('粉丝：0  关注：0',
+                      style: TextStyle(color: Colors.white, fontSize: 16.0),):
+                    Text('粉丝：$fans  关注：$attentions', style: TextStyle(color: Colors.white, fontSize: 16.0),),
                   )
                 ),
                 Container(

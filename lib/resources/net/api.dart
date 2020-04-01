@@ -37,4 +37,7 @@ class URL{
 
   //关注用户
   static const String ATTENTION_USER = BASE_URL + '/v1/attention/user/api';
+
+  //取得关注数和粉丝数
+  static const String USER_FANS_ATTENTION = BASE_URL + '/v1/fans/attention/api';
 }

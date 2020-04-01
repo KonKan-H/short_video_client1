@@ -10,6 +10,8 @@ class UserInfo {
   var sex;
   var area;
   var introduction;
+  var fans;
+  var attentions;
 
   UserInfo();
 }
