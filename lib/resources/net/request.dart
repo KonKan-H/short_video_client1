@@ -28,6 +28,19 @@ class DioRequest {
     return result;
   }
 
+  //put请求
+  static Future<Result> dioDelete(String url, Map<String, dynamic> data) async {
+    TsUtils.logInfo('Delete: $url $data');
+    Response response;
+    Dio dio = new Dio();
+    dio.options.responseType = ResponseType.plain;
+    response = await dio.delete(url, data: data);
+    Result result = Result.formJson(json.decode(response.data));
+    TsUtils.logInfo(result.toString());
+    return result;
+  }
+
+
   //get请求
   static Future<Result> dioGet(String url) async {
     TsUtils.logInfo('Get: $url');

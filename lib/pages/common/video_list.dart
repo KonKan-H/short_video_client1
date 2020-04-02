@@ -1,28 +1,34 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/models/Video.dart';
+import 'package:short_video_client1/pages/VideoPage/delete_video_dialog.dart';
 import 'package:short_video_client1/pages/VideoPage/video_player.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/util/user_info_until.dart';
 
-class MyVideoList extends StatefulWidget {
-  MyVideoList({Key key, @required this.userId}):super(key: key);
+class VideoListPage extends StatefulWidget {
+  VideoListPage({Key key, @required this.userId, this.isMyself}):super(key: key);
   var userId;
+  bool isMyself;
 
   @override
   State<StatefulWidget> createState() {
-    return new GridViewState(userId: userId);
+    return new GridViewState(userId: userId, isMyself: isMyself);
   }
 }
 
 class GridViewState extends State {
-  GridViewState({Key key, this.userId});
+  GridViewState({Key key, this.userId, this.isMyself});
   var userId;
+  bool isMyself, isDelete = false;
   List<Video> videoList = List();
 
   @override
   Widget build(BuildContext context) {
+    //id为空 查找所有视频
     if(userId == null ) {
       UserInfoUntil.getUserInfo().then((userInfo) {
         if (userInfo != null && userInfo.userName != null) {
@@ -30,6 +36,7 @@ class GridViewState extends State {
         }
       });
     }
+    //id不为空 查找id用户的视频
     Map<String, dynamic> data = {
       "userId" : userId
     };
@@ -46,6 +53,7 @@ class GridViewState extends State {
       });
       videoList = l;
     });
+
     Widget layout;
 
     layout = (videoList == null || videoList.length == 0) ? Center(
@@ -60,6 +68,9 @@ class GridViewState extends State {
       padding: const EdgeInsets.all(8.0),
       children: buildGridTileList(videoList),
     );
+    setState(() {
+      layout;
+    });
     return layout;
   }
 
@@ -89,6 +100,20 @@ class GridViewState extends State {
 //                      builder: (context) => VideoScreen(video: Video(Random().nextInt(10000000), 'https://www.runoob.com/try/demo_source/mov_bbb.mp4', "作者"))
                         builder: (context) => VideoPlayerPage(video: video)
                     ));
+                  },
+                  onLongPress: () {
+                    if(isMyself) {
+                      showCupertinoAlertDialog(video);
+                      setState(() {
+                        if(isDelete) {
+                          videoList.remove(video);
+                          setState(() {
+                            videoList;
+                            isDelete = true;
+                          });
+                        }
+                      });
+                    }
                   },
                 ),
               ],
@@ -138,6 +163,50 @@ class GridViewState extends State {
     );
   }
 
+  showCupertinoAlertDialog(Video video) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text("是否删除该视频"),
+            content: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 10,
+                ),
+                Align(
+                  child: Text(video.description == null ? "" : video.description.toString(), maxLines: 1,
+                    overflow: TextOverflow.ellipsis,),
+                  alignment: Alignment(0, 0),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: Text("取消"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoDialogAction(
+                child: Text("确定"),
+                onPressed: () {
+                  DioRequest.dioPost(URL.VIDEO_DELETE, Video.model2map(video)).then((result) {
+                    bool flag = result.data as bool;
+                    if(flag) {
+                      setState(() {
+                        isDelete = flag;
+                      });
+                    }
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
+  }
+
 //  String getPhotoUrl() {
 //    int id = Random().nextInt(999);
 //    String url = "https://i.picsum.photos/id/$id/200/300.jpg";
@@ -145,3 +214,5 @@ class GridViewState extends State {
 //    return url;
 //  }
 }
+
+

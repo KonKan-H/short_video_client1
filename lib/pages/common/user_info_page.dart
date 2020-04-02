@@ -106,9 +106,11 @@ class _UserInfoPageState extends State<UserInfoPage> {
                 attention.userId = authorId;
                 attention.fansId = looker;
                 bool flag = await attentionUserYON(attention, isAttention);
-                setState(() {
-                  flag;
-                });
+                if(mounted) {
+                  setState(() {
+                    flag;
+                  });
+                }
                 if(flag != null) {
                   if(flag) {
                     if(isAttention) {

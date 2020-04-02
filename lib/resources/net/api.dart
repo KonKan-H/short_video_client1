@@ -15,7 +15,7 @@ class URL{
   static const String UPLOAD_FILE = BASE_URL + '/v1/file/api';
 
   //获取视频
-  static const String GET_VIDEO_LIST = BASE_URL + '/v1/video/api';
+  static const String GET_VIDEO_LIST = BASE_URL + '/v1/video/init/api';
 
   //点赞
   static const String VIDEO_LIKE = BASE_URL + '/v1/like/api';
@@ -43,4 +43,7 @@ class URL{
 
   //取得关注数和粉丝数
   static const String USER_FANS_ATTENTION = BASE_URL + '/v1/fans/attention/api';
+
+  //删除视频
+  static const String VIDEO_DELETE = BASE_URL + '/v1/video/delete/api';
 }

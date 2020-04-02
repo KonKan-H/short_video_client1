@@ -179,6 +179,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                                   shape: CircleBorder(),
                                   child: InkWell(
                                     onTap: () async {
+                                      if(userId == null) {
+                                        TsUtils.showShort('请先登录');
+                                        return;
+                                      }
                                       bool flag = await attentionUser(video);
                                       if(flag) {
                                         TsUtils.showShort('关注成功');
@@ -303,7 +307,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         Container(
           padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
           alignment: Alignment.topLeft,
-          child: Text(video.description,
+          child: Text(video.description == null ? "" : video.description,
             style: TextStyle(color: Colors.white,
                 fontSize: 14,
                 decoration: TextDecoration.none),

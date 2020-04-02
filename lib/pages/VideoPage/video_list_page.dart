@@ -16,7 +16,7 @@ class VideoList extends StatelessWidget {
         ),
         body: new Center(
           child: Container(
-            child: MyVideoList(userId: null,),
+            child: VideoListPage(userId: null,),
           )
         ),
       );

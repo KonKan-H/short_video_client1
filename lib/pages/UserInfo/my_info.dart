@@ -3,7 +3,9 @@ import 'package:short_video_client1/app/OsApplication.dart';
 import 'package:short_video_client1/event/login_event.dart';
 import 'package:short_video_client1/models/AttentionsFans.dart';
 import 'package:short_video_client1/models/Result.dart';
+import 'file:///D:/Flutter/project/short_video_client1/lib/pages/VideoPage/my_video_list.dart';
 import 'package:short_video_client1/pages/UserInfo/user_detail_info_page.dart';
+import 'package:short_video_client1/pages/common/video_list.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
@@ -31,7 +33,6 @@ class _MyInfoPageState extends State<MyInfoPage> {
     _getUserInfo();
     OsApplication.eventBus.on<LoginEvent>().listen((event) {
       if(event != null) {
-        if(mounted) {
           setState(() {
             userName = event.userName;
             userAvatar = event.userAvatar;
@@ -39,13 +40,14 @@ class _MyInfoPageState extends State<MyInfoPage> {
             area = event.area;
             sex = event.sex;
             userId = event.userId;
+            if(userId != null) {
+              _getFansAndAttentions();
+            }
           });
-        }
       } else {
         userName = null;
       }
     });
-    _getFansAndAttentions();
   }
 
   //取得关注数和粉丝数
@@ -55,12 +57,10 @@ class _MyInfoPageState extends State<MyInfoPage> {
     };
     Result result = await DioRequest.dioPost(URL.USER_FANS_ATTENTION, data);
     AttentionsFans attentionsFans = AttentionsFans.formJson(result.data);
-    if(mounted) {
-      setState(() {
-        fans = attentionsFans.fans.toString();
-        attentions = attentionsFans.attentions.toString();
-      });
-    }
+    setState(() {
+      fans = attentionsFans.fans.toString();
+      attentions = attentionsFans.attentions.toString();
+    });
   }
 
   _getUserInfo() {
@@ -78,6 +78,9 @@ class _MyInfoPageState extends State<MyInfoPage> {
             userId = userInfo.userId;
             mobilePhone = userInfo.mobilePhone;
             introduction = userInfo.introduction;
+            if(userId != null) {
+              _getFansAndAttentions();
+            }
           });
         }
       }
@@ -153,10 +156,6 @@ class _MyInfoPageState extends State<MyInfoPage> {
                     offstage: area == null ? true : false,
                     child:  Text(area.toString(), style: TextStyle(color: Colors.white, fontSize: 16.0),),
                   ),
-//                    child: Offstage(
-//                      offstage: area == null ? true : false,
-//                      child:  Text(area, style: TextStyle(color: Colors.white, fontSize: 16.0),),
-//                    )
                 ),
                 Container(
                   child: introduction == null ? Container(child: null,) : Offstage(
@@ -175,25 +174,12 @@ class _MyInfoPageState extends State<MyInfoPage> {
               alignment: Alignment.centerLeft,
               child: InkWell(
                 onTap: () {
-                  print('this is the item of $title');
-                  if(title == "退出登录"){
-                    if(userName != null) {
-                      if(mounted) {
-                        setState(() {
-                          UserUntil.cleanUserInfo();
-                          UserInfoUntil.cleanUserInfo();
-                          userName = null;
-                          userAvatar = null;
-                          sex = null;
-                          area = null;
-                          introduction = null;
-                        });
-                      }
-                      TsUtils.showShort("退出成功");
-                    } else {
-                      TsUtils.showShort("请先登录");
-                    }
+                  if(userId == null) {
+                    TsUtils.showShort('请先登录');
+                    return;
                   }
+                  print('this is the item of $title');
+                  listDetal(title);
                 },
                 child: Column(
                   children: <Widget>[
@@ -235,5 +221,30 @@ class _MyInfoPageState extends State<MyInfoPage> {
     Navigator.push(context, MaterialPageRoute(
       builder: (context) => UserDetailInfoPage()
     ));
+  }
+
+  void listDetal(String title) {
+    if(title == "退出登录"){
+      if(userName != null) {
+        if(mounted) {
+          setState(() {
+            UserUntil.cleanUserInfo();
+            UserInfoUntil.cleanUserInfo();
+            userName = null;
+            userAvatar = null;
+            sex = null;
+            area = null;
+            introduction = null;
+          });
+        }
+        TsUtils.showShort("退出成功");
+      } else {
+        TsUtils.showShort("请先登录");
+      }
+    } else if(title == "我的视频") {
+      Navigator.push(context, MaterialPageRoute(
+        builder: (context) => MyVideoList(userId: userId, isMyself: true)
+      ));
+    }
   }
 }
