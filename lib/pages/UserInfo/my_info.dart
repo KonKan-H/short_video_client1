@@ -5,7 +5,6 @@ import 'package:short_video_client1/models/AttentionsFans.dart';
 import 'package:short_video_client1/models/Result.dart';
 import 'file:///D:/Flutter/project/short_video_client1/lib/pages/VideoPage/my_video_list.dart';
 import 'package:short_video_client1/pages/UserInfo/user_detail_info_page.dart';
-import 'package:short_video_client1/pages/common/video_list.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
@@ -13,6 +12,7 @@ import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/util/user_info_until.dart';
 import 'package:short_video_client1/resources/util/user_until.dart';
 import 'login_page.dart';
+import 'my_attentions_and_fans.dart';
 
 class MyInfoPage extends StatefulWidget {
   MyInfoPage({Key key}) : super(key: key);
@@ -25,7 +25,7 @@ class MyInfoPage extends StatefulWidget {
 
 class _MyInfoPageState extends State<MyInfoPage> {
   var userId, id, userName, userAvatar, sex, area, introduction, age, mobilePhone, fans, attentions;
-  var titles = ['我的消息', '我的视频',  '我的关注', '我的粉丝', '退出登录'];
+  var titles = ['我的点赞', '我的视频',  '我的关注', '我的粉丝', '退出登录'];
 
   @override
   void initState() {
@@ -225,26 +225,28 @@ class _MyInfoPageState extends State<MyInfoPage> {
 
   void listDetal(String title) {
     if(title == "退出登录"){
-      if(userName != null) {
-        if(mounted) {
-          setState(() {
-            UserUntil.cleanUserInfo();
-            UserInfoUntil.cleanUserInfo();
-            userName = null;
-            userAvatar = null;
-            sex = null;
-            area = null;
-            introduction = null;
-          });
-        }
-        TsUtils.showShort("退出成功");
-      } else {
-        TsUtils.showShort("请先登录");
+      if(mounted) {
+        setState(() {
+          UserUntil.cleanUserInfo();
+          UserInfoUntil.cleanUserInfo();
+          userName = null;
+          userAvatar = null;
+          sex = null;
+          area = null;
+          introduction = null;
+        });
       }
+      TsUtils.showShort("退出成功");
     } else if(title == "我的视频") {
       Navigator.push(context, MaterialPageRoute(
-        builder: (context) => MyVideoList(userId: userId, isMyself: true)
+        builder: (context) => MyVideoList(userId: userId, couldDelete: true)
       ));
+    } else if(title == "我的关注" || title == "我的粉丝") {
+      Navigator.push(context, MaterialPageRoute(
+        builder: (context) => MyAttentionsAndFans(title: title, userId: userId)
+      ));
+    } else if(title == "我的点赞") {
+
     }
   }
 }

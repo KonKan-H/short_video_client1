@@ -46,4 +46,10 @@ class URL{
 
   //删除视频
   static const String VIDEO_DELETE = BASE_URL + '/v1/video/delete/api';
+
+  //取得粉丝列表
+  static const String FANS_LIST_VIEW = BASE_URL + '/v1/fans/list/api';
+
+  //取得关注列表
+  static const String ATTENTIONS_LIST_VIEW = BASE_URL + '/v1/attentions/list/api';
 }

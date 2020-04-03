@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/models/Video.dart';
-import 'package:short_video_client1/pages/VideoPage/delete_video_dialog.dart';
 import 'package:short_video_client1/pages/VideoPage/video_player.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
@@ -10,13 +8,13 @@ import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/util/user_info_until.dart';
 
 class VideoListPage extends StatefulWidget {
-  VideoListPage({Key key, @required this.userId, this.isMyself}):super(key: key);
+  VideoListPage({Key key, @required this.userId, this.couldDelete}):super(key: key);
   var userId;
-  bool isMyself;
+  bool couldDelete;
 
   @override
   State<StatefulWidget> createState() {
-    return new GridViewState(userId: userId, isMyself: isMyself);
+    return new GridViewState(userId: userId, isMyself: couldDelete);
   }
 }
 

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:short_video_client1/models/Attention.dart';
 import 'package:short_video_client1/models/Result.dart';
@@ -190,9 +191,11 @@ class _UserInfoPageState extends State<UserInfoPage> {
                   ),
                 ),
                 Container(
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: (userInfo == null || userInfo.introduction == null) ? Container(child: null,) : Offstage(
                     offstage: userInfo.introduction == null ? true : false,
-                    child:  Text(userInfo.introduction, style: TextStyle(color: Colors.white, fontSize: 16.0),),
+                    child:  Text(userInfo.introduction, style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      ),
                   ),
                 ),
               ],

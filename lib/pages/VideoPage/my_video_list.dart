@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:short_video_client1/pages/common/video_list.dart';
 import 'package:short_video_client1/resources/strings.dart';
-import 'package:short_video_client1/resources/tools.dart';
 
 class MyVideoList extends StatefulWidget {
-  MyVideoList({Key key, this.userId, this.isMyself}) : super(key: key);
+  MyVideoList({Key key, this.userId, this.couldDelete}) : super(key: key);
   final userId;
-  bool isMyself;
+  bool couldDelete;
   @override
   _MyVideoListState createState() {
-    return _MyVideoListState(userId: userId, isMyself: isMyself);
+    return _MyVideoListState(userId: userId, couldDelete: couldDelete);
   }
 }
 
 class _MyVideoListState extends State<MyVideoList> {
-  _MyVideoListState({Key key, this.userId, this.isMyself});
+  _MyVideoListState({Key key, this.userId, this.couldDelete});
   var userId;
-  bool isMyself;
+  bool couldDelete;
 
   @override
   void initState() {
@@ -38,7 +37,7 @@ class _MyVideoListState extends State<MyVideoList> {
       ),
       body: new Center(
           child: Container(
-            child: VideoListPage(userId: userId, isMyself: isMyself),
+            child: VideoListPage(userId: userId, couldDelete: couldDelete),
           )
       ),
     );

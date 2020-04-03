@@ -9,7 +9,7 @@ class FollowingVideo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
-          title: new Text("关注视频"),
+          title: new Text("我的关注"),
           backgroundColor: ConstantData.MAIN_COLOR, //设置appbar背景颜色
           centerTitle: true, //设置标题是否局中
         ),

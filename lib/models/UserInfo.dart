@@ -14,4 +14,20 @@ class UserInfo {
   var attentions;
 
   UserInfo();
+
+  factory UserInfo.formJson(Map<String, dynamic> map) {
+    UserInfo userInfo = new UserInfo();
+    userInfo.id = map['id'];
+    userInfo.userId = map['userId'];
+    userInfo.age = map['age'];
+    userInfo.userName = map['userName'];
+    userInfo.mobilePhone = map['userMobilePhone'];
+    userInfo.userAvatar = map['userAvatar'];
+    userInfo.sex = map['sex'];
+    userInfo.area = map['area'];
+    userInfo.introduction = map['introduction'];
+    userInfo.fans = map['fans'];
+    userInfo.attentions = map['attentions'];
+    return userInfo;
+  }
 }
