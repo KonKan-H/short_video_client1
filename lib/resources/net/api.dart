@@ -52,4 +52,7 @@ class URL{
 
   //取得关注列表
   static const String ATTENTIONS_LIST_VIEW = BASE_URL + '/v1/attentions/list/api';
+
+  //用户点赞的视频
+  static const String MY_FAVORITE_VIDEO = BASE_URL + '/v1/favorite/video/api';
 }
