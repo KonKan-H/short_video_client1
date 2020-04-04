@@ -66,11 +66,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-//      routes: {
-//        '/': (context) => CameraHome(),
-//        '/preview': (context) => PreviewRoute(),
-//        '/commit': (context) => CommitRoute(),
-//      },
       home: bodyLayout(controller: controller, userName: userName),
     );
   }

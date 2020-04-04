@@ -36,7 +36,7 @@ class _MyFavoriteVideoState extends State<MyFavoriteVideo> {
     Map<String, dynamic> data = {
       "userId" : userId
     };
-    DioRequest.dioPost(URL.MY_FAVORITE_VIDEO, data).then((result) {
+    DioRequest.dioPost(URL.MY_FAVORITE_VIDEO_LIST, data).then((result) {
       List<Video> l = List();
       print(result.data);
       Video video;

@@ -49,19 +49,17 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       });
     _getUserInfo();
     OsApplication.eventBus.on<LoginEvent>().listen((event) {
-      OsApplication.eventBus.on<LoginEvent>().listen((event) {
-        if(event != null) {
-          userName = event.userName;
-          userAvatar = event.userAvatar;
-          age = event.age.toString();
-          area = event.area;
-          sex = event.sex;
-          userAvatar = event.userAvatar;
-          userId = event.userId;
-        } else {
-          userName = null;
-        }
-      });
+      if(event != null) {
+        userName = event.userName;
+        userAvatar = event.userAvatar;
+        age = event.age.toString();
+        area = event.area;
+        sex = event.sex;
+        userAvatar = event.userAvatar;
+        userId = event.userId;
+      } else {
+        userName = null;
+      }
     });
   }
 

@@ -21,7 +21,7 @@ class VideoListPage extends StatefulWidget {
 class GridViewState extends State {
   GridViewState({Key key, this.userId, this.isMyself});
   var userId;
-  bool isMyself, isDelete = false;
+  bool isMyself, ifDelete = false;
   List<Video> videoList = List();
 
   @override
@@ -103,11 +103,11 @@ class GridViewState extends State {
                     if(isMyself) {
                       showCupertinoAlertDialog(video);
                       setState(() {
-                        if(isDelete) {
+                        if(ifDelete) {
                           videoList.remove(video);
                           setState(() {
                             videoList;
-                            isDelete = true;
+                            ifDelete = false;
                           });
                         }
                       });
@@ -193,7 +193,7 @@ class GridViewState extends State {
                     bool flag = result.data as bool;
                     if(flag) {
                       setState(() {
-                        isDelete = flag;
+                        ifDelete = flag;
                       });
                     }
                   });

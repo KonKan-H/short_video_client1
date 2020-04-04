@@ -109,7 +109,7 @@ class _MyAttentionsAndFansState extends State<MyAttentionsAndFans> {
             ),
             Container(
               height: 80,
-              width: 0.7 * width,
+              width: 0.6 * width,
               child: Column(
                 children: <Widget>[
                   Container(

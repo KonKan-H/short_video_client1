@@ -5,7 +5,7 @@ import 'package:short_video_client1/models/AttentionsFans.dart';
 import 'package:short_video_client1/models/Result.dart';
 import 'file:///D:/Flutter/project/short_video_client1/lib/pages/VideoPage/my_video_list.dart';
 import 'package:short_video_client1/pages/UserInfo/user_detail_info_page.dart';
-import 'package:short_video_client1/pages/VideoPage/My_favorite_video.dart';
+import 'package:short_video_client1/pages/VideoPage/my_favorite_video.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
