@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:short_video_client1/models/Reply.dart';
+import 'package:short_video_client1/models/Video.dart';
+import 'package:short_video_client1/resources/tools.dart';
 
 class ReplyFullList extends StatelessWidget {
-  const ReplyFullList({Key key,this.pCtx}) : super(key: key);
+  const ReplyFullList({Key key,this.pCtx, this.video}) : super(key: key);
   final BuildContext pCtx;
+  final Video video;
   @override
   Widget build(BuildContext context) {
     double rpx = MediaQuery.of(context).size.width / 750;
@@ -35,9 +37,10 @@ class ReplyFullList extends StatelessWidget {
               )
             ],
             title: Text(
-              "10条评论",
-              style: TextStyle(color: Colors.grey[700],fontSize: 25*rpx),
+                ((video.comments == null || video.comments == 0) ? '0' : video.comments.toString()) + "条评论",
+              style: TextStyle(color: Colors.grey[700], fontSize: 25 * rpx, fontWeight: FontWeight.w700),
             ),
+            centerTitle: true,
             // elevation: 1,
           )
         ),
@@ -222,11 +225,17 @@ class BottomReplyBar extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.only(left: 30*rpx),
             // width: 600*rspx,
-            child: TextField(controller: _controller,decoration: InputDecoration(hintText: "留下你的精彩评论",border: InputBorder.none),),
+            child: TextField(
+              controller: _controller,
+              decoration: InputDecoration(hintText: "留下你的精彩评论",border: InputBorder.none),
+              obscureText: false,
+            ),
           )
         ),
         //IconButton(icon: Icon(Icons.email,color: Colors.grey[500],size: 50*rpx,),onPressed: (){showAtFriendPage(pCtx);},),
-        IconButton(icon: Icon(Icons.face,color: Colors.grey[500],size: 50*rpx),onPressed: (){},),
+        IconButton(icon: Icon(Icons.face,color: Colors.grey[500],size: 50*rpx),onPressed: (){
+          TsUtils.showShort(_controller.text);
+        },),
         SizedBox(width: 20*rpx,)
       ],),
     );

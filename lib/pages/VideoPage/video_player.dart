@@ -33,6 +33,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   final Video video;
   var userId, id, userName, userAvatar, sex, area, introduction, age, mobilePhone;
   bool isLiked, isAttention;
+  double screenWidth;
+  double screenHeight;
 
   VideoPlayerController _videoPlayerController;
 
@@ -99,8 +101,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   @override
   Widget build(BuildContext context) {
     //取得屏幕宽度
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
+    screenHeight = MediaQuery.of(context).size.height;
 
     return Stack(
       children: <Widget>[
@@ -235,7 +237,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                           child: Icon(Icons.comment, color: Colors.white, size: 35,),
                           color: Color(0x00FFFFFF),
                           onPressed: () {
-                            showBottom(context);
+                            showBottom(context, video);
                           },
                           shape: CircleBorder(),
                         ),
@@ -354,6 +356,25 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         : await getApplicationSupportDirectory();
     return directory.path;
   }
+
+  showBottom(context, Video video) {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusDirectional.circular(10)),
+        context: context,
+
+        builder: (_) {
+          return Container(
+              height: 0.6 * screenHeight,
+              child: GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  },
+                  child: ReplyFullList(pCtx: context, video: video,)
+              ),
+          );
+        });
+  }
 }
 
 Future<bool> attentionUser(Video video) async {
@@ -365,22 +386,7 @@ Future<bool> attentionUser(Video video) async {
   return result.data as bool;
 }
 
-showBottom(context) {
-  showModalBottomSheet(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusDirectional.circular(10)),
-      context: context,
-      builder: (_) {
-        return Container(
-            height: 600,
-            child: GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-                child: ReplyFullList(pCtx: context)
-            ));
-      });
-}
+
 
 
 
