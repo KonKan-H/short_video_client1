@@ -128,7 +128,7 @@ class bodyLayout extends StatelessWidget {
           } else {
             print('================');
              Navigator.push(context, MaterialPageRoute(
-                 builder: (context) => CameraExampleHome()
+                 builder: (context) => selectImag()
              ));
 //            Navigator.pushNamed(context, '/');
           }
