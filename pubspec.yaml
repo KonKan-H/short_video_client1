@@ -59,6 +59,8 @@ flutter:
   assets:
     - images/ic_avatar_default.png
     - images/ic_arrow_right.png
+    - images/ic_arrow_add.png
+    - images/ic_arrow_play.png
 
   fonts:
     - family: MyIcon
