@@ -9,7 +9,9 @@ import 'package:short_video_client1/models/Attention.dart';
 import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/pages/VideoPage/layout/BottomSheet.dart';
 import 'package:short_video_client1/pages/VideoPage/likebutton/like_button.dart';
+import 'package:short_video_client1/pages/VideoPage/my_video_list.dart';
 import 'package:short_video_client1/pages/common/user_info_page.dart';
+import 'package:short_video_client1/pages/common/video_list.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
@@ -155,9 +157,15 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                     shape: CircleBorder(),
                     child: InkWell(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => UserInfoPage(authorId : video.authorId, looker: video.looker,)
-                        ));
+                        if(video.authorId == video.looker) {
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => MyVideoList(userId: userId, couldDelete: true)
+                          ));
+                        } else {
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => UserInfoPage(authorId : video.authorId, looker: video.looker,)
+                          ));
+                        }
                       },
                       child: Container(
                         width: 60,
