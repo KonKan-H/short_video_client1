@@ -58,7 +58,7 @@ class _MyAttentionsAndFansState extends State<MyAttentionsAndFans> {
         UserInfo userInfo;
         for(Map<String, dynamic> map in result.data) {
           userInfo = UserInfo.formJson(map);
-          userInfoList.add(userInfo);
+          l.add(userInfo);
           setState(() {
             l;
           });

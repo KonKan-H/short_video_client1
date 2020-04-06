@@ -55,7 +55,7 @@ class GridViewState extends State {
     Widget layout;
 
     layout = (videoList == null || videoList.length == 0) ? Center(
-      child: CircularProgressIndicator(),
+      child: Text('没有数据',),
     ): GridView(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
