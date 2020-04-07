@@ -1,10 +1,15 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:short_video_client1/models/Result.dart';
+import 'package:short_video_client1/resources/net/api.dart';
+import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
 import 'package:short_video_client1/resources/tools.dart';
+import 'package:uuid/uuid.dart';
 import 'package:video_player/video_player.dart';
 
 class selectVideo extends StatefulWidget {
@@ -22,6 +27,7 @@ class _selectVideoState extends State<selectVideo> {
   File _video, _cover;
   double screenWidth, screenHeight;
   VideoPlayerController _videoPlayerController;
+  var _controller = new TextEditingController();
 
   @override
   void initState() {
@@ -39,15 +45,7 @@ class _selectVideoState extends State<selectVideo> {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
     if(_video != null) {
-      setState(() {
-        _videoPlayerController = VideoPlayerController.file(_video)
-          ..initialize().then((_) {
-            //确保在视频初始化后显示第一帧，甚至在按下播放按钮之前。
-            setState(() {
-              _videoPlayerController.setLooping(false);
-            });
-          });
-      });
+      _videoPlayerController = VideoPlayerController.file(_video);
     }
     return Scaffold(
       appBar: AppBar(
@@ -88,19 +86,13 @@ class _selectVideoState extends State<selectVideo> {
                                   image: NetworkImage(ConstantData.VIDEO_UPLOAD_PNG, scale: 4)
                                 )
                             ),
-                          ) : Container(
+                          )
+                              : Container(
                             height: 150,
                             width: 100,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(color: Colors.black),
-                            child: _videoPlayerController.value.initialized
-                                ? Container(
-                              child: AspectRatio(
-                                aspectRatio: _videoPlayerController.value.aspectRatio,
-                                child: VideoPlayer(_videoPlayerController),
-                              ),
-                            )
-                                : Center(
+                            child: Center(
                               child: Image.asset('images/ic_arrow_play.png', color: Colors.white, scale: 4,),
                             ),
                           ),
@@ -160,7 +152,7 @@ class _selectVideoState extends State<selectVideo> {
                           style: TextStyle(fontSize: 15.0, color: Color(0xff969696)),
                           maxLines: 5,
                           textAlign: TextAlign.start,
-                          //controller: controller,
+                          controller: _controller,
                           decoration: InputDecoration.collapsed(hintText: '最多50个字符'),
                           obscureText: false,
                         ),
@@ -182,7 +174,8 @@ class _selectVideoState extends State<selectVideo> {
                       TsUtils.showShort("选择上传视频");
                       return;
                     }
-                    TsUtils.showShort(_video.toString());
+                    TsUtils.showShort(_controller.text);
+                    _uploadVideoInfo();
                   },
                 ),
               ),
@@ -191,6 +184,21 @@ class _selectVideoState extends State<selectVideo> {
         ),
       ),
     );
+  }
+
+  _uploadVideoInfo() async {
+    String videoName = Uuid().v1();
+    String videoSuffix = _video.path.substring(_video.path.length - 4, _video.path.length);
+    String coverName = Uuid().v1();
+    String coverSuffix = _cover.path.substring(_cover.path.length - 4, _cover.path.length);
+    FormData formData = FormData.from({
+//      'file' : MultipartFile.fromFile(_image.path, filename: name),
+      "video" : UploadFileInfo(_video, videoName + videoSuffix),
+      "cover" : UploadFileInfo(_cover, coverName + coverSuffix),
+      "introduction" : _controller.text
+    });
+    Result result = await DioRequest.uploadFile(URL.UPLOAD_VIDEO_INFO, formData);
+    print("==");
   }
 
   // 显示弹窗

@@ -65,10 +65,11 @@ class _FollowingVideoState extends State<FollowingVideo> {
           video = Video.formJson(map);
           l.add(video);
         }
-        setState(() {
-          l;
-        });
-        videoList = l;
+        if(mounted) {
+          setState(() {
+            videoList = l;
+          });
+        }
       });
       if(videoList == null || videoList.length == 0) {
         widget = Center(

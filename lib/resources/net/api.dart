@@ -58,4 +58,7 @@ class URL{
 
   //取得用户关注用户的视频
   static const String MY_FOLLOWING_VIDEO_LIST = BASE_URL + '/v1/following/video/api';
+
+  //上传视频信息
+  static const String UPLOAD_VIDEO_INFO = BASE_URL + '/v1/videoInfo/api';
 }

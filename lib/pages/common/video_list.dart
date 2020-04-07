@@ -46,10 +46,11 @@ class GridViewState extends State {
         video = Video.formJson(map);
         l.add(video);
       }
-      setState(() {
-        l;
-      });
-      videoList = l;
+      if(mounted) {
+        setState(() {
+          videoList = l;
+        });
+      }
     });
 
     Widget layout;

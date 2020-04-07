@@ -44,10 +44,11 @@ class _MyFavoriteVideoState extends State<MyFavoriteVideo> {
         video = Video.formJson(map);
         l.add(video);
       }
-      setState(() {
-        l;
-      });
-      videoList = l;
+      if(mounted) {
+        setState(() {
+          videoList = l;
+        });
+      }
     });
     return  Scaffold(
       appBar: new AppBar(
