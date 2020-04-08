@@ -195,7 +195,8 @@ class _selectVideoState extends State<selectVideo> {
 //      'file' : MultipartFile.fromFile(_image.path, filename: name),
       "video" : UploadFileInfo(_video, videoName + videoSuffix),
       "cover" : UploadFileInfo(_cover, coverName + coverSuffix),
-      "introduction" : _controller.text
+      "description" : _controller.text,
+      "userId" : userId
     });
     Result result = await DioRequest.uploadFile(URL.UPLOAD_VIDEO_INFO, formData);
     print("==");

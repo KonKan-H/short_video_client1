@@ -82,7 +82,9 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
         title: Text('用户信息', style: new TextStyle(color: Colors.white)),
         iconTheme: new IconThemeData(color: Colors.white),
       ),
-      body: initInputBody(),
+      body: SingleChildScrollView(
+        child: initInputBody(),
+      ),
     );
   }
 

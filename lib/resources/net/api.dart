@@ -1,6 +1,6 @@
 class URL{
-  //192.168.31.81为服务端 IP地址
-  static const String BASE_URL = 'http://192.168.31.81:9250/v3';
+  //10.20.8.155为服务端 IP地址
+  static const String BASE_URL = 'http://10.20.8.155:9250/v3';
 
   //注册
   static const String USER_REGISTER = BASE_URL + '/v1/registration/api';

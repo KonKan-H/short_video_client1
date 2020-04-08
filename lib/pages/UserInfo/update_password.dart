@@ -154,7 +154,6 @@ class _UpdatePasswordState extends State<UpdatePassword> {
           onPressed: () async {
             print("mobilePhone: $_mobilePhone, password: $_password1");
             if (_formKey.currentState.validate()) {
-              ///只有输入的内容符合要求通过才会到达此处
               _formKey.currentState.save();
               try {
                 Map<String, dynamic> data = {
