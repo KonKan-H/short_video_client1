@@ -44,8 +44,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     _getLikeAndAttention();
     super.initState();
     print(ConstantData.VIDEO_FILE_URI + video.url);
-    print("============");
-    _videoPlayerController = VideoPlayerController.network('http://10.20.6.91:8080/hls/19a0d4fc6485435fa18a2e2c6eef3cf7.m3u8')
+    _videoPlayerController = VideoPlayerController.network(ConstantData.VIDEO_FILE_URI + video.url)
       ..initialize().then((_) {
         //确保在视频初始化后显示第一帧，甚至在按下播放按钮之前。
         setState(() {
