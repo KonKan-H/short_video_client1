@@ -25,7 +25,6 @@ class UserDetailInfoPage extends StatefulWidget {
 class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
   var userId, id, userName, userAvatar, sex, area, introduction, age, mobilePhone;
   File _image;
-  var _imgServerPath;
 //  WidgetsUtils widgetsUtils;
 
   var _userNameController = new TextEditingController();
@@ -48,7 +47,6 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
         age = event.age.toString();
         area = event.area;
         sex = event.sex;
-        userAvatar = event.userAvatar;
         userId = event.userId;
       } else {
         userName = null;
@@ -65,7 +63,6 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
           age = userInfo.age;
           area = userInfo.area;
           sex = userInfo.sex;
-          userAvatar = userInfo.userAvatar;
           userId = userInfo.userId;
           mobilePhone = userInfo.mobilePhone;
           introduction = userInfo.introduction;
@@ -167,7 +164,7 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
               shape: BoxShape.circle,
               color: Colors.transparent,
               image: new DecorationImage(
-                  image: NetworkImage(userAvatar), fit: BoxFit.cover),
+                  image: NetworkImage(ConstantData.AVATAR_FILE_URI + userAvatar), fit: BoxFit.cover),
               border: new Border.all(color: Colors.white, width: 2.0)),
         );
       }
@@ -327,14 +324,13 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
   _uploadImage() async {
     String name = Uuid().v1();
     String suffix = _image.path.substring(_image.path.length - 4, _image.path.length);
+    userAvatar = (name + suffix);
+    print(userAvatar);
     FormData formData = FormData.from({
 //      'file' : MultipartFile.fromFile(_image.path, filename: name),
-      "file" : UploadFileInfo(_image, name + suffix),
+      "file" : UploadFileInfo(_image, userAvatar),
     });
     Result result = await DioRequest.uploadFile(URL.UPLOAD_FILE, formData);
-    setState(() {
-      userAvatar = result.data;
-    });
-    print(userAvatar);
+
   }
 }
