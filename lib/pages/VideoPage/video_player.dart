@@ -11,7 +11,6 @@ import 'package:short_video_client1/pages/VideoPage/layout/BottomSheet.dart';
 import 'package:short_video_client1/pages/VideoPage/likebutton/like_button.dart';
 import 'package:short_video_client1/pages/VideoPage/my_video_list.dart';
 import 'package:short_video_client1/pages/common/user_info_page.dart';
-import 'package:short_video_client1/pages/common/video_list.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
@@ -44,7 +43,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   void initState() {
     _getLikeAndAttention();
     super.initState();
-    _videoPlayerController = VideoPlayerController.network(video.url)
+    print(ConstantData.VIDEO_FILE_URI + video.url);
+    print("============");
+    _videoPlayerController = VideoPlayerController.network('http://10.20.6.91:8080/hls/19a0d4fc6485435fa18a2e2c6eef3cf7.m3u8')
       ..initialize().then((_) {
         //确保在视频初始化后显示第一帧，甚至在按下播放按钮之前。
         setState(() {
@@ -61,6 +62,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         sex = event.sex;
         userAvatar = event.userAvatar;
         userId = event.userId;
+        video.looker = event.userId;
       } else {
         userName = null;
       }
@@ -81,6 +83,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           userId = userInfo.userId;
           mobilePhone = userInfo.mobilePhone;
           introduction = userInfo.introduction;
+          video.looker = userInfo.userId;
         });
       }
     });
@@ -111,6 +114,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         Scaffold(
           appBar: AppBar(
               title: Text(video.authorName.toString()),
+              centerTitle: true,
           ),
           body: Container(
             alignment: Alignment.center,
@@ -157,6 +161,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                     shape: CircleBorder(),
                     child: InkWell(
                       onTap: () {
+                        if(video.looker == null) {
+                          TsUtils.showShort("请先登录");
+                          return;
+                        }
                         if(video.authorId == video.looker) {
                           Navigator.push(context, MaterialPageRoute(
                               builder: (context) => MyVideoList(userId: userId, couldDelete: true)
@@ -175,7 +183,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                             width: 60,
                             height: 60,
                             //alignment: Alignment.bottomCenter,
-                            child: CircleAvatar(backgroundImage: NetworkImage(video.authorAvatar),),
+                            child: CircleAvatar(backgroundImage: NetworkImage(ConstantData.AVATAR_FILE_URI + video.authorAvatar),),
                           ),
                           Positioned(
                               bottom: 0,

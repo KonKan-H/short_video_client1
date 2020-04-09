@@ -38,9 +38,30 @@ class _FollowingVideoState extends State<FollowingVideo> {
   _getUserInfo() {
     UserInfoUntil.getUserInfo().then((userInfo) {
       if(userInfo != null && userInfo.userId != null) {
-        setState(() {
-          userId = userInfo.userId;
-        });
+        if(mounted) {
+          setState(() {
+            userId = userInfo.userId;
+            if(userId != null) {
+              Map<String, dynamic> data = {
+                "userId" : userId
+              };
+              DioRequest.dioPost(URL.MY_FOLLOWING_VIDEO_LIST, data).then((result) {
+                List<Video> l = List();
+                print(result.data);
+                Video video;
+                for(Map<String, dynamic> map in result.data) {
+                  video = Video.formJson(map);
+                  l.add(video);
+                }
+                if(mounted) {
+                  setState(() {
+                    videoList = l;
+                  });
+                }
+              });
+            }
+          });
+        }
       }
     });
   }
@@ -53,32 +74,14 @@ class _FollowingVideoState extends State<FollowingVideo> {
   @override
   Widget build(BuildContext context) {
     Widget widget;
-    if(userId != null) {
-      Map<String, dynamic> data = {
-        "userId" : userId
-      };
-      DioRequest.dioPost(URL.MY_FOLLOWING_VIDEO_LIST, data).then((result) {
-        List<Video> l = List();
-        print(result.data);
-        Video video;
-        for(Map<String, dynamic> map in result.data) {
-          video = Video.formJson(map);
-          l.add(video);
-        }
-        if(mounted) {
-          setState(() {
-            videoList = l;
-          });
-        }
-      });
-      if(videoList == null || videoList.length == 0) {
-        widget = Center(
-          child: Text("关注用户没有发布视频"),
-        );
-      } else {
-        widget = buildVideoList();
-      }
+    if (videoList == null || videoList.length == 0) {
+      widget = Center(
+        child: Text("关注用户没有发布视频"),
+      );
     } else {
+      widget = buildVideoList();
+    }
+    if(userId == null ) {
       widget = Center(
         child: Text('请先登录'),
       );
@@ -134,7 +137,7 @@ class _FollowingVideoState extends State<FollowingVideo> {
             alignment: Alignment.center,
             child: Stack(
               children: <Widget>[
-                Image.network(video.cover, fit: BoxFit.cover,),
+                Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
                 InkWell(
                   onTap: () {
                     video.looker = userId;
@@ -155,7 +158,7 @@ class _FollowingVideoState extends State<FollowingVideo> {
               width: 40,
               height: 40,
               child: new CircleAvatar(
-                backgroundImage: new NetworkImage(video.authorAvatar),
+                backgroundImage: new NetworkImage(ConstantData.AVATAR_FILE_URI + video.authorAvatar),
                 radius: 100,
               ),
             ),

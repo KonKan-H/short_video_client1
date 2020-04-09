@@ -4,6 +4,7 @@ import 'package:short_video_client1/models/Video.dart';
 import 'package:short_video_client1/pages/VideoPage/video_player.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
+import 'package:short_video_client1/resources/strings.dart';
 import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/util/user_info_until.dart';
 
@@ -23,17 +24,16 @@ class GridViewState extends State {
   var userId;
   bool isMyself, ifDelete = false;
   List<Video> videoList = List();
-
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     //id为空 查找所有视频
-    if(userId == null ) {
-      UserInfoUntil.getUserInfo().then((userInfo) {
-        if (userInfo != null && userInfo.userName != null) {
-          userId = userInfo.userId;
-        }
-      });
-    }
+//    if(userId == null ) {
+//      UserInfoUntil.getUserInfo().then((userInfo) {
+//        if (userInfo != null && userInfo.userName != null) {
+//          userId = userInfo.userId;
+//        }
+//      });
+//    }
     //id不为空 查找id用户的视频
     Map<String, dynamic> data = {
       "userId" : userId
@@ -51,7 +51,12 @@ class GridViewState extends State {
           videoList = l;
         });
       }
-    });
+    });    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
 
     Widget layout;
 
@@ -90,10 +95,20 @@ class GridViewState extends State {
             alignment: Alignment.center,
             child: Stack(
               children: <Widget>[
-                Image.network(video.cover, fit: BoxFit.cover,),
+                Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
                 InkWell(
                   onTap: () {
-                    video.looker = userId;
+                    if(userId != null) {
+                      video.looker = userId;
+                    } else {
+                      UserInfoUntil.getUserInfo().then((userInfo) {
+                      if (userInfo != null && userInfo.userName != null) {
+                        setState(() {
+                          video.looker = userInfo.userId;
+                        });
+                      }
+                    });
+                  }
                     Navigator.push(context, MaterialPageRoute(
 //                  Navigator.of(parentContext).push(MaterialPageRoute(
 //                      builder: (context) => VideoScreen(video: Video(Random().nextInt(10000000), 'https://www.runoob.com/try/demo_source/mov_bbb.mp4', "作者"))
@@ -125,7 +140,7 @@ class GridViewState extends State {
               width: 40,
               height: 40,
               child: new CircleAvatar(
-                backgroundImage: new NetworkImage(video.authorAvatar),
+                backgroundImage: NetworkImage(ConstantData.AVATAR_FILE_URI + video.authorAvatar),
                 radius: 100,
               ),
             ),

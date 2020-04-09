@@ -44,6 +44,9 @@ class _UserInfoPageState extends State<UserInfoPage> {
       "userId" : authorId
     };
     Result result = await DioRequest.dioPost(URL.GET_USER_INFO, data);
+    setState(() {
+      result;
+    });
     userInfo = await UserInfoUntil.map2UserInfo(result.data);
     isMyself = (authorId == looker);
     setState(() {
@@ -148,7 +151,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                       shape: BoxShape.circle,
                       color: Colors.transparent,
                       image: DecorationImage(
-                          image: NetworkImage(userInfo.userAvatar),
+                          image: NetworkImage(ConstantData.AVATAR_FILE_URI + userInfo.userAvatar),
                           fit:BoxFit.cover
                       ),
                       border: Border.all(color: Colors.white, width: 2.0)
@@ -238,7 +241,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
             alignment: Alignment.center,
             child: Stack(
               children: <Widget>[
-                Image.network(video.cover, fit: BoxFit.cover,),
+                Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
                 InkWell(
                   onTap: () {
                     video.looker = authorId;
@@ -259,7 +262,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
               width: 40,
               height: 40,
               child: new CircleAvatar(
-                backgroundImage: new NetworkImage(video.authorAvatar),
+                backgroundImage: new NetworkImage(ConstantData.AVATAR_FILE_URI + video.authorAvatar),
                 radius: 100,
               ),
             ),

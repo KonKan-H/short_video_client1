@@ -101,7 +101,7 @@ class _MyFavoriteVideoState extends State<MyFavoriteVideo> {
             alignment: Alignment.center,
             child: Stack(
               children: <Widget>[
-                Image.network(video.cover, fit: BoxFit.cover,),
+                Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
                 InkWell(
                   onTap: () {
                     video.looker = userId;

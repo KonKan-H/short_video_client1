@@ -4,6 +4,7 @@ import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/pages/common/user_info_page.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
+import 'package:short_video_client1/resources/strings.dart';
 
 class MyAttentionsAndFans extends StatefulWidget {
   MyAttentionsAndFans({Key key, this.title, this.userId}) : super(key: key);
@@ -23,17 +24,6 @@ class _MyAttentionsAndFansState extends State<MyAttentionsAndFans> {
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
     userId = widget.userId.toString();
     title = widget.title.toString();
     Map<String, dynamic> data = {
@@ -66,6 +56,17 @@ class _MyAttentionsAndFansState extends State<MyAttentionsAndFans> {
         }
       });
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(title: Text(widget.title), centerTitle: true,),
@@ -100,7 +101,7 @@ class _MyAttentionsAndFansState extends State<MyAttentionsAndFans> {
                     shape: BoxShape.circle,
                     color: Colors.transparent,
                     image: DecorationImage(
-                        image: NetworkImage(userInfo.userAvatar),
+                        image: NetworkImage(ConstantData.AVATAR_FILE_URI + userInfo.userAvatar),
                         fit:BoxFit.cover
                     ),
                     border: Border.all(color: Colors.white, width: 2.0)

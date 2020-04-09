@@ -45,8 +45,6 @@ class _MyInfoPageState extends State<MyInfoPage> {
               _getFansAndAttentions();
             }
           });
-      } else {
-        userName = null;
       }
     });
   }
@@ -75,7 +73,6 @@ class _MyInfoPageState extends State<MyInfoPage> {
             age = userInfo.age;
             area = userInfo.area;
             sex = userInfo.sex;
-            userAvatar = userInfo.userAvatar;
             userId = userInfo.userId;
             mobilePhone = userInfo.mobilePhone;
             introduction = userInfo.introduction;
@@ -117,7 +114,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                     shape: BoxShape.circle,
                     color: Colors.transparent,
                     image: DecorationImage(
-                      image: NetworkImage(userAvatar),
+                      image: NetworkImage(ConstantData.AVATAR_FILE_URI + userAvatar),
                       fit:BoxFit.cover
                     ),
                     border: Border.all(color: Colors.white, width: 2.0)

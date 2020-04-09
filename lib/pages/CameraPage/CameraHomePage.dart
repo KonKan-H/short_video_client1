@@ -174,7 +174,6 @@ class _selectVideoState extends State<selectVideo> {
                       TsUtils.showShort("选择上传视频");
                       return;
                     }
-                    TsUtils.showShort(_controller.text);
                     _uploadVideoInfo();
                   },
                 ),
@@ -192,14 +191,14 @@ class _selectVideoState extends State<selectVideo> {
     String coverName = Uuid().v1();
     String coverSuffix = _cover.path.substring(_cover.path.length - 4, _cover.path.length);
     FormData formData = FormData.from({
-//      'file' : MultipartFile.fromFile(_image.path, filename: name),
       "video" : UploadFileInfo(_video, videoName + videoSuffix),
       "cover" : UploadFileInfo(_cover, coverName + coverSuffix),
       "description" : _controller.text,
       "userId" : userId
     });
     Result result = await DioRequest.uploadFile(URL.UPLOAD_VIDEO_INFO, formData);
-    print("==");
+    TsUtils.showShort("上传成功");
+    Navigator.pop(context);
   }
 
   // 显示弹窗
