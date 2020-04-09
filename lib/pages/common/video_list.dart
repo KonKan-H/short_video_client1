@@ -56,10 +56,7 @@ class GridViewState extends State {
 
   @override
   Widget build(BuildContext context) {
-
-
     Widget layout;
-
     layout = (videoList == null || videoList.length == 0) ? Center(
       child: Text('没有数据',),
     ): GridView(
@@ -95,7 +92,10 @@ class GridViewState extends State {
             alignment: Alignment.center,
             child: Stack(
               children: <Widget>[
-                Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
+                Container(
+                  alignment: Alignment.center,
+                  child: Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
+                ),
                 InkWell(
                   onTap: () {
                     if(userId != null) {

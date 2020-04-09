@@ -137,7 +137,10 @@ class _FollowingVideoState extends State<FollowingVideo> {
             alignment: Alignment.center,
             child: Stack(
               children: <Widget>[
-                Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
+                Container(
+                  alignment: Alignment.center,
+                  child: Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
+                ),
                 InkWell(
                   onTap: () {
                     video.looker = userId;
