@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:short_video_client1/models/Reply.dart';
+import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/models/Video.dart';
+import 'package:short_video_client1/pages/VideoPage/my_video_list.dart';
+import 'package:short_video_client1/pages/common/user_info_page.dart';
+import 'package:short_video_client1/resources/net/api.dart';
+import 'package:short_video_client1/resources/net/request.dart';
+import 'package:short_video_client1/resources/strings.dart';
 import 'package:short_video_client1/resources/tools.dart';
 
 class ReplyFullList extends StatelessWidget {
-  const ReplyFullList({Key key,this.pCtx, this.video}) : super(key: key);
+  ReplyFullList({Key key,this.pCtx, this.video, this.replies, this.userId}) : super(key: key);
   final BuildContext pCtx;
   final Video video;
+  final userId;
+  List<Reply> replies = List();
+
   @override
   Widget build(BuildContext context) {
     double rpx = MediaQuery.of(context).size.width / 750;
 //    RecommendProvider provider = Provider.of<RecommendProvider>(pCtx);
 //    Reply reply = provider.reply;
-    List<Reply> replies = List<Reply>();
-
 //    replies.add(reply);
 //    replies.add(reply);
 //    replies.add(reply);
@@ -50,14 +57,16 @@ class ReplyFullList extends StatelessWidget {
         body: SingleChildScrollView(
             controller: controller,
             child: Container(
-              child: genReplyList(replies, controller),
+              child: genReplyList(replies, controller, video, userId),
             )));
   }
 }
 
 class ReplyList extends StatelessWidget {
-  const ReplyList({Key key, this.reply, this.controller}) : super(key: key);
+  const ReplyList({Key key, this.reply, this.controller, this.video, this.userId}) : super(key: key);
   final Reply reply;
+  final Video video;
+  final userId;
   final ScrollController controller;
   @override
   Widget build(BuildContext context) {
@@ -68,32 +77,59 @@ class ReplyList extends StatelessWidget {
     replies.add(reply);
     // RecommendProvider provider=Provider.of<RecommendProvider>(context);
     return Container(
+      height: rpx * 750,
+      //decoration: BoxDecoration(color: Colors.cyanAccent),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Row(
             children: <Widget>[
-              Container(
-                width: 100 * rpx,
-                height: 100 * rpx,
-                padding: EdgeInsets.all(10 * rpx),
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage("${reply.replyMakerAvatar}"),
-                ),
-              ),
-              Container(
-                width: 550 * rpx,
-                child: ListTile(
-                  title: Text("${reply.replyMakerName}"),
-                  subtitle: Text(
-                    "${reply.replyContent}",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+              Material(
+                child: InkWell(
+                  child: Container(
+                    width: 100 * rpx,
+                    height: 100 * rpx,
+                    padding: EdgeInsets.all(10 * rpx),
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(ConstantData.AVATAR_FILE_URI + "${reply.replyMakerAvatar}"),
+                    ),
                   ),
+                  onTap: () {
+                    if(reply.replyMakerId == video.looker) {
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => MyVideoList(userId: video.looker, couldDelete: true)
+                      ));
+                    } else {
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => UserInfoPage(authorId : reply.replyMakerId, looker: video.looker,)
+                      ));
+                    }
+                  },
+                ),
+              ),
+              Container(
+                width: 480 * rpx,
+                child: ListTile(
+                  title: Text("${reply.replyMakerName}", style: TextStyle(color: Colors.grey[500]),),
+                  subtitle: RichText(
+                    text: TextSpan(
+                        text: "${reply.replyContent}",
+                        style: TextStyle(color: Colors.black, fontSize: 14),
+                        children: [
+                          //TextSpan(text: , style: TextStyle(color: Colors.grey[500]),)
+                        ]),
+                  ),
+
+                  // Text(
+                  //   "${afterReply.replyContent}",
+                  //   maxLines: 2,
+                  //   overflow: TextOverflow.ellipsis,
+                  // ),
                 ),
               ),
               Container(
                 width: 100 * rpx,
+                alignment: Alignment.topRight,
                 child: IconButton(
                   onPressed: () {},
                   icon: Icon(
@@ -138,7 +174,7 @@ class AfterReply extends StatelessWidget {
                       padding: EdgeInsets.all(10 * rpx),
                       child: CircleAvatar(
                         backgroundImage:
-                            NetworkImage("${afterReply.replyMakerAvatar}"),
+                            NetworkImage(ConstantData.AVATAR_FILE_URI + "${afterReply.replyMakerAvatar}"),
                       ),
                     ),
                     Container(
@@ -150,7 +186,7 @@ class AfterReply extends StatelessWidget {
                               text: "${afterReply.replyContent}",
                               style: TextStyle(color: Colors.grey[500]),
                               children: [
-                                TextSpan(text: "  ${afterReply.whenReplied}")
+                                //TextSpan(text: TsUtils.dateDeal(afterReply.replyTime))
                               ]),
                         ),
 
@@ -182,7 +218,7 @@ class AfterReply extends StatelessWidget {
   }
 }
 
-genReplyList(List<Reply> replies, ScrollController controller) {
+genReplyList(List<Reply> replies, ScrollController controller, Video video, String userId) {
   return ListView.builder(
     shrinkWrap: true,
     controller: controller,
@@ -191,6 +227,8 @@ genReplyList(List<Reply> replies, ScrollController controller) {
       return ReplyList(
         reply: replies[index],
         controller: controller,
+        video: video,
+        userId: userId
       );
     },
   );
@@ -233,7 +271,8 @@ class BottomReplyBar extends StatelessWidget {
           )
         ),
         //IconButton(icon: Icon(Icons.email,color: Colors.grey[500],size: 50*rpx,),onPressed: (){showAtFriendPage(pCtx);},),
-        IconButton(icon: Icon(Icons.face,color: Colors.grey[500],size: 50*rpx),onPressed: (){
+        IconButton(icon: Icon(Icons.face,color: Colors.grey[500],size: 50*rpx),
+          onPressed: (){
           TsUtils.showShort(_controller.text);
         },),
         SizedBox(width: 20*rpx,)

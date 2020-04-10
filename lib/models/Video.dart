@@ -61,8 +61,8 @@ class Video{
       'duration' : video.duration,
       'likes' : video.likes,
       'downloads' : video.downloads,
-        'commentss': video.comments,
-        'looker' : video.looker
+      'commentss': video.comments,
+      'looker' : video.looker
       };
       return map;
   }

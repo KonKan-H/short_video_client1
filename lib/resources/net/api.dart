@@ -61,4 +61,7 @@ class URL{
 
   //上传视频信息
   static const String UPLOAD_VIDEO_INFO = BASE_URL + '/v1/videoInfo/api';
+
+  //根据视频取得评论列表
+  static const String VIDEO_REPLY_LIST = BASE_URL + '/v1/reply/api';
 }

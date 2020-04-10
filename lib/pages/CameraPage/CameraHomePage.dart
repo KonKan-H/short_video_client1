@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:short_video_client1/models/Result.dart';
+import 'package:short_video_client1/pages/common/process_Indicator.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
@@ -169,12 +170,17 @@ class _selectVideoState extends State<selectVideo> {
                     '发 布',
                     style: new TextStyle(color: Colors.white, fontSize: 14.0),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if(_video == null) {
                       TsUtils.showShort("选择上传视频");
                       return;
                     }
-                    _uploadVideoInfo();
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => ProgressRoute()));
+                    Result result = await _uploadVideoInfo();
+                    if(result != null) {
+                      Navigator.pop(context);
+                    }
                   },
                 ),
               ),
@@ -185,20 +191,22 @@ class _selectVideoState extends State<selectVideo> {
     );
   }
 
-  _uploadVideoInfo() async {
+  Future<Result> _uploadVideoInfo() async {
     String videoName = Uuid().v1();
     String videoSuffix = _video.path.substring(_video.path.length - 4, _video.path.length);
-    String coverName = Uuid().v1();
-    String coverSuffix = _cover.path.substring(_cover.path.length - 4, _cover.path.length);
     FormData formData = FormData.from({
       "video" : UploadFileInfo(_video, videoName + videoSuffix),
-      "cover" : UploadFileInfo(_cover, coverName + coverSuffix),
       "description" : _controller.text,
       "userId" : userId
     });
-    Result result = await DioRequest.uploadFile(URL.UPLOAD_VIDEO_INFO, formData);
-    TsUtils.showShort("上传成功");
-    Navigator.pop(context);
+    String coverName;
+    String coverSuffix;
+    if(_cover != null) {
+      coverName = Uuid().v1();
+      coverSuffix = _cover.path.substring(_cover.path.length - 4, _cover.path.length);
+      formData.add("cover" , UploadFileInfo(_cover, coverName + coverSuffix));
+    }
+    return await DioRequest.uploadFile(URL.UPLOAD_VIDEO_INFO, formData);;
   }
 
   // 显示弹窗

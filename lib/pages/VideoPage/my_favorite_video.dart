@@ -125,7 +125,7 @@ class _MyFavoriteVideoState extends State<MyFavoriteVideo> {
               width: 40,
               height: 40,
               child: new CircleAvatar(
-                backgroundImage: new NetworkImage(video.authorAvatar),
+                backgroundImage: new NetworkImage(ConstantData.AVATAR_FILE_URI + video.authorAvatar),
                 radius: 100,
               ),
             ),

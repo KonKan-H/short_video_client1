@@ -41,4 +41,8 @@ class TsUtils{
     return data.toString();
   }
 
+  static String dateDeal(String dateTime) {
+   //DateTime dateTime = DateTime.parse(dateTime);
+  }
+
 }

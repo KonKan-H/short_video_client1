@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:short_video_client1/app/OsApplication.dart';
 import 'package:short_video_client1/event/login_event.dart';
 import 'package:short_video_client1/models/Attention.dart';
+import 'package:short_video_client1/models/Reply.dart';
 import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/pages/VideoPage/layout/BottomSheet.dart';
 import 'package:short_video_client1/pages/VideoPage/likebutton/like_button.dart';
@@ -36,6 +37,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   bool isLiked, isAttention;
   double screenWidth;
   double screenHeight;
+  List<Reply> replies = List();
 
   VideoPlayerController _videoPlayerController;
 
@@ -111,10 +113,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     return Stack(
       children: <Widget>[
         Scaffold(
-          appBar: AppBar(
-              title: Text(video.authorName.toString()),
-              centerTitle: true,
-          ),
+//          appBar: AppBar(
+//              title: Text(video.authorName.toString()),
+//              centerTitle: true,
+//          ),
           body: Container(
             alignment: Alignment.center,
             decoration: BoxDecoration(color: Colors.black),
@@ -252,6 +254,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                           child: Icon(Icons.comment, color: Colors.white, size: 35,),
                           color: Color(0x00FFFFFF),
                           onPressed: () {
+                            _getReplyList();
                             showBottom(context, video);
                           },
                           shape: CircleBorder(),
@@ -377,7 +380,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadiusDirectional.circular(10)),
         context: context,
-
         builder: (_) {
           return Container(
               height: 0.6 * screenHeight,
@@ -385,11 +387,26 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                   onTap: () {
                     FocusScope.of(context).requestFocus(FocusNode());
                   },
-                  child: ReplyFullList(pCtx: context, video: video,)
+                  child: ReplyFullList(pCtx: context, video: video, replies: replies,userId: video.looker.toString())
               ),
           );
         });
   }
+
+
+  _getReplyList() async {
+    Result result = await DioRequest.dioPost(URL.VIDEO_REPLY_LIST, Video.model2map(video));
+    if(result != null) {
+      replies.clear();
+      for(Map<String, dynamic> map in result.data) {
+        replies.add(Reply.formJson(map));
+      }
+      setState(() {
+        replies;
+      });
+    }
+  }
+
 }
 
 Future<bool> attentionUser(Video video) async {
