@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:short_video_client1/models/Reply.dart';
 import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/models/Video.dart';
@@ -19,11 +21,6 @@ class ReplyFullList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double rpx = MediaQuery.of(context).size.width / 750;
-//    RecommendProvider provider = Provider.of<RecommendProvider>(pCtx);
-//    Reply reply = provider.reply;
-//    replies.add(reply);
-//    replies.add(reply);
-//    replies.add(reply);
     ScrollController controller = ScrollController();
     return Scaffold(
         appBar: PreferredSize(
@@ -52,29 +49,29 @@ class ReplyFullList extends StatelessWidget {
           )
         ),
         bottomNavigationBar: SafeArea(
-          child: BottomReplyBar(pCtx: pCtx,),
+          child: BottomReplyBar(pCtx: pCtx, video: video),
         ),
         body: SingleChildScrollView(
             controller: controller,
             child: Container(
-              child: genReplyList(replies, controller, video, userId),
+              child: genReplyList(replies, controller, video, userId, pCtx),
             )));
   }
 }
 
 class ReplyList extends StatelessWidget {
-  const ReplyList({Key key, this.reply, this.controller, this.video, this.userId}) : super(key: key);
+  ReplyList({Key key, this.reply, this.controller, this.video, this.userId, this.context}) : super(key: key);
   final Reply reply;
   final Video video;
   final userId;
   final ScrollController controller;
+  final BuildContext context;
+
+  bool ifDelete;
   @override
   Widget build(BuildContext context) {
     double rpx = MediaQuery.of(context).size.width / 750;
-    List<Reply> replies = List<Reply>();
-    replies.add(reply);
-    replies.add(reply);
-    replies.add(reply);
+    var replies = reply.afterReplies;
     // RecommendProvider provider=Provider.of<RecommendProvider>(context);
     return Container(
       height: rpx * 750,
@@ -82,74 +79,127 @@ class ReplyList extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Material(
-                child: InkWell(
-                  child: Container(
-                    width: 100 * rpx,
-                    height: 100 * rpx,
-                    padding: EdgeInsets.all(10 * rpx),
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(ConstantData.AVATAR_FILE_URI + "${reply.replyMakerAvatar}"),
+          Material(
+            child: InkWell(
+              child: Row(
+                children: <Widget>[
+                  Material(
+                    child: InkWell(
+                      child: Container(
+                        width: 100 * rpx,
+                        height: 100 * rpx,
+                        padding: EdgeInsets.all(10 * rpx),
+                        child: CircleAvatar(
+                          backgroundImage: NetworkImage(ConstantData.AVATAR_FILE_URI + "${reply.replyMakerAvatar}"),
+                        ),
+                      ),
+                      onTap: () {
+                        if(reply.replyMakerId == video.looker) {
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => MyVideoList(userId: video.looker, couldDelete: true)
+                          ));
+                        } else {
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => UserInfoPage(authorId : reply.replyMakerId, looker: video.looker,)
+                          ));
+                        }
+                      },
                     ),
                   ),
-                  onTap: () {
-                    if(reply.replyMakerId == video.looker) {
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => MyVideoList(userId: video.looker, couldDelete: true)
-                      ));
-                    } else {
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => UserInfoPage(authorId : reply.replyMakerId, looker: video.looker,)
-                      ));
-                    }
-                  },
-                ),
-              ),
-              Container(
-                width: 480 * rpx,
-                child: ListTile(
-                  title: Text("${reply.replyMakerName}", style: TextStyle(color: Colors.grey[500]),),
-                  subtitle: RichText(
-                    text: TextSpan(
-                        text: "${reply.replyContent}",
-                        style: TextStyle(color: Colors.black, fontSize: 14),
-                        children: [
-                          //TextSpan(text: , style: TextStyle(color: Colors.grey[500]),)
-                        ]),
-                  ),
+                  Container(
+                    width: 480 * rpx,
+                    child: ListTile(
+                      title: Text("${reply.replyMakerName}", style: TextStyle(color: Colors.grey[500]),),
+                      subtitle: RichText(
+                        text: TextSpan(
+                            text: "${reply.replyContent}",
+                            style: TextStyle(color: Colors.black, fontSize: 14),
+                            children: [
+                              TextSpan(text: " " + TsUtils.dateDeal(reply.replyTime), style: TextStyle(color: Colors.grey[500], fontSize: 12),)
+                            ]),
+                      ),
 
-                  // Text(
-                  //   "${afterReply.replyContent}",
-                  //   maxLines: 2,
-                  //   overflow: TextOverflow.ellipsis,
-                  // ),
-                ),
-              ),
-              Container(
-                width: 100 * rpx,
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.favorite,
-                    color: Colors.grey[300],
+                      // Text(
+                      //   "${afterReply.replyContent}",
+                      //   maxLines: 2,
+                      //   overflow: TextOverflow.ellipsis,
+                      // ),
+                    ),
                   ),
-                ),
-              )
-            ],
+                  Container(
+                    width: 100 * rpx,
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.favorite,
+                        color: Colors.grey[300],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              onTap: () {
+
+              },
+              onLongPress: () {
+
+              },
+            ),
           ),
-          genAfterReplyList(replies, controller)
+          genAfterReplyList(reply.afterReplies, controller, video)
         ],
       ),
     );
   }
+
+//  showCupertinoAlertDialog(Video video, BuildContext context) {
+//    showDialog(
+//        context: context,
+//        builder: (BuildContext context) {
+//          return CupertinoAlertDialog(
+//            title: Text("是否删除该视频"),
+//            content: Column(
+//              children: <Widget>[
+//                SizedBox(
+//                  height: 10,
+//                ),
+//                Align(
+//                  child: Text(video.description == null ? "" : video.description.toString(), maxLines: 1,
+//                    overflow: TextOverflow.ellipsis,),
+//                  alignment: Alignment(0, 0),
+//                ),
+//              ],
+//            ),
+//            actions: <Widget>[
+//              CupertinoDialogAction(
+//                child: Text("取消"),
+//                onPressed: () {
+//                  Navigator.pop(context);
+//                },
+//              ),
+//              CupertinoDialogAction(
+//                child: Text("确定"),
+//                onPressed: () {
+//                  DioRequest.dioPost(URL.REPLY_DELETE, Video.model2map(video)).then((result) {
+//                    bool flag = result.data as bool;
+//                    if(flag) {
+//                      ifDelete = flag;
+//                    }
+//                  });
+//                  Navigator.pop(context);
+//                },
+//              ),
+//            ],
+//          );
+//        });
+//  }
 }
 
 class AfterReply extends StatelessWidget {
-  const AfterReply({Key key, this.afterReply}) : super(key: key);
+  const AfterReply({Key key, this.afterReply, this.video}) : super(key: key);
   final Reply afterReply;
+  final Video video;
   @override
   Widget build(BuildContext context) {
     double rpx = MediaQuery.of(context).size.width / 750;
@@ -157,60 +207,82 @@ class AfterReply extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Container(
-                width: 100 * rpx,
-              ),
-              Container(
-                width: 550 * rpx,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      width: 70 * rpx,
-                      height: 70 * rpx,
-                      margin: EdgeInsets.only(top: 15 * rpx),
-                      padding: EdgeInsets.all(10 * rpx),
-                      child: CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(ConstantData.AVATAR_FILE_URI + "${afterReply.replyMakerAvatar}"),
+          Material(
+            child: InkWell(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    width: 100 * rpx,
+                  ),
+                  Container(
+                    width: 550 * rpx,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Material(
+                          child: InkWell(
+                            child: Container(
+                              width: 70 * rpx,
+                              height: 70 * rpx,
+                              margin: EdgeInsets.only(top: 15 * rpx),
+                              padding: EdgeInsets.all(10 * rpx),
+                              child: CircleAvatar(
+                                backgroundImage:
+                                NetworkImage(ConstantData.AVATAR_FILE_URI + "${afterReply.replyMakerAvatar}"),
+                              ),
+                            ),
+                            onTap: () {
+                              if(afterReply.replyMakerId == video.looker) {
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) => MyVideoList(userId: video.looker, couldDelete: true)
+                                ));
+                              } else {
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) => UserInfoPage(authorId : afterReply.replyMakerId, looker: video.looker,)
+                                ));
+                              }
+                            },
+                          ),
+                        ),
+                        Container(
+                          width: 480 * rpx,
+                          child: ListTile(
+                            title: Text("${afterReply.replyMakerName}"),
+                            subtitle: RichText(
+                              text: TextSpan(
+                                  text: "${afterReply.replyContent}",
+                                  style: TextStyle(color: Colors.grey[500]),
+                                  children: [
+                                    TextSpan(text: " " + TsUtils.dateDeal(afterReply.replyTime), style: TextStyle(color: Colors.grey[500], fontSize: 12),)
+                                  ]),
+                            ),
+
+                            // Text(
+                            //   "${afterReply.replyContent}",
+                            //   maxLines: 2,
+                            //   overflow: TextOverflow.ellipsis,
+                            // ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: 100 * rpx,
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.favorite,
+                        color: Colors.grey[300],
                       ),
                     ),
-                    Container(
-                      width: 480 * rpx,
-                      child: ListTile(
-                        title: Text("${afterReply.replyMakerName}"),
-                        subtitle: RichText(
-                          text: TextSpan(
-                              text: "${afterReply.replyContent}",
-                              style: TextStyle(color: Colors.grey[500]),
-                              children: [
-                                //TextSpan(text: TsUtils.dateDeal(afterReply.replyTime))
-                              ]),
-                        ),
-
-                        // Text(
-                        //   "${afterReply.replyContent}",
-                        //   maxLines: 2,
-                        //   overflow: TextOverflow.ellipsis,
-                        // ),
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
-              Container(
-                width: 100 * rpx,
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.favorite,
-                    color: Colors.grey[300],
-                  ),
-                ),
-              )
-            ],
+              onLongPress: () {
+
+              },
+            ),
           )
         ],
       ),
@@ -218,7 +290,7 @@ class AfterReply extends StatelessWidget {
   }
 }
 
-genReplyList(List<Reply> replies, ScrollController controller, Video video, String userId) {
+genReplyList(List<Reply> replies, ScrollController controller, Video video, String userId, BuildContext context) {
   return ListView.builder(
     shrinkWrap: true,
     controller: controller,
@@ -228,13 +300,17 @@ genReplyList(List<Reply> replies, ScrollController controller, Video video, Stri
         reply: replies[index],
         controller: controller,
         video: video,
-        userId: userId
+        userId: userId,
+        context: context,
       );
     },
   );
 }
 
-genAfterReplyList(List<Reply> replies, ScrollController controller) {
+genAfterReplyList(List<Reply> replies, ScrollController controller, Video video) {
+  if(replies == null || replies.length == 0) {
+    return null;
+  }
   return ListView.builder(
     shrinkWrap: true,
     controller: controller,
@@ -242,14 +318,16 @@ genAfterReplyList(List<Reply> replies, ScrollController controller) {
     itemBuilder: (context, index) {
       return AfterReply(
         afterReply: replies[index],
+        video: video,
       );
     },
   );
 }
 
 class BottomReplyBar extends StatelessWidget {
-  const BottomReplyBar({Key key,this.pCtx}) : super(key: key);
+  const BottomReplyBar({Key key,this.pCtx, this.video}) : super(key: key);
   final BuildContext pCtx;
+  final Video video;
   @override
   Widget build(BuildContext context) {
     TextEditingController _controller=TextEditingController();
@@ -272,8 +350,18 @@ class BottomReplyBar extends StatelessWidget {
         ),
         //IconButton(icon: Icon(Icons.email,color: Colors.grey[500],size: 50*rpx,),onPressed: (){showAtFriendPage(pCtx);},),
         IconButton(icon: Icon(Icons.face,color: Colors.grey[500],size: 50*rpx),
-          onPressed: (){
-          TsUtils.showShort(_controller.text);
+          onPressed: () async {
+            if(_controller.text == null || _controller.text.length == 0) {
+              TsUtils.showShort("评论内容为空");
+              return;
+            }
+            Reply reply = Reply();
+            reply.replyContent = _controller.text;
+            reply.replyMakerId = video.looker.toString();
+            reply.replyVideoId = video.id.toString();
+            reply.videoAuthorId = video.authorId.toString();
+            Result result = await DioRequest.dioPut(URL.COMMENT_VIDEO, Reply.model2map(reply));
+            TsUtils.showShort("评论成功");
         },),
         SizedBox(width: 20*rpx,)
       ],),

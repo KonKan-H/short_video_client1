@@ -3,6 +3,7 @@ import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class TsUtils{
   // md5 加密
@@ -41,8 +42,12 @@ class TsUtils{
     return data.toString();
   }
 
-  static String dateDeal(String dateTime) {
-   //DateTime dateTime = DateTime.parse(dateTime);
+  static String dateDeal(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+//    String date = dateTime.toString();
+    var format = new DateFormat("MM-dd HH:mm:ss");
+    return format.format(dateTime);
   }
+
 
 }
