@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/pages/common/process_Indicator.dart';
 import 'package:short_video_client1/resources/net/api.dart';
@@ -175,12 +176,11 @@ class _selectVideoState extends State<selectVideo> {
                       TsUtils.showShort("选择上传视频");
                       return;
                     }
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => ProgressRoute()));
+                    ProgressDialog pr = TsUtils.showProgressDiolog(context, "视频上传中....");
+                    await pr.show();
                     Result result = await _uploadVideoInfo();
-                    if(result != null) {
-                      Navigator.pop(context);
-                    }
+                    TsUtils.showShort("上传成功");
+                    Navigator.pop(context);
                   },
                 ),
               ),
@@ -201,12 +201,16 @@ class _selectVideoState extends State<selectVideo> {
     });
     String coverName;
     String coverSuffix;
+    Result result;
     if(_cover != null) {
       coverName = Uuid().v1();
       coverSuffix = _cover.path.substring(_cover.path.length - 4, _cover.path.length);
       formData.add("cover" , UploadFileInfo(_cover, coverName + coverSuffix));
+      result = await DioRequest.uploadFile(URL.UPLOAD_VIDEO_INFO_COVER, formData);
+    } else {
+      result = await DioRequest.uploadFile(URL.UPLOAD_VIDEO_INFO, formData);
     }
-    return await DioRequest.uploadFile(URL.UPLOAD_VIDEO_INFO, formData);;
+    return result;
   }
 
   // 显示弹窗

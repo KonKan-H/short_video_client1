@@ -118,15 +118,7 @@ class GridViewState extends State {
                   onLongPress: () {
                     if(isMyself) {
                       showCupertinoAlertDialog(video);
-                      setState(() {
-                        if(ifDelete) {
-                          videoList.remove(video);
-                          setState(() {
-                            videoList;
-                            ifDelete = false;
-                          });
-                        }
-                      });
+
                     }
                   },
                 ),
@@ -208,9 +200,12 @@ class GridViewState extends State {
                   DioRequest.dioPost(URL.VIDEO_DELETE, Video.model2map(video)).then((result) {
                     bool flag = result.data as bool;
                     if(flag) {
+                      videoList.remove(video);
                       setState(() {
-                        ifDelete = flag;
+                        videoList;
                       });
+                      ifDelete = false;
+                      TsUtils.showShort("删除成功");
                     }
                   });
                   Navigator.pop(context);

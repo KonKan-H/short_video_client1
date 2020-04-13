@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:short_video_client1/app/OsApplication.dart';
 import 'package:short_video_client1/event/login_event.dart';
 import 'package:short_video_client1/models/Attention.dart';
@@ -340,7 +341,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     WidgetsFlutterBinding.ensureInitialized();
     FlutterDownloader.initialize();
     // 获取存储路径
-    var _localPath = (await _findLocalPath()) + ConstantData.VIDEO_LOCALHOST;
+    //var _localPath = (await _findLocalPath()) + ConstantData.VIDEO_LOCALHOST;
+    var _localPath = ConstantData.VIDEO_LOCALHOST;
     final savedDir = Directory(_localPath);
     // 判断下载路径是否存在
     bool hasExisted = await savedDir.exists();
@@ -348,9 +350,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     if (!hasExisted) {
       savedDir.create();
     }
-    String fileName = Uuid().v1() + '.mp4';
+    String fileName = video.url.toString().substring(0, video.url.toString().indexOf(".")) + '.mp4';
     await FlutterDownloader.enqueue(
-      url: video.url,
+      url: ConstantData.VIDEO_FILE_URI + video.url,
       fileName: fileName,
       savedDir: _localPath,
       showNotification: true,
