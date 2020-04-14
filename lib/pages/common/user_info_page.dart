@@ -98,6 +98,8 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
     return Scaffold(
       appBar: AppBar(
+        title: Text("User Video"),
+        centerTitle: true,
         actions: <Widget>[
           Offstage(
             offstage: isMyself,
@@ -131,6 +133,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
             ),
           )
         ],
+        backgroundColor: ConstantData.MAIN_COLOR,
       ),
       body: Center(
         child: CustomScrollView(reverse: false, shrinkWrap: false,slivers: <Widget>[
@@ -208,17 +211,15 @@ class _UserInfoPageState extends State<UserInfoPage> {
             padding: const EdgeInsets.all(8.0),
             sliver: new SliverGrid( //Grid
               gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, //Grid按两列显示
-                mainAxisSpacing: 10.0,
-                crossAxisSpacing: 10.0,
-                childAspectRatio: 2/3,
+                  crossAxisCount: 2,
+//                  mainAxisSpacing: 8.0,
+                  childAspectRatio: 0.5
               ),
               delegate: new SliverChildBuilderDelegate((BuildContext context, int index) {
                   Video video = videoList[index];
                 //创建子widget
                   return new Container(
                     alignment: Alignment.center,
-                    //color: Colors.cyan[100 * (index % 9)],
                     child: getItemWidget(video),
                   );
                 },
@@ -234,70 +235,79 @@ class _UserInfoPageState extends State<UserInfoPage> {
   }
 
   Widget getItemWidget(Video video) {
-    return Container(
-      child: new Stack(
-        children: <Widget>[
-          new Container(
-            alignment: Alignment.center,
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  alignment: Alignment.center,
-                  child: Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
-                ),
-                InkWell(
-                  onTap: () {
-                    video.looker = authorId;
-                    Navigator.push(context, MaterialPageRoute(
-//                  Navigator.of(parentContext).push(MaterialPageRoute(
-//                      builder: (context) => VideoScreen(video: Video(Random().nextInt(10000000), 'https://www.runoob.com/try/demo_source/mov_bbb.mp4', "作者"))
-                        builder: (context) => VideoPlayerPage(video: video)
-                    ));
-                  },
-                ),
-              ],
-            ),
-          ),
-          //头像
-          new Container(
-            alignment: Alignment.bottomLeft,
-            child: new Container(
-              width: 40,
-              height: 40,
-              child: new CircleAvatar(
-                backgroundImage: new NetworkImage(ConstantData.AVATAR_FILE_URI + video.authorAvatar),
-                radius: 100,
-              ),
-            ),
-          ),
-          new Container(
-            alignment: Alignment.bottomRight,
-            child: new Container(
-              width: 120,
-              height: 40,
-              alignment: Alignment.centerRight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+    return Card(
+      child: Container(
+        child: new Stack(
+          children: <Widget>[
+            new Container(
+              height: 345,
+              color: Colors.white70,
+              alignment: Alignment.topCenter,
+              child: Stack(
                 children: <Widget>[
-                  new Container(
-                    width: 30,
-                    height: 40,
-                    alignment: Alignment.centerLeft,
-                    child:  Icon(Icons.favorite, size: 30, color: Colors.red,),
+                  Container(
+                    alignment: Alignment.center,
+                    child: Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
                   ),
-                  new Container(
-                      width: 60,
-                      height: 40,
-                      alignment: Alignment.centerRight,
-                      child: Center(
-                        child: Text(TsUtils.dataDeal(video.likes), style: TextStyle(color: Colors.white),),
-                      )
+                  InkWell(
+                    onTap: () {
+                      video.looker = authorId;
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => VideoPlayerPage(video: video)
+                      ));
+                    },
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+            //头像
+            Container(
+              child: Stack(
+                children: <Widget>[
+                  new Container(
+                    alignment: Alignment.bottomLeft,
+                    padding: EdgeInsets.fromLTRB(5, 0, 0, 5),
+                    child: new Container(
+                      width: 40,
+                      height: 40,
+                      child: new CircleAvatar(
+                        backgroundImage: new NetworkImage(ConstantData.AVATAR_FILE_URI + video.authorAvatar),
+                        radius: 100,
+                      ),
+                    ),
+                  ),
+                  new Container(
+                    alignment: Alignment.bottomRight,
+                    child: new Container(
+                      width: 120,
+                      height: 40,
+                      alignment: Alignment.centerRight,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          new Container(
+                            width: 30,
+                            height: 40,
+                            alignment: Alignment.centerLeft,
+                            child:  Icon(Icons.favorite, size: 25, color: Colors.red,),
+                          ),
+                          new Container(
+                              width: 60,
+                              height: 40,
+                              alignment: Alignment.centerRight,
+                              child: Center(
+                                child: Text(TsUtils.dataDeal(video.likes), style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w700),),
+                              )
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

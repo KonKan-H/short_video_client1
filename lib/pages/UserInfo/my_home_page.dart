@@ -9,7 +9,7 @@ class MyInfoHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("用户页面"),
+          title: Text("User Info"),
           backgroundColor: ConstantData.MAIN_COLOR, //设置appbar背景颜色
           centerTitle: true, //设置标题是否局中
         ),

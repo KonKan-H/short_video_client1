@@ -65,8 +65,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         userAvatar = event.userAvatar;
         userId = event.userId;
         video.looker = event.userId;
-      } else {
-        userName = null;
       }
     });
   }
@@ -149,8 +147,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         Positioned(
           right: 0,
           width: 0.20 * screenWidth,
-          height: 0.5 * screenHeight,
-          top: 0.28 * screenHeight,
+          height: 0.4 * screenHeight,
+          bottom: 0.2 * screenHeight,
           child:
             Container(
   //            decoration: BoxDecoration(color: Colors.orange),

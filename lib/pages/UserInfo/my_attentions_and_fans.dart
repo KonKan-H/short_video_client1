@@ -69,7 +69,11 @@ class _MyAttentionsAndFansState extends State<MyAttentionsAndFans> {
     width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title), centerTitle: true,),
+      appBar: AppBar(
+        title: Text(widget.title),
+        centerTitle: true,
+        backgroundColor: ConstantData.MAIN_COLOR,
+      ),
       body: (userInfoList == null || userInfoList.length == 0) ? Center(
         child: Center(
           child: Text('没有数据'),

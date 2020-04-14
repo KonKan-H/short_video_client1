@@ -7,7 +7,7 @@ class ConstantData{
   static const String URL_HEADER_PORT = URL_BASE + "8080/";
 
   //主色调
-  static const Color MAIN_COLOR = Colors.blueAccent;
+  static const Color MAIN_COLOR = Colors.orange;
 
   static const String VIDEO_LOCALHOST = '"/sdcard/DCIM/Camera"';
 
