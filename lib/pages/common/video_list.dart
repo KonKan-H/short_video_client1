@@ -55,6 +55,7 @@ class GridViewState extends State {
     super.initState();
   }
 
+
   @override
   Widget build(BuildContext context) {
     Widget layout;
@@ -91,7 +92,7 @@ class GridViewState extends State {
           children: <Widget>[
             //封面
             new Container(
-              height: 355,
+              height: ConstantData.VIDEO_HEIGHT,
               color: Colors.white70,
               alignment: Alignment.topCenter,
               child: Stack(

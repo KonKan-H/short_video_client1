@@ -98,7 +98,7 @@ class _MyFavoriteVideoState extends State<MyFavoriteVideo> {
         child: new Stack(
           children: <Widget>[
             new Container(
-              height: 345,
+              height: ConstantData.VIDEO_HEIGHT,
               color: Colors.white70,
               alignment: Alignment.topCenter,
               child: Stack(

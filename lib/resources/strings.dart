@@ -9,7 +9,10 @@ class ConstantData{
   //主色调
   static const Color MAIN_COLOR = Colors.orange;
 
-  static const String VIDEO_LOCALHOST = '"/sdcard/DCIM/Camera"';
+  static const String VIDEO_LOCALHOST = '/sdcard/DCIM/Camera';
+
+  //视频长度
+  static const double VIDEO_HEIGHT = 348;
 
   static const String VIDEO_URL_HEADER = "";
 

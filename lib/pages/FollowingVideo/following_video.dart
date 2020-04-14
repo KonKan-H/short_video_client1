@@ -134,7 +134,7 @@ class _FollowingVideoState extends State<FollowingVideo> {
         child: new Stack(
           children: <Widget>[
             new Container(
-              height: 355,
+              height: ConstantData.VIDEO_HEIGHT,
               color: Colors.white70,
               alignment: Alignment.topCenter,
               child: Stack(

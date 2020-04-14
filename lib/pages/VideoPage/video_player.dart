@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:short_video_client1/app/OsApplication.dart';
@@ -10,6 +11,7 @@ import 'package:short_video_client1/models/Attention.dart';
 import 'package:short_video_client1/models/Reply.dart';
 import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/pages/VideoPage/layout/BottomSheet.dart';
+import 'package:short_video_client1/pages/VideoPage/layout/VideoControlAction.dart';
 import 'package:short_video_client1/pages/VideoPage/likebutton/like_button.dart';
 import 'package:short_video_client1/pages/VideoPage/my_video_list.dart';
 import 'package:short_video_client1/pages/common/user_info_page.dart';
@@ -18,7 +20,6 @@ import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
 import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/util/user_info_until.dart';
-import 'package:uuid/uuid.dart';
 import 'package:video_player/video_player.dart';
 import 'package:short_video_client1/models/Video.dart';
 
@@ -131,6 +132,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
             ),
           ),
           floatingActionButton: FloatingActionButton(
+            backgroundColor: ConstantData.MAIN_COLOR,
             onPressed: () {
               setState(() {
               _videoPlayerController.value.isPlaying
@@ -246,10 +248,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                       ],
                     ),
                   ),
+                  //评论
                   Container(
                     child: Column(
                       children: <Widget>[
                         RaisedButton(
+//                            child: Text('下载', style: TextStyle(color: Colors.white),),
                           child: Icon(Icons.comment, color: Colors.white, size: 35,),
                           color: Color(0x00FFFFFF),
                           onPressed: () {
@@ -292,10 +296,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           height: 0.2 * screenHeight,
           child: Container(
 //            decoration: BoxDecoration(color: Colors.redAccent),
+            padding: EdgeInsets.all(4),
             child: Container(
-              child: Container(
-                child: titleSection(),
-              ),
+              child: titleSection(),
             ),
           ),
         ),
@@ -349,15 +352,16 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       savedDir.create();
     }
     String fileName = video.url.toString().substring(0, video.url.toString().indexOf(".")) + '.mp4';
+    print(ConstantData.VIDEO_FILE_URI + fileName);
     await FlutterDownloader.enqueue(
-      url: ConstantData.VIDEO_FILE_URI + video.url,
+      url: ConstantData.VIDEO_FILE_URI + fileName,
       fileName: fileName,
       savedDir: _localPath,
       showNotification: true,
       // show download progress in status bar (for Android)
       openFileFromNotification: true, // click on notification to open downloaded file (for Android)
     );
-    TsUtils.showShort('下载成功');
+    TsUtils.showShort('下载成功, 文件保存在' + _localPath);
     setState(() {
       video.downloads ++;
     });
@@ -417,8 +421,3 @@ Future<bool> attentionUser(Video video) async {
   print(result.data);
   return result.data as bool;
 }
-
-
-
-
-

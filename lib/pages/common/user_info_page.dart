@@ -90,9 +90,11 @@ class _UserInfoPageState extends State<UserInfoPage> {
         video = Video.formJson(map);
         l.add(video);
       }
-      setState(() {
-        l;
-      });
+      if(mounted) {
+        setState(() {
+          l;
+        });
+      }
       videoList = l;
     });
 
@@ -240,7 +242,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
         child: new Stack(
           children: <Widget>[
             new Container(
-              height: 345,
+              height: ConstantData.VIDEO_HEIGHT,
               color: Colors.white70,
               alignment: Alignment.topCenter,
               child: Stack(
