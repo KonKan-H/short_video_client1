@@ -44,7 +44,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   void initState() {
     _getLikeAndAttention();
     super.initState();
-    print(ConstantData.VIDEO_FILE_URI + video.url);
+    TsUtils.logInfo(ConstantData.VIDEO_FILE_URI + video.url);
     _videoPlayerController = VideoPlayerController.network(ConstantData.VIDEO_FILE_URI + video.url)
       ..initialize().then((_) {
         //确保在视频初始化后显示第一帧，甚至在按下播放按钮之前。
@@ -65,6 +65,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         video.looker = event.userId;
       }
     });
+    _getReplyList();
   }
 
   _getUserInfo() {
@@ -240,7 +241,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                             isLike: isLiked,
                           ),
                         ):Container(
-                          child: Icon(Icons.favorite, color: Colors.white,)
+                          padding: EdgeInsets.fromLTRB(0, 7, 0, 0),
+                          child: Icon(Icons.favorite, color: Colors.grey, size: 35,)
                         ),
                       ],
                     ),
@@ -442,7 +444,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         });
   }
 
-
   _getReplyList() async {
     Result result = await DioRequest.dioPost(URL.VIDEO_REPLY_LIST, Video.model2map(video));
     if(result != null) {
@@ -450,12 +451,13 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       for(Map<String, dynamic> map in result.data) {
         replies.add(Reply.formJson(map));
       }
-      setState(() {
-        replies;
-      });
+      if(mounted) {
+        setState(() {
+          replies;
+        });
+      }
     }
   }
-
 }
 
 Future<bool> attentionUser(Video video) async {

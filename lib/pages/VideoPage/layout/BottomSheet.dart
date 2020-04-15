@@ -67,14 +67,13 @@ class ReplyList extends StatelessWidget {
   final ScrollController controller;
   final BuildContext context;
 
-  bool ifDelete;
   @override
   Widget build(BuildContext context) {
     double rpx = MediaQuery.of(context).size.width / 750;
     var replies = reply.afterReplies;
     // RecommendProvider provider=Provider.of<RecommendProvider>(context);
     return Container(
-      height: rpx * 750,
+      height: rpx * 140,
       //decoration: BoxDecoration(color: Colors.cyanAccent),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -118,7 +117,6 @@ class ReplyList extends StatelessWidget {
                               TextSpan(text: " " + TsUtils.dateDeal(reply.replyTime), style: TextStyle(color: Colors.grey[500], fontSize: 12),)
                             ]),
                       ),
-
                       // Text(
                       //   "${afterReply.replyContent}",
                       //   maxLines: 2,
@@ -126,74 +124,87 @@ class ReplyList extends StatelessWidget {
                       // ),
                     ),
                   ),
-                  Container(
-                    width: 100 * rpx,
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.favorite,
-                        color: Colors.grey[300],
-                      ),
-                    ),
-                  )
+//                  Container(
+//                    width: 100 * rpx,
+//                    alignment: Alignment.topRight,
+//                    child: Column(
+//                      children: <Widget>[
+//                        IconButton(
+//                          onPressed: () async {
+//                            reply.likePeople = userId.toString();
+//                            if(reply.ifFaved == "no") {
+//                              Result result = await DioRequest.dioPost(URL.LIKE_REPLY, Reply.model2map(reply));
+//                              reply.likes = reply.likes++;
+//                            } else {
+//                              Result result = await DioRequest.dioPost(URL.CANCEL_LIKE_REPLY, Reply.model2map(reply));
+//                              reply.likes = reply.likes--;
+//                            }
+//                            reply.ifFaved = reply.ifFaved == "yes" ? "no" : "yes";
+//                          },
+//                          icon: Icon(
+//                            Icons.favorite,
+//                            color: reply.ifFaved != "yes" ? Colors.grey[300] : Colors.red,
+//                          ),
+//                        ),
+//                        Container(
+//                          child: Text(TsUtils.dataDeal(reply.likes), style: TextStyle(color: Colors.grey, fontSize: 14),),
+//                        )
+//                      ],
+//                    )
+//                  )
                 ],
               ),
-              onTap: () {
-
-              },
               onLongPress: () {
-
+                if(reply.videoAuthorId == userId || reply.replyMakerId == userId) {
+                  showCupertinoAlertDialog(context, reply);
+                }
               },
             ),
           ),
-          genAfterReplyList(reply.afterReplies, controller, video)
+          genAfterReplyList(replies, controller, video)
         ],
       ),
     );
   }
 
-//  showCupertinoAlertDialog(Video video, BuildContext context) {
-//    showDialog(
-//        context: context,
-//        builder: (BuildContext context) {
-//          return CupertinoAlertDialog(
-//            title: Text("是否删除该视频"),
-//            content: Column(
-//              children: <Widget>[
-//                SizedBox(
-//                  height: 10,
-//                ),
-//                Align(
-//                  child: Text(video.description == null ? "" : video.description.toString(), maxLines: 1,
-//                    overflow: TextOverflow.ellipsis,),
-//                  alignment: Alignment(0, 0),
-//                ),
-//              ],
-//            ),
-//            actions: <Widget>[
-//              CupertinoDialogAction(
-//                child: Text("取消"),
-//                onPressed: () {
-//                  Navigator.pop(context);
-//                },
-//              ),
-//              CupertinoDialogAction(
-//                child: Text("确定"),
-//                onPressed: () {
-//                  DioRequest.dioPost(URL.REPLY_DELETE, Video.model2map(video)).then((result) {
-//                    bool flag = result.data as bool;
-//                    if(flag) {
-//                      ifDelete = flag;
-//                    }
-//                  });
-//                  Navigator.pop(context);
-//                },
-//              ),
-//            ],
-//          );
-//        });
-//  }
+  showCupertinoAlertDialog(BuildContext context, Reply reply) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text("是否删除该评论"),
+            content: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 10,
+                ),
+                Align(
+                  child: Text(reply.replyContent == null ? "" : reply.replyContent.toString(), maxLines: 1,
+                    overflow: TextOverflow.ellipsis,),
+                  alignment: Alignment(0, 0),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: Text("取消"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoDialogAction(
+                child: Text("确定"),
+                onPressed: () async {
+                  Result result = await DioRequest.dioPost(URL.REPLY_DELETE, Reply.model2map(reply));
+                  TsUtils.showShort("删除成功");
+                  video.comments--;
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
+  }
 }
 
 class AfterReply extends StatelessWidget {
@@ -309,7 +320,9 @@ genReplyList(List<Reply> replies, ScrollController controller, Video video, Stri
 
 genAfterReplyList(List<Reply> replies, ScrollController controller, Video video) {
   if(replies == null || replies.length == 0) {
-    return null;
+    return Container(
+      child: null,
+    );
   }
   return ListView.builder(
     shrinkWrap: true,
@@ -361,7 +374,13 @@ class BottomReplyBar extends StatelessWidget {
             reply.replyVideoId = video.id.toString();
             reply.videoAuthorId = video.authorId.toString();
             Result result = await DioRequest.dioPut(URL.COMMENT_VIDEO, Reply.model2map(reply));
-            TsUtils.showShort("评论成功");
+            if(result.data == 1) {
+              TsUtils.showShort("评论成功");
+              video.comments++;
+            } else {
+              TsUtils.showShort("评论失败");
+            }
+            Navigator.pop(context);
         },),
         SizedBox(width: 20*rpx,)
       ],),

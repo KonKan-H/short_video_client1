@@ -12,6 +12,8 @@ class Reply {
   String replyTime;
   String ifFaved;
   List<Reply> afterReplies;
+  int likes;
+  String likePeople;
 
   Reply({this.ifFaved,
         this.afterReplies,
@@ -24,6 +26,8 @@ class Reply {
         this.id,
         this.replyId,
         this.videoAuthorId,
+        this.likes,
+        this.likePeople,
       });
 
   factory Reply.formJson(Map<String, dynamic> map) {
@@ -39,6 +43,8 @@ class Reply {
       replyMakerId: map['replyMakerId'].toString(),
       id: map['id'].toString(),
       replyId: map['replyId'].toString(),
+      likes: map['likes'],
+      likePeople: map['likePeople'].toString()
     );
     print(map['afterReplies']);
     reply.afterReplies = map['afterReplies'] != null ? map2list(map['afterReplies']) : null;
@@ -63,6 +69,8 @@ class Reply {
       'id':reply.id,
       'replyId':reply.replyId,
       'videoAuthorId':reply.videoAuthorId,
+      'likes':reply.likes,
+      'likePeople':reply.likePeople
     };
     return map;
   }

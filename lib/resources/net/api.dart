@@ -73,4 +73,14 @@ class URL{
 
   //评论视频
   static const String COMMENT_VIDEO = BASE_URL + '/v1/reply/api';
+
+  //删除评论
+  static const String REPLY_DELETE = BASE_URL + '/v1/reply/delete/api';
+
+  //点赞评论
+  static const String LIKE_REPLY = BASE_URL + '/v1/reply/like/api';
+
+  //取消点赞评论
+  static const String CANCEL_LIKE_REPLY = BASE_URL + '/v1/reply/cancel/api';
+
 }
