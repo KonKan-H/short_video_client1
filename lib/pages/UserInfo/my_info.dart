@@ -212,7 +212,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
 
   _loginPage() {
     final result = Navigator.push(context, MaterialPageRoute(
-      builder: (context) => LoginPage(),
+      builder: (context) => LoginScreen(),
     ));
   }
 
