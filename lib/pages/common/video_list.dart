@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:short_video_client1/models/Video.dart';
 import 'package:short_video_client1/pages/VideoPage/video_player.dart';
 import 'package:short_video_client1/resources/net/api.dart';
@@ -34,6 +35,11 @@ class GridViewState extends State {
 //        }
 //      });
 //    }
+    _getVideoList();
+    super.initState();
+  }
+
+  _getVideoList() {
     //id不为空 查找id用户的视频
     Map<String, dynamic> data = {
       "userId" : userId
@@ -52,23 +58,38 @@ class GridViewState extends State {
         });
       }
     });
-    super.initState();
   }
 
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  void _onRefresh() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _getVideoList();
+    _refreshController.refreshCompleted();
+  }
 
   @override
   Widget build(BuildContext context) {
     Widget layout;
     layout = (videoList == null || videoList.length == 0) ? Center(
       child: Text('没有数据',),
-    ): GridView(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-//          mainAxisSpacing: 8.0,
-          childAspectRatio: 0.5
+    ): SmartRefresher(
+//      enablePullUp: true,
+      header: WaterDropMaterialHeader(
+        backgroundColor: ConstantData.MAIN_COLOR,
       ),
-      padding: const EdgeInsets.all(4.0),
-      children: buildGridTileList(videoList),
+      controller: _refreshController,
+      onRefresh: _onRefresh,
+      child: GridView(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+//          mainAxisSpacing: 8.0,
+            childAspectRatio: 0.5
+        ),
+        padding: const EdgeInsets.all(4.0),
+        children: buildGridTileList(videoList),
+      ),
     );
     setState(() {
       layout;

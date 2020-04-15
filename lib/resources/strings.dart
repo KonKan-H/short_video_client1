@@ -25,4 +25,8 @@ class ConstantData{
   static const String VIDEO_FILE_URI = URL_HEADER_PORT + "video/";
   static const String COVER_FILE_URI = URL_HEADER_PORT + "cover/";
   static const String AVATAR_FILE_URI = URL_HEADER_PORT + "avatar/";
+
+  static const String appName = 'ECORP';
+  static const String logoTag = 'near.huscarl.loginsample.logo';
+  static const String titleTag = 'near.huscarl.loginsample.title';
 }

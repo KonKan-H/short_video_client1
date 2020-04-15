@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:short_video_client1/app/OsApplication.dart';
 import 'package:short_video_client1/event/login_event.dart';
 import 'package:short_video_client1/models/Video.dart';
@@ -41,29 +42,42 @@ class _FollowingVideoState extends State<FollowingVideo> {
         if(mounted) {
           setState(() {
             userId = userInfo.userId;
-            if(userId != null) {
-              Map<String, dynamic> data = {
-                "userId" : userId
-              };
-              DioRequest.dioPost(URL.MY_FOLLOWING_VIDEO_LIST, data).then((result) {
-                List<Video> l = List();
-                print(result.data);
-                Video video;
-                for(Map<String, dynamic> map in result.data) {
-                  video = Video.formJson(map);
-                  l.add(video);
-                }
-                if(mounted) {
-                  setState(() {
-                    videoList = l;
-                  });
-                }
-              });
-            }
+            _getVideoList();
           });
         }
       }
     });
+  }
+
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  void _onRefresh() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _getVideoList();
+    _refreshController.refreshCompleted();
+  }
+
+  _getVideoList() {
+    if(userId != null) {
+      Map<String, dynamic> data = {
+        "userId" : userId
+      };
+      DioRequest.dioPost(URL.MY_FOLLOWING_VIDEO_LIST, data).then((result) {
+        List<Video> l = List();
+        print(result.data);
+        Video video;
+        for(Map<String, dynamic> map in result.data) {
+          video = Video.formJson(map);
+          l.add(video);
+        }
+        if(mounted) {
+          setState(() {
+            videoList = l;
+          });
+        }
+      });
+    }
   }
 
   @override
@@ -79,7 +93,15 @@ class _FollowingVideoState extends State<FollowingVideo> {
         child: Text("关注用户没有发布视频",),
       );
     } else {
-      widget = buildVideoList();
+      widget = SmartRefresher(
+//        enablePullUp: true,
+        header: WaterDropMaterialHeader(
+          backgroundColor: ConstantData.MAIN_COLOR,
+        ),
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        child: buildVideoList(),
+      );
     }
     if(userId == null ) {
       widget = Center(

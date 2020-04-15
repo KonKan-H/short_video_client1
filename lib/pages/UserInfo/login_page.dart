@@ -181,7 +181,7 @@ class _LoginPageState extends State<LoginPage> {
               }
             }
           },
-          shape: StadiumBorder(),
+          shape: StadiumBorder(side: BorderSide()),
         ),
       ),
     );
