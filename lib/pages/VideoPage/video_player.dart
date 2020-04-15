@@ -2,16 +2,13 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:short_video_client1/app/OsApplication.dart';
 import 'package:short_video_client1/event/login_event.dart';
 import 'package:short_video_client1/models/Attention.dart';
 import 'package:short_video_client1/models/Reply.dart';
 import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/pages/VideoPage/layout/BottomSheet.dart';
-import 'package:short_video_client1/pages/VideoPage/layout/VideoControlAction.dart';
 import 'package:short_video_client1/pages/VideoPage/likebutton/like_button.dart';
 import 'package:short_video_client1/pages/VideoPage/my_video_list.dart';
 import 'package:short_video_client1/pages/common/user_info_page.dart';
@@ -235,7 +232,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                       children: <Widget>[
                         isLiked != null ? Container(
                           child: LikeButton(
-                            width: 72.0,
+                            width: 90.0,
                             duration: Duration(seconds: 2),
                             circleStartColor: Color(0xffffff),
                             looker: userId,
@@ -252,15 +249,15 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                   Container(
                     child: Column(
                       children: <Widget>[
-                        RaisedButton(
-//                            child: Text('下载', style: TextStyle(color: Colors.white),),
-                          child: Icon(Icons.comment, color: Colors.white, size: 35,),
-                          color: Color(0x00FFFFFF),
-                          onPressed: () {
-                            _getReplyList();
-                            showBottom(context, video);
-                          },
-                          shape: CircleBorder(),
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            child: Icon(IconData(0xf003b, fontFamily: 'MyIcon'), color: Colors.white, size: 35,),
+                            onTap: () {
+                              _getReplyList();
+                              showBottom(context, video);
+                            },
+                          ),
                         ),
                         Container(
                           child: Text(TsUtils.dataDeal(video.comments), style: TextStyle(color: Colors.white, fontSize: 13, decoration: TextDecoration.none),),
@@ -269,16 +266,18 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                     )
                   ),
                   Container(
+//                      child: videoControlAction(icon: IconData(0xe633, fontFamily: 'MyIcon'), label: TsUtils.dataDeal(video.downloads)),
                       child: Column(
                         children: <Widget>[
-                          RaisedButton(
-//                            child: Text('下载', style: TextStyle(color: Colors.white),),
-                            child: Icon(Icons.share, color: Colors.white, size: 35,),
-                            color: Color(0x00FFFFFF),
-                            onPressed: () {
-                              _downLoadVideo(video);
-                            },
-                            shape: CircleBorder(),
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              highlightColor: Colors.transparent,
+                              child: Icon(IconData(0xe633, fontFamily: 'MyIcon',), size: 28, color: Colors.white,),
+                              onTap: () {
+                                _downLoadVideo(video);
+                              },
+                            ),
                           ),
                           Container(
                             child: Text(TsUtils.dataDeal(video.downloads), style: TextStyle(color: Colors.white, fontSize: 13, decoration: TextDecoration.none),),
@@ -293,7 +292,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         Positioned(
           bottom: 0,
           width: 0.7 * screenWidth,
-          height: 0.2 * screenHeight,
+          height: 0.25 * screenHeight,
           child: Container(
 //            decoration: BoxDecoration(color: Colors.redAccent),
             padding: EdgeInsets.all(4),
@@ -314,27 +313,73 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 
   //标题
   Widget titleSection() {
-    return Column(
-      children: <Widget>[
-        Container(
-          alignment: Alignment.topLeft,
-          padding: const EdgeInsets.all(4),
-          child: Text('@' + video.authorName, style: TextStyle(
-              color: Colors.white,
-              fontSize: 17,
-              decoration: TextDecoration.none),),
-        ),
-        Container(
-          padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
-          alignment: Alignment.topLeft,
-          child: Text(video.description == null ? "" : video.description,
-            style: TextStyle(color: Colors.white,
-                fontSize: 14,
-                decoration: TextDecoration.none),
-            maxLines: 4, overflow: TextOverflow.ellipsis,),
-        ),
-      ],
+    return Container(
+      padding: EdgeInsets.only(left: 16, bottom: 60),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: 7, bottom: 7),
+            child: Text(
+              "@" + video.authorName,
+              style: TextStyle(
+                  fontSize: 14, color: Colors.white, fontWeight: FontWeight.w500, decoration: TextDecoration.none),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 4, bottom: 7),
+            child: Text(
+                video.description,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w300,
+                    decoration: TextDecoration.none,),
+                maxLines: 3, overflow: TextOverflow.ellipsis,
+                ),
+          ),
+          Row(
+            children: <Widget>[
+              Icon(
+                Icons.music_note,
+                size: 19,
+                color: Colors.white,
+              ),
+              Text(
+                "Ready for music ...",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w300,
+                    decoration: TextDecoration.none),
+              )
+            ],
+          ),
+        ],
+      ),
     );
+//    return Column(
+//      children: <Widget>[
+//        Container(
+//          alignment: Alignment.topLeft,
+//          padding: const EdgeInsets.all(4),
+//          child: Text('@' + video.authorName, style: TextStyle(
+//              color: Colors.white,
+//              fontSize: 17,
+//              decoration: TextDecoration.none),),
+//        ),
+//        Container(
+//          padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
+//          alignment: Alignment.topLeft,
+//          child: Text(video.description == null ? "" : video.description,
+//            style: TextStyle(color: Colors.white,
+//                fontSize: 14,
+//                decoration: TextDecoration.none),
+//            maxLines: 4, overflow: TextOverflow.ellipsis,),
+//        ),
+//      ],
+//    );
   }
 
   //下载视频

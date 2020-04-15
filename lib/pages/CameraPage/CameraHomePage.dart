@@ -299,13 +299,18 @@ class _MakeVideoState extends State<MakeVideo> {
               height: 5.0,
               color: new Color(0xfff2f2f2),
             ),
-            new Container(
-              child: new Text(
-                '取消',
-                style: new TextStyle(color: Colors.black, fontSize: 15.0),
+            new InkWell(
+              child: Container(
+                child: new Text(
+                  '取消',
+                  style: new TextStyle(color: Colors.black, fontSize: 15.0),
+                ),
+                height: 40.0,
+                alignment: Alignment.center,
               ),
-              height: 40.0,
-              alignment: Alignment.center,
+              onTap: () {
+                Navigator.pop(context);
+              },
             )
           ],
         ));
@@ -348,13 +353,18 @@ class _MakeVideoState extends State<MakeVideo> {
               height: 5.0,
               color: new Color(0xfff2f2f2),
             ),
-            new Container(
-              child: new Text(
-                '取消',
-                style: new TextStyle(color: Colors.black, fontSize: 15.0),
+            new InkWell(
+              child: Container(
+                child: new Text(
+                  '取消',
+                  style: new TextStyle(color: Colors.black, fontSize: 15.0),
+                ),
+                height: 40.0,
+                alignment: Alignment.center,
               ),
-              height: 40.0,
-              alignment: Alignment.center,
+              onTap: () {
+                Navigator.pop(context);
+              },
             )
           ],
         ));

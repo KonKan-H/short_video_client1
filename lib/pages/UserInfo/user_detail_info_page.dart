@@ -78,6 +78,8 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
       appBar: new AppBar(
         title: Text('用户信息', style: new TextStyle(color: Colors.white)),
         iconTheme: new IconThemeData(color: Colors.white),
+        centerTitle: true,
+        backgroundColor: ConstantData.MAIN_COLOR,
       ),
       body: SingleChildScrollView(
         child: initInputBody(),
@@ -309,13 +311,18 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
               height: 5.0,
               color: new Color(0xfff2f2f2),
             ),
-            new Container(
-              child: new Text(
-                '取消',
-                style: new TextStyle(color: Colors.black, fontSize: 15.0),
+            new InkWell(
+              child: Container(
+                child: new Text(
+                  '取消',
+                  style: new TextStyle(color: Colors.black, fontSize: 15.0),
+                ),
+                height: 40.0,
+                alignment: Alignment.center,
               ),
-              height: 40.0,
-              alignment: Alignment.center,
+              onTap: () {
+                Navigator.pop(context);
+              },
             )
           ],
         ));
