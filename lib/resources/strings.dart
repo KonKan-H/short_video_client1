@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ConstantData{
-  static const String URL_BASE = 'http://10.20.8.155:';
+//  static const String URL_BASE = 'http://10.20.8.155:';
 //  static const String URL_BASE = 'http://192.168.43.93:';
+  static const String URL_BASE = 'http://112.126.82.137:';
 
   static const String URL_HEADER_PORT = URL_BASE + "8080/";
 
@@ -26,7 +27,7 @@ class ConstantData{
   static const String COVER_FILE_URI = URL_HEADER_PORT + "cover/";
   static const String AVATAR_FILE_URI = URL_HEADER_PORT + "avatar/";
 
-  static const String appName = 'ECORP';
+  static const String appName = 'SV Hub';
   static const String logoTag = 'near.huscarl.loginsample.logo';
   static const String titleTag = 'near.huscarl.loginsample.title';
 }
