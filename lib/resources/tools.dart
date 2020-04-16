@@ -44,7 +44,7 @@ class TsUtils{
   }
 
   static String dateDeal(String dateString) {
-    DateTime dateTime = DateTime.parse(dateString);
+    DateTime dateTime = DateTime.parse(dateString).toLocal();
 //    String date = dateTime.toString();
     var format = new DateFormat("MM-dd HH:mm:ss");
     return format.format(dateTime);

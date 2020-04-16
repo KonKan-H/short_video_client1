@@ -29,9 +29,11 @@ class _FollowingVideoState extends State<FollowingVideo> {
     _getUserInfo();
     OsApplication.eventBus.on<LoginEvent>().listen((event) {
       if(event != null) {
-        setState(() {
-          userId = event.userId;
-        });
+        if(mounted) {
+          setState(() {
+            userId = event.userId;
+          });
+        }
       }
     });
   }
