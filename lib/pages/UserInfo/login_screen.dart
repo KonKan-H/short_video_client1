@@ -30,6 +30,10 @@ class LoginScreen extends StatelessWidget {
     return Future.delayed(loginTime).then((_) async {
       if (result.code == 1) {
         UserInfo userInfo = await UserInfoUntil.map2UserInfo(result.data);
+        Map<String, dynamic> data = {
+          "access_token": userInfo.accessToken
+        };
+        UserUntil.saveToke(data);
         User user = User(userInfo.userId, userInfo.userName,
             userInfo.userAvatar, userInfo.mobilePhone);
         OsApplication.eventBus.fire(LoginEvent(
@@ -39,7 +43,7 @@ class LoginScreen extends StatelessWidget {
             userInfo.age,
             userInfo.sex,
             userInfo.area,
-            userInfo.introduction));
+            userInfo.introduction,));
         UserUntil.saveUserInfo(user);
         UserInfoUntil.saveUserInfo(userInfo);
         TsUtils.showShort("登录成功");

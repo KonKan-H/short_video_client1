@@ -9,7 +9,7 @@ class UserUntil{
   static const USER_AVATAR = 'user_avatar';
   static const USER_MOBILE_PHONE = 'user_mobile_phone';
   static const USER_TOKEN_TYPE = 'user_token_type';
-  static const USER_EXPIRES_IN = 'user_expires_in';
+//  static const USER_EXPIRES_IN = 'user_expires_in';
   static const USER_COOKIE = 'user_cookie';
 
   //保存用户信息
@@ -30,6 +30,7 @@ class UserUntil{
     sharedPreferences.setString(USER_NAME, null);
     sharedPreferences.setString(USER_MOBILE_PHONE, null);
     sharedPreferences.setString(USER_AVATAR, null);
+    sharedPreferences..setString(USER_TOKEN_TYPE, null);
     saveUserInfo(null);
     OsApplication.cookie = null;
   }
@@ -60,13 +61,20 @@ class UserUntil{
   //保存token
   static Future<void> saveToke(Map<String, dynamic> map) async {
     if(map != null) {
-      String tokeType = map['token_type'];
-      String expiresIn = map['expires_in'];
+      String tokeType = map['access_token'];
+//      String expiresIn = map['expires_in'];
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       sharedPreferences.setString(USER_TOKEN_TYPE, tokeType);
-      sharedPreferences.setString(USER_EXPIRES_IN, expiresIn);
+//      sharedPreferences.setString(USER_EXPIRES_IN, expiresIn);
     }
  }
+
+ //取得token
+  static Future<String> getToken() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String token = sharedPreferences.get(USER_TOKEN_TYPE);
+    return token;
+  }
 
   //保存cookie
   static void saveCookie(String cookie) async {

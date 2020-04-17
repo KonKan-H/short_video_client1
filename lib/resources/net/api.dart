@@ -3,7 +3,7 @@ import 'package:short_video_client1/resources/strings.dart';
 class URL{
   //10.20.8.155为服务端 IP地址
   //static const String BASE_URL = 'http://10.20.8.155:9250/v3';
-  static const String BASE_URL = ConstantData.URL_BASE + '9250/v3';
+  static const String BASE_URL = ConstantData.URL_BASE + ':9250/v3';
 
   //注册
   static const String USER_REGISTER = BASE_URL + '/v1/registration/api';
@@ -65,7 +65,7 @@ class URL{
   //上传视频信息 带封面
   static const String UPLOAD_VIDEO_INFO_COVER = BASE_URL + '/v1/videoInfo/cover/api';
 
-  //上传视频信息 带封面
+  //上传视频信息 不带封面
   static const String UPLOAD_VIDEO_INFO = BASE_URL + '/v1/videoInfo/api';
 
   //根据视频取得评论列表

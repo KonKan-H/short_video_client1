@@ -85,6 +85,7 @@ class UserInfoUntil{
       userInfo.introduction = map['introduction'];
       userInfo.fans = map['fans'];
       userInfo.attentions = map['attentions'];
+      userInfo.accessToken = map['accessToken'];
       return userInfo;
     } else {
       return null;

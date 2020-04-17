@@ -240,9 +240,16 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                             video: video,
                             isLike: isLiked,
                           ),
-                        ):Container(
-                          padding: EdgeInsets.fromLTRB(0, 7, 0, 0),
-                          child: Icon(Icons.favorite, color: Colors.grey, size: 35,)
+                        ):Column(
+                          children: <Widget>[
+                            Container(
+                                padding: EdgeInsets.fromLTRB(0, 7, 0, 0),
+                                child: Icon(Icons.favorite, color: Colors.grey, size: 35,)
+                            ),
+                            Container(
+                              child: Text("点赞", style: TextStyle(color: Colors.white, fontSize: 13, decoration: TextDecoration.none),),
+                            )
+                          ],
                         ),
                       ],
                     ),
