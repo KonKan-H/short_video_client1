@@ -166,10 +166,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                           return;
                         }
                         if(video.authorId == video.looker) {
+                          _videoPlayerController.pause();
                           Navigator.push(context, MaterialPageRoute(
                               builder: (context) => MyVideoList(userId: userId, couldDelete: true)
                           ));
                         } else {
+                          _videoPlayerController.pause();
                           Navigator.push(context, MaterialPageRoute(
                               builder: (context) => UserInfoPage(authorId : video.authorId, looker: video.looker,)
                           ));

@@ -72,9 +72,12 @@ class GridViewState extends State {
   @override
   Widget build(BuildContext context) {
     Widget layout;
-    layout = (videoList == null || videoList.length == 0) ? Center(
-      child: Text('没有数据',),
-    ): SmartRefresher(
+    layout = (videoList == null || videoList.length == 0) ?
+//    Center(
+//      child: Text('没有数据',),
+//    )
+    CircularProgressIndicator()
+        : SmartRefresher(
 //      enablePullUp: true,
       header: WaterDropMaterialHeader(
         backgroundColor: ConstantData.MAIN_COLOR,

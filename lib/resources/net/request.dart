@@ -80,7 +80,11 @@ class DioRequest {
   static Future<Result> uploadFile(String url, FormData formData) async {
     Response response;
     Dio dio = getDio();
-    response = await dio.post(url, data: formData);
+    try{
+      response = await dio.post(url, data: formData);
+    } on DioError catch(e)  {
+      _dioErrorDeal(e);
+    }
     Result result = Result.formJson(json.decode(response.data));
     TsUtils.logInfo(result.toString());
     return result;
@@ -89,6 +93,8 @@ class DioRequest {
    static _dioErrorDeal(DioError e) {
     if(e.message.contains("403")) {
       TsUtils.showShort("token错误，请重新登录");
+    } else {
+      TsUtils.showShort("服务器好像出了点小问题,请稍候");
     }
    }
 }

@@ -7,8 +7,6 @@ import 'package:short_video_client1/resources/strings.dart';
 class VideoList extends StatelessWidget {
   VideoList({Key key}) : super(key: key);
 
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
