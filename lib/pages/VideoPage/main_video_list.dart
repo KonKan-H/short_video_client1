@@ -13,20 +13,23 @@ class MainVideoList extends StatelessWidget{
                 appBar: AppBar(
                     backgroundColor: ConstantData.MAIN_COLOR,
                     title: TabBar(
+                        indicatorSize: TabBarIndicatorSize.label,
+                        indicatorColor: Colors.white,
+//                        unselectedLabelColor: Colors.grey,
                         tabs: <Widget>[
-                            Tab(child: Text('热门', style: TextStyle(fontWeight: FontWeight.w100, fontSize: 14),),),
-                            Tab(child: Text('推荐', style: TextStyle(fontWeight: FontWeight.w100, fontSize: 14),),),
+                          Tab(child: Text('For you', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),),),
+                          Tab(child: Text('Hot', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),),),
                         ],
                     )
                 ),
             body: TabBarView(
             children: <Widget>[
-                Container(
-                        child: HotVideoListPage(),//TabCar对应tab_transit.dart的Class name
-                ),
-                Container(
-                    child: VideoListPage(), //TabCar对应tab_car.dart的Class name
-            )
+              Container(
+                child: VideoListPage(), //TabCar对应tab_car.dart的Class name
+              ),
+              Container(
+                child: HotVideoListPage(),//TabCar对应tab_transit.dart的Class name
+              ),
             ],
            ),
           ),

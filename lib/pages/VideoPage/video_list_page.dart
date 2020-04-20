@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:short_video_client1/pages/VideoPage/hot_video_list.dart';
-import 'file:///D:/flutterdemo/short_video_client1/lib/pages/VideoPage/video_list.dart';
+import 'package:short_video_client1/pages/VideoPage/video_list.dart';
 import 'package:short_video_client1/resources/strings.dart';
 
 class VideoListPage extends StatelessWidget {

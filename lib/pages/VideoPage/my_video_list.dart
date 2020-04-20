@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'file:///D:/flutterdemo/short_video_client1/lib/pages/VideoPage/video_list.dart';
+import 'package:short_video_client1/pages/VideoPage/video_list.dart';
 import 'package:short_video_client1/resources/strings.dart';
 
 class MyVideoList extends StatefulWidget {
