@@ -332,10 +332,20 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         children: <Widget>[
           Padding(
             padding: EdgeInsets.only(top: 7, bottom: 7),
-            child: Text(
-              "@" + video.authorName,
-              style: TextStyle(
-                  fontSize: 14, color: Colors.white, fontWeight: FontWeight.w500, decoration: TextDecoration.none),
+            child: Row(
+              children: <Widget>[
+                Text(
+                  "@" + video.authorName,
+                  style: TextStyle(
+                    fontSize: 14, color: Colors.white, fontWeight: FontWeight.w500, decoration: TextDecoration.none),
+                ),
+                Text(
+                  " " + TsUtils.dateDeal(video.createTime),
+                  style: TextStyle(
+                    fontSize: 12, color: Colors.white, fontWeight: FontWeight.w100, decoration: TextDecoration.none
+                  ),
+                ),
+              ],
             ),
           ),
           Padding(

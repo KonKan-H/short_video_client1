@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/models/Video.dart';
 import 'package:short_video_client1/pages/VideoPage/video_player.dart';
 import 'package:short_video_client1/resources/net/api.dart';
@@ -25,6 +26,7 @@ class GridViewState extends State {
   var userId;
   bool isMyself, ifDelete = false;
   List<Video> videoList = List();
+  int currentPage = 1;
   @override
   void initState() {
     //id为空 查找所有视频
@@ -48,7 +50,8 @@ class GridViewState extends State {
       List<Video> l = List();
       print(result.data);
       Video video;
-      for(Map<String, dynamic> map in result.data) {
+      List<dynamic> data = result.data['list'];
+      for(Map<String, dynamic> map in data) {
         video = Video.formJson(map);
         l.add(video);
       }
@@ -66,7 +69,34 @@ class GridViewState extends State {
     await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
     _getVideoList();
+    currentPage = 1;
     _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    Map<String, dynamic> data = {
+      "userId" : userId.toString(),
+      "currentPage": ++currentPage,
+    };
+    DioRequest.dioPost(URL.GET_VIDEO_LIST, data).then((result) {
+      List<Video> l = List();
+      print(result.data);
+      Video video;
+      List<dynamic> data = result.data['list'];
+      for(Map<String, dynamic> map in data) {
+        video = Video.formJson(map);
+        l.add(video);
+      }
+      if(mounted) {
+        setState(() {
+          videoList.addAll(l);
+        });
+      }
+    });
+    _refreshController.loadComplete();
   }
 
   @override
@@ -78,12 +108,38 @@ class GridViewState extends State {
 //    )
     CircularProgressIndicator()
         : SmartRefresher(
-//      enablePullUp: true,
+      enablePullUp: true,
+      enablePullDown: true,
       header: WaterDropMaterialHeader(
         backgroundColor: ConstantData.MAIN_COLOR,
       ),
+      footer: CustomFooter(
+        builder: (BuildContext context,LoadStatus mode){
+          Widget body ;
+          if(mode==LoadStatus.idle){
+            body =  Text("pull up load");
+          }
+          else if(mode==LoadStatus.loading){
+            body =  CupertinoActivityIndicator();
+          }
+          else if(mode == LoadStatus.failed){
+            body = Text("Load Failed!Click retry!");
+          }
+          else if(mode == LoadStatus.canLoading){
+            body = Text("release to load more");
+          }
+          else{
+            body = Text("No more Data");
+          }
+          return Container(
+            height: 55.0,
+            child: Center(child:body),
+          );
+        },
+      ),
       controller: _refreshController,
       onRefresh: _onRefresh,
+      onLoading: _onLoading,
       child: GridView(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,

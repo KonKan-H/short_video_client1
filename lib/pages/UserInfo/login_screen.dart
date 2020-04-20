@@ -11,7 +11,7 @@ import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
 import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/util/user_info_until.dart';
-import 'package:short_video_client1/resources/util/user_until.dart';
+import 'package:short_video_client1/resources/util/user_util.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key key, this.context}) : super(key: key);

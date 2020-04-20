@@ -86,6 +86,8 @@ class UserInfoUntil{
       userInfo.fans = map['fans'];
       userInfo.attentions = map['attentions'];
       userInfo.accessToken = map['accessToken'];
+      userInfo.pageSize = map['pageSize'];
+      userInfo.currentPage = map['currentPage'];
       return userInfo;
     } else {
       return null;

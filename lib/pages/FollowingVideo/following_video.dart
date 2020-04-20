@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:short_video_client1/app/OsApplication.dart';
@@ -22,6 +23,7 @@ class FollowingVideo extends StatefulWidget {
 class _FollowingVideoState extends State<FollowingVideo> {
   List<Video> videoList = List();
   var userId;
+  int currentPage = 1;
 
   @override
   void initState() {
@@ -57,6 +59,7 @@ class _FollowingVideoState extends State<FollowingVideo> {
     await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
     _getVideoList();
+    currentPage = 1;
     _refreshController.refreshCompleted();
   }
 
@@ -69,7 +72,8 @@ class _FollowingVideoState extends State<FollowingVideo> {
         List<Video> l = List();
         print(result.data);
         Video video;
-        for(Map<String, dynamic> map in result.data) {
+        List<dynamic> data = result.data['list'];
+        for(Map<String, dynamic> map in data) {
           video = Video.formJson(map);
           l.add(video);
         }
@@ -80,6 +84,32 @@ class _FollowingVideoState extends State<FollowingVideo> {
         }
       });
     }
+  }
+
+  void _onLoading() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    Map<String, dynamic> data = {
+      "userId" : userId.toString(),
+      "currentPage": ++currentPage,
+    };
+    DioRequest.dioPost(URL.MY_FOLLOWING_VIDEO_LIST, data).then((result) {
+      List<Video> l = List();
+      print(result.data);
+      Video video;
+      List<dynamic> data = result.data['list'];
+      for(Map<String, dynamic> map in data) {
+        video = Video.formJson(map);
+        l.add(video);
+      }
+      if(mounted) {
+        setState(() {
+          videoList.addAll(l);
+        });
+      }
+    });
+    _refreshController.loadComplete();
   }
 
   @override
@@ -96,12 +126,38 @@ class _FollowingVideoState extends State<FollowingVideo> {
       );
     } else {
       widget = SmartRefresher(
-//        enablePullUp: true,
+        enablePullUp: !(userId == null),
+        enablePullDown: true,
         header: WaterDropMaterialHeader(
           backgroundColor: ConstantData.MAIN_COLOR,
         ),
+        footer: CustomFooter(
+          builder: (BuildContext context,LoadStatus mode){
+            Widget body ;
+            if(mode==LoadStatus.idle){
+              body =  Text("pull up load");
+            }
+            else if(mode==LoadStatus.loading){
+              body =  CupertinoActivityIndicator();
+            }
+            else if(mode == LoadStatus.failed){
+              body = Text("Load Failed!Click retry!");
+            }
+            else if(mode == LoadStatus.canLoading){
+              body = Text("release to load more");
+            }
+            else{
+              body = Text("No more Data");
+            }
+            return Container(
+              height: 55.0,
+              child: Center(child:body),
+            );
+          },
+        ),
         controller: _refreshController,
         onRefresh: _onRefresh,
+        onLoading: _onLoading,
         child: buildVideoList(),
       );
     }

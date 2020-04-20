@@ -13,6 +13,8 @@ class UserInfo {
   var fans;
   var attentions;
   var accessToken;
+  int pageSize;
+  int currentPage = 1;
 
   UserInfo();
 
@@ -30,6 +32,8 @@ class UserInfo {
     userInfo.fans = map['fans'];
     userInfo.attentions = map['attentions'];
     userInfo.accessToken = map['accessToken'];
+    userInfo.pageSize = map['pageSize'];
+    userInfo.currentPage = map['currentPage'];
     return userInfo;
   }
 }

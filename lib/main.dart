@@ -14,7 +14,7 @@ import 'package:short_video_client1/pages/VideoPage/video_upload.dart';
 import 'package:short_video_client1/resources/strings.dart';
 import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/util/user_info_until.dart';
-import 'package:short_video_client1/resources/util/user_until.dart';
+import 'package:short_video_client1/resources/util/user_util.dart';
 
 void main() {
 //  runApp(Home());
