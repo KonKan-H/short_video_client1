@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:short_video_client1/app/OsApplication.dart';
+import 'package:short_video_client1/event/login_event.dart';
 import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/models/Video.dart';
 import 'package:short_video_client1/pages/VideoPage/video_player.dart';
@@ -10,43 +12,52 @@ import 'package:short_video_client1/resources/strings.dart';
 import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/util/user_info_until.dart';
 
-class VideoListPage extends StatefulWidget {
-  VideoListPage({Key key, @required this.userId, this.couldDelete}):super(key: key);
-  var userId;
-  bool couldDelete;
+class HotVideoList extends StatefulWidget {
+  HotVideoList({Key key}):super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return new GridViewState(userId: userId, isMyself: couldDelete);
+    return new GridViewState();
   }
 }
 
 class GridViewState extends State {
-  GridViewState({Key key, this.userId, this.isMyself});
-  var userId;
-  bool isMyself, ifDelete = false;
   List<Video> videoList = List();
   int currentPage = 1;
+  var userId;
   @override
   void initState() {
-    //id为空 查找所有视频
-//    if(userId == null ) {
-//      UserInfoUntil.getUserInfo().then((userInfo) {
-//        if (userInfo != null && userInfo.userName != null) {
-//          userId = userInfo.userId;
-//        }
-//      });
-//    }
-    _getVideoList();
+    _getUserInfo();
+    _getHotVideoList();
     super.initState();
+    OsApplication.eventBus.on<LoginEvent>().listen((event) {
+      if(event != null) {
+        if(mounted) {
+          setState(() {
+            userId = event.userId;
+          });
+        }
+      }
+    });
   }
 
-  _getVideoList() {
-    //id不为空 查找id用户的视频
-    Map<String, dynamic> data = {
-      "userId" : userId
-    };
-    DioRequest.dioPost(URL.GET_VIDEO_LIST, data).then((result) {
+  _getUserInfo() {
+    UserInfoUntil.getUserInfo().then((userInfo) {
+      if(userInfo != null && userInfo.userId != null) {
+        if(mounted) {
+          setState(() {
+            userId = userInfo.userId;
+          });
+        }
+      }
+    });
+  }
+
+  _getHotVideoList() {
+    Map<String, dynamic> map = {
+    "currentPage" : currentPage
+  };
+    DioRequest.dioPost(URL.HOT_VIDEO, map).then((result) {
       List<Video> l = List();
       print(result.data);
       Video video;
@@ -68,7 +79,7 @@ class GridViewState extends State {
     // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
-    _getVideoList();
+    _getHotVideoList();
     currentPage = 1;
     _refreshController.refreshCompleted();
   }
@@ -78,17 +89,21 @@ class GridViewState extends State {
     await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
     Map<String, dynamic> data = {
-      "userId" : userId.toString(),
       "currentPage": ++currentPage,
     };
     DioRequest.dioPost(URL.GET_VIDEO_LIST, data).then((result) {
       List<Video> l = List();
       print(result.data);
       Video video;
-      List<dynamic> data = result.data['list'];
-      for(Map<String, dynamic> map in data) {
-        video = Video.formJson(map);
-        l.add(video);
+      List<dynamic> data;
+      try {
+        data = result.data['list'];
+        for(Map<String, dynamic> map in data) {
+          video = Video.formJson(map);
+          l.add(video);
+        }
+      } on Error catch(e) {
+        TsUtils.logInfo("返回数据为空，已为最后一页");
       }
       if(mounted) {
         setState(() {
@@ -198,11 +213,6 @@ class GridViewState extends State {
                           builder: (context) => VideoPlayerPage(video: video)
                       ));
                     },
-                    onLongPress: () {
-                      if(isMyself) {
-                        showCupertinoAlertDialog(video);
-                      }
-                    },
                   ),
                 ],
               ),
@@ -258,53 +268,6 @@ class GridViewState extends State {
         ),
       ),
     );
-  }
-
-  showCupertinoAlertDialog(Video video) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return CupertinoAlertDialog(
-            title: Text("是否删除该视频"),
-            content: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
-                Align(
-                  child: Text(video.description == null ? "" : video.description.toString(), maxLines: 1,
-                    overflow: TextOverflow.ellipsis,),
-                  alignment: Alignment(0, 0),
-                ),
-              ],
-            ),
-            actions: <Widget>[
-              CupertinoDialogAction(
-                child: Text("取消"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              CupertinoDialogAction(
-                child: Text("确定"),
-                onPressed: () {
-                  DioRequest.dioPost(URL.VIDEO_DELETE, Video.model2map(video)).then((result) {
-                    bool flag = result.data as bool;
-                    if(flag) {
-                      videoList.remove(video);
-                      setState(() {
-                        videoList;
-                      });
-                      ifDelete = false;
-                      TsUtils.showShort("删除成功");
-                    }
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        });
   }
 
 //  String getPhotoUrl() {

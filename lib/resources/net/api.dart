@@ -84,4 +84,6 @@ class URL{
   //取消点赞评论
   static const String CANCEL_LIKE_REPLY = BASE_URL + '/v1/reply/cancel/api';
 
+  //取得热门视频
+  static const String HOT_VIDEO = BASE_URL + '/v1/hot/video/api';
 }

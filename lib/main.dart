@@ -8,6 +8,7 @@ import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/pages/CameraPage/CameraHomePage.dart';
 import 'package:short_video_client1/pages/FollowingVideo/following_video.dart';
 import 'package:short_video_client1/pages/UserInfo/my_home_page.dart';
+import 'package:short_video_client1/pages/VideoPage/main_video_list.dart';
 import 'package:short_video_client1/pages/VideoPage/video_list_page.dart';
 import 'package:short_video_client1/pages/VideoPage/video_upload.dart';
 
@@ -50,7 +51,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
 
   static List<Widget> _widgetOptions = <Widget>[
-    new VideoList(),
+    new MainVideoList(),
     new FollowingVideo(),
     new MakeVideo(),
     new MyInfoHomePage(),

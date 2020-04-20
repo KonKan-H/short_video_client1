@@ -464,7 +464,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   }
 
   _getReplyList() async {
-    Result result = await DioRequest.dioPost(URL.VIDEO_REPLY_LIST, Video.model2map(video));
+    Map<String, dynamic> map = Video.model2map(video);
+    Result result = await DioRequest.dioPost(URL.VIDEO_REPLY_LIST, map);
     if(result != null) {
       replies.clear();
       for(Map<String, dynamic> map in result.data) {
