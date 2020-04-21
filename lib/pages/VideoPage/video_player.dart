@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:short_video_client1/app/OsApplication.dart';
 import 'package:short_video_client1/event/login_event.dart';
 import 'package:short_video_client1/models/Attention.dart';
@@ -112,10 +113,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     return Stack(
       children: <Widget>[
         Scaffold(
-//          appBar: AppBar(
-//              title: Text(video.authorName.toString()),
-//              centerTitle: true,
-//          ),
           body: Material(
             child: InkWell(
               child: Container(
@@ -136,27 +133,13 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                 if(mounted) {
                   setState(() {
                     _videoPlayerController.value.isPlaying
-                ? _videoPlayerController.pause()
+                      ? _videoPlayerController.pause()
                     : _videoPlayerController.play();
                   });
                 }
               },
             ),
           ),
-//          floatingActionButton: FloatingActionButton(
-//            backgroundColor: ConstantData.MAIN_COLOR,
-//            onPressed: () {
-//              setState(() {
-//              _videoPlayerController.value.isPlaying
-//                ? _videoPlayerController.pause()
-//                    : _videoPlayerController.play();
-//                });
-//             // print(_videoPlayerController.value);
-//            },
-//            child: Icon(_videoPlayerController.value.isPlaying
-//            ? Icons.pause
-//                : Icons.play_arrow),
-//          ),
         ),
         Positioned(
           right: 0,
@@ -326,6 +309,22 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
             ),
           ),
         ),
+        Positioned(
+          top: 0.08 * screenHeight,
+          left: 5,
+          child: Container(
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                child: Icon(IconData(0xe952, fontFamily: "play"), color: Colors.white, size: 35,),
+                onTap: () {
+                  _videoPlayerController.pause();
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ),
+        ),
         Offstage(
           offstage: _videoPlayerController.value.isPlaying,
           child: Center(
@@ -454,6 +453,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     }
     String fileName = video.url.toString().substring(0, video.url.toString().indexOf(".")) + '.mp4';
     print(ConstantData.VIDEO_FILE_URI + fileName);
+//    ProgressDialog pr = TsUtils.showProgressDiolog(context, "视频下载中....");
+//    await pr.show();
     await FlutterDownloader.enqueue(
       url: ConstantData.VIDEO_FILE_URI + fileName,
       fileName: fileName,
@@ -462,6 +463,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       // show download progress in status bar (for Android)
       openFileFromNotification: true, // click on notification to open downloaded file (for Android)
     );
+//    pr.hide();
     TsUtils.showShort('下载成功, 文件保存在' + _localPath);
     setState(() {
       video.downloads ++;

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class ConstantData{
-  static const String URL_BASE = 'http://10.20.8.155';
+//  static const String URL_BASE = 'http://10.20.8.155';
 //  static const String URL_BASE = 'http://192.168.43.93';
-//  static const String URL_BASE = 'http://112.126.82.137';
+  static const String URL_BASE = 'http://112.126.82.137';
 
   static const String URL_HEADER_PORT = URL_BASE + ":8080/";
 
   //主色调
   static const Color MAIN_COLOR = Colors.orange;
 
-  static const String VIDEO_LOCALHOST = '/sdcard/DCIM/Camera';
+  static const String VIDEO_LOCALHOST = '/storage/emulated/0/DCIM/Camera';
 
   //视频长度
   static const double VIDEO_HEIGHT = 348;

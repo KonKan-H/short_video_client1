@@ -91,10 +91,10 @@ class DioRequest {
   }
 
    static _dioErrorDeal(DioError e) {
-    if(e.message.contains("408")) {
+    if(e.message.contains("403")) {
       TsUtils.showShort("token错误，请重新登录");
     } else {
-      TsUtils.showShort("服务器好像出了点小问题,请稍候");
+      TsUtils.showShort("权限受制，或请先登录");
     }
    }
 }

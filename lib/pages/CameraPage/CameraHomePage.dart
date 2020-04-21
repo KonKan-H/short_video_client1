@@ -207,11 +207,6 @@ class _MakeVideoState extends State<MakeVideo> {
                       _uploadVideoInfo().then((result) {
                         pr.hide();
                       });
-//                      Future.delayed(Duration(seconds: 5)).then((value) {
-//                        if(pr.isShowing()) {
-//                          pr.hide();
-//                        }
-//                      });
                       TsUtils.showShort("上传成功");
                       Navigator.pop(context);
                     },
