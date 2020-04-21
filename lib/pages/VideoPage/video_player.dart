@@ -48,6 +48,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     _videoPlayerController = VideoPlayerController.network(ConstantData.VIDEO_FILE_URI + video.url)
       ..initialize().then((_) {
         //确保在视频初始化后显示第一帧，甚至在按下播放按钮之前。
+        _videoPlayerController.play();
         setState(() {
           _videoPlayerController.setLooping(true);
         });
@@ -115,34 +116,47 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 //              title: Text(video.authorName.toString()),
 //              centerTitle: true,
 //          ),
-          body: Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(color: Colors.black),
-            child: _videoPlayerController.value.initialized
-              ? Container(
-                child: AspectRatio(
-                  aspectRatio: _videoPlayerController.value.aspectRatio,
-                  child: VideoPlayer(_videoPlayerController),
+          body: Material(
+            child: InkWell(
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(color: Colors.black),
+                child: _videoPlayerController.value.initialized
+                    ? Container(
+                  child: AspectRatio(
+                    aspectRatio: _videoPlayerController.value.aspectRatio,
+                    child: VideoPlayer(_videoPlayerController),
+                  ),
+                )
+                    : Center(
+                  child: CircularProgressIndicator(),
                 ),
-              )
-                  : Center(
-              child: CircularProgressIndicator(),
-            ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: ConstantData.MAIN_COLOR,
-            onPressed: () {
-              setState(() {
-              _videoPlayerController.value.isPlaying
+              ),
+              onTap: () {
+                if(mounted) {
+                  setState(() {
+                    _videoPlayerController.value.isPlaying
                 ? _videoPlayerController.pause()
                     : _videoPlayerController.play();
-                });
-             // print(_videoPlayerController.value);
-            },
-            child: Icon(_videoPlayerController.value.isPlaying
-            ? Icons.pause
-                : Icons.play_arrow),
+                  });
+                }
+              },
+            ),
           ),
+//          floatingActionButton: FloatingActionButton(
+//            backgroundColor: ConstantData.MAIN_COLOR,
+//            onPressed: () {
+//              setState(() {
+//              _videoPlayerController.value.isPlaying
+//                ? _videoPlayerController.pause()
+//                    : _videoPlayerController.play();
+//                });
+//             // print(_videoPlayerController.value);
+//            },
+//            child: Icon(_videoPlayerController.value.isPlaying
+//            ? Icons.pause
+//                : Icons.play_arrow),
+//          ),
         ),
         Positioned(
           right: 0,
@@ -309,6 +323,27 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
             padding: EdgeInsets.all(4),
             child: Container(
               child: titleSection(),
+            ),
+          ),
+        ),
+        Offstage(
+          offstage: _videoPlayerController.value.isPlaying,
+          child: Center(
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                highlightColor: Colors.transparent,
+                child: Icon(IconData(0xe637, fontFamily: 'play'), color: Colors.white, size: 60,),
+                onTap: () {
+                  if(mounted) {
+                    setState(() {
+                      _videoPlayerController.value.isPlaying
+                          ? _videoPlayerController.pause()
+                          : _videoPlayerController.play();
+                    });
+                  }
+                },
+              ),
             ),
           ),
         ),

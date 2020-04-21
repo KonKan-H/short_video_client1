@@ -204,13 +204,15 @@ class _MakeVideoState extends State<MakeVideo> {
                       }
                       ProgressDialog pr = TsUtils.showProgressDiolog(context, "视频上传中....");
                       await pr.show();
-                      Result result = await _uploadVideoInfo();
-                      TsUtils.showShort("上传成功");
-                      setState(() {
-                        _video == null;
-                        _cover == null;
-                        _controller.text == null;
+                      _uploadVideoInfo().then((result) {
+                        pr.hide();
                       });
+//                      Future.delayed(Duration(seconds: 5)).then((value) {
+//                        if(pr.isShowing()) {
+//                          pr.hide();
+//                        }
+//                      });
+                      TsUtils.showShort("上传成功");
                       Navigator.pop(context);
                     },
                   ),

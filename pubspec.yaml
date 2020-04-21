@@ -50,8 +50,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-#dependency_overrides:
-#  flushbar: 1.9.1
+dependency_overrides:
+  flushbar: 1.9.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -73,6 +73,9 @@ flutter:
     - family: MyIcon
       fonts:
         - asset: fonts/iconfont.ttf
+    - family: play
+      fonts:
+        - asset: fonts/play.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

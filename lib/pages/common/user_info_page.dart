@@ -86,9 +86,16 @@ class _UserInfoPageState extends State<UserInfoPage> {
       List<Video> l = List();
       print(result.data);
       Video video;
-      for(Map<String, dynamic> map in result.data) {
-        video = Video.formJson(map);
-        l.add(video);
+      List<dynamic> data;
+      try {
+        data = result.data['list'];
+        for(Map<String, dynamic> map in data) {
+          video = Video.formJson(map);
+          l.add(video);
+        }
+      } on Error catch(e) {
+        TsUtils.showShort("没有更多数据");
+        TsUtils.logInfo("返回数据为空，已为最后一页");
       }
       if(mounted) {
         setState(() {

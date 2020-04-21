@@ -106,6 +106,7 @@ class _FollowingVideoState extends State<FollowingVideo> {
           l.add(video);
         }
       } on Error catch(e) {
+        TsUtils.showShort("没有更多数据");
         TsUtils.logInfo("返回数据为空，已为最后一页");
       }
       if(mounted) {
