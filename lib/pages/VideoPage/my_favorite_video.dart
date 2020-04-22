@@ -5,6 +5,7 @@ import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
 import 'package:short_video_client1/resources/tools.dart';
+import 'package:short_video_client1/resources/util/user_info_until.dart';
 
 class MyFavoriteVideo extends StatefulWidget {
   MyFavoriteVideo({Key key, this.userId}) : super(key: key);
@@ -74,7 +75,7 @@ class _MyFavoriteVideoState extends State<MyFavoriteVideo> {
 //          mainAxisSpacing: 8.0,
           childAspectRatio: 0.5
       ),
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(4.0),
       children: buildGridTileList(videoList),
     );
     setState(() {
@@ -97,19 +98,31 @@ class _MyFavoriteVideoState extends State<MyFavoriteVideo> {
       child: Container(
         child: new Stack(
           children: <Widget>[
-            new Container(
+            Container(
               height: ConstantData.VIDEO_HEIGHT,
               color: Colors.white70,
               alignment: Alignment.topCenter,
               child: Stack(
+                fit: StackFit.expand,
                 children: <Widget>[
                   Container(
+                    color: Colors.black,
                     alignment: Alignment.center,
                     child: Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
                   ),
                   InkWell(
                     onTap: () {
-                      video.looker = userId;
+                      if(userId != null) {
+                        video.looker = userId;
+                      } else {
+                        UserInfoUtil.getUserInfo().then((userInfo) {
+                          if (userInfo != null && userInfo.userName != null) {
+                            setState(() {
+                              video.looker = userInfo.userId;
+                            });
+                          }
+                        });
+                      }
                       Navigator.push(context, MaterialPageRoute(
                           builder: (context) => VideoPlayerPage(video: video)
                       ));
@@ -119,51 +132,52 @@ class _MyFavoriteVideoState extends State<MyFavoriteVideo> {
               ),
             ),
             //头像
-           Container(
-             child: Stack(
-               children: <Widget>[
-                 new Container(
-                   alignment: Alignment.bottomLeft,
-                   padding: EdgeInsets.fromLTRB(5, 0, 0, 5),
-                   child: new Container(
-                     width: 40,
-                     height: 40,
-                     child: new CircleAvatar(
-                       backgroundImage: new NetworkImage(ConstantData.AVATAR_FILE_URI + video.authorAvatar),
-                       radius: 100,
-                     ),
-                   ),
-                 ),
-                 new Container(
-                   alignment: Alignment.bottomRight,
-                   child: new Container(
-                     width: 120,
-                     height: 40,
-                     alignment: Alignment.centerRight,
-                     child: Row(
-                       mainAxisAlignment: MainAxisAlignment.center,
-                       children: <Widget>[
-                         new Container(
-                           width: 30,
-                           height: 40,
-                           alignment: Alignment.centerLeft,
-                           child:  Icon(Icons.favorite, size: 25, color: Colors.red,),
-                         ),
-                         new Container(
-                             width: 60,
-                             height: 40,
-                             alignment: Alignment.centerRight,
-                             child: Center(
-                               child: Text(TsUtils.dataDeal(video.likes), style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w700),),
-                             )
-                         ),
-                       ],
-                     ),
-                   ),
-                 ),
-               ],
-             ),
-           )
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: Stack(
+                children: <Widget>[
+                  new Container(
+                    alignment: Alignment.bottomLeft,
+                    padding: EdgeInsets.fromLTRB(5, 0, 0, 5),
+                    child: new Container(
+                      width: 40,
+                      height: 40,
+                      child: new CircleAvatar(
+                        backgroundImage: NetworkImage(ConstantData.AVATAR_FILE_URI + video.authorAvatar),
+                        radius: 100,
+                      ),
+                    ),
+                  ),
+                  new Container(
+                    alignment: Alignment.bottomRight,
+                    child: new Container(
+                      width: 120,
+                      height: 40,
+                      alignment: Alignment.centerRight,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          new Container(
+                            width: 30,
+                            height: 40,
+                            alignment: Alignment.centerLeft,
+                            child:  Icon(Icons.favorite, size: 25, color: Colors.red,),
+                          ),
+                          new Container(
+                              width: 60,
+                              height: 40,
+                              alignment: Alignment.centerRight,
+                              child: Center(
+                                child: Text(TsUtils.dataDeal(video.likes), style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w700),),
+                              )
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

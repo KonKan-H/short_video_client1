@@ -34,7 +34,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   _VideoPlayerPageState({Key key, @required this.video});
   final Video video;
   var userId, id, userName, userAvatar, sex, area, introduction, age, mobilePhone;
-  bool isLiked, isAttention;
+  bool isLiked = false, isAttention;
   double screenWidth;
   double screenHeight;
   List<Reply> replies = List();
@@ -246,7 +246,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                           children: <Widget>[
                             Container(
                                 padding: EdgeInsets.fromLTRB(0, 7, 0, 0),
-                                child: Icon(Icons.favorite, color: Colors.grey, size: 35,)
+                                child: Icon(Icons.favorite, color: Colors.white, size: 35,)
                             ),
                             Container(
                               child: Text("点赞", style: TextStyle(color: Colors.white, fontSize: 13, decoration: TextDecoration.none),),

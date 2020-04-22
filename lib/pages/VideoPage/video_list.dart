@@ -194,6 +194,12 @@ class GridViewState extends State {
                       }
                     },
                   ),
+                  BackdropFilter(
+                    filter: ImageFilter.blur(
+                        sigmaX: 15,
+                        sigmaY: 15
+                    ),
+                  )
                 ],
               ),
             ),
