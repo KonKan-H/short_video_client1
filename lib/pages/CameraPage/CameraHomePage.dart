@@ -45,7 +45,7 @@ class _MakeVideoState extends State<MakeVideo> {
   }
 
   _getUserInfo() {
-    UserInfoUntil.getUserInfo().then((userInfo) {
+    UserInfoUtil.getUserInfo().then((userInfo) {
       if(userInfo != null && userInfo.userName != null) {
         setState(() {
           userId = userInfo.userId;

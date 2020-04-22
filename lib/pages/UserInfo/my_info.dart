@@ -63,7 +63,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
   }
 
   _getUserInfo() {
-    UserInfoUntil.getUserInfo().then((userInfo) {
+    UserInfoUtil.getUserInfo().then((userInfo) {
       if(userInfo != null && userInfo.userName != null) {
         if(mounted) {
           setState(() {
@@ -226,7 +226,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
       if(mounted) {
         setState(() {
           UserUntil.cleanUserInfo();
-          UserInfoUntil.cleanUserInfo();
+          UserInfoUtil.cleanUserInfo();
           userName = null;
           userAvatar = null;
           sex = null;

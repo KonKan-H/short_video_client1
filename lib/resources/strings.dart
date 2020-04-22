@@ -8,14 +8,12 @@ class ConstantData{
   static const String URL_HEADER_PORT = URL_BASE + ":8080/";
 
   //主色调
-  static const Color MAIN_COLOR = Colors.orange;
+  static const Color MAIN_COLOR = Colors.pinkAccent;
 
   static const String VIDEO_LOCALHOST = '/storage/emulated/0/DCIM/Camera';
 
   //视频长度
   static const double VIDEO_HEIGHT = 348;
-
-  static const String VIDEO_URL_HEADER = "";
 
   //上传视频背景图
   static const String VIDEO_UPLOAD_PNG = 'https://timgsa.baidu.com/timg?image&quality=80&'

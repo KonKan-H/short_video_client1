@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -98,7 +100,6 @@ class GridViewState extends State {
           l.add(video);
         }
       } on Error catch(e) {
-        TsUtils.showShort("没有更多数据");
         TsUtils.logInfo("返回数据为空，已为最后一页");
       }
       if(mounted) {
@@ -123,30 +124,6 @@ class GridViewState extends State {
       enablePullDown: true,
       header: WaterDropMaterialHeader(
         backgroundColor: ConstantData.MAIN_COLOR,
-      ),
-      footer: CustomFooter(
-        builder: (BuildContext context,LoadStatus mode){
-          Widget body ;
-          if(mode==LoadStatus.idle){
-            body =  Text("pull up load");
-          }
-          else if(mode==LoadStatus.loading){
-            body =  CupertinoActivityIndicator();
-          }
-          else if(mode == LoadStatus.failed){
-            body = Text("Load Failed!Click retry!");
-          }
-          else if(mode == LoadStatus.canLoading){
-            body = Text("release to load more");
-          }
-          else{
-            body = Text("No more Data");
-          }
-          return Container(
-            height: 55.0,
-            child: Center(child:body),
-          );
-        },
       ),
       controller: _refreshController,
       onRefresh: _onRefresh,
@@ -182,13 +159,15 @@ class GridViewState extends State {
         child: new Stack(
           children: <Widget>[
             //封面
-            new Container(
+            Container(
               height: ConstantData.VIDEO_HEIGHT,
               color: Colors.white70,
               alignment: Alignment.topCenter,
               child: Stack(
+                fit: StackFit.expand,
                 children: <Widget>[
                   Container(
+                    color: Colors.black,
                     alignment: Alignment.center,
                     child: Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
                   ),
@@ -197,7 +176,7 @@ class GridViewState extends State {
                       if(userId != null) {
                         video.looker = userId;
                       } else {
-                        UserInfoUntil.getUserInfo().then((userInfo) {
+                        UserInfoUtil.getUserInfo().then((userInfo) {
                           if (userInfo != null && userInfo.userName != null) {
                             setState(() {
                               video.looker = userInfo.userId;

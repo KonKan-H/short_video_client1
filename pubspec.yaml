@@ -68,6 +68,7 @@ flutter:
     - images/ic_arrow_right.png
     - images/ic_arrow_add.png
     - images/ic_arrow_play.png
+    - images/bj.png
 
   fonts:
     - family: MyIcon

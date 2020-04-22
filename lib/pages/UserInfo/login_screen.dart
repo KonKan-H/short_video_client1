@@ -29,7 +29,7 @@ class LoginScreen extends StatelessWidget {
     Result result = await DioRequest.dioPost(URL.USER_LOGIN, data);
     return Future.delayed(loginTime).then((_) async {
       if (result.code == 1) {
-        UserInfo userInfo = await UserInfoUntil.map2UserInfo(result.data);
+        UserInfo userInfo = await UserInfoUtil.map2UserInfo(result.data);
         Map<String, dynamic> data = {
           "access_token": userInfo.accessToken
         };
@@ -45,7 +45,7 @@ class LoginScreen extends StatelessWidget {
             userInfo.area,
             userInfo.introduction,));
         UserUntil.saveUserInfo(user);
-        UserInfoUntil.saveUserInfo(userInfo);
+        UserInfoUtil.saveUserInfo(userInfo);
         TsUtils.showShort("登录成功");
         Navigator.pop(context);
         return null;

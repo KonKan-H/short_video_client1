@@ -47,7 +47,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
     setState(() {
       result;
     });
-    userInfo = await UserInfoUntil.map2UserInfo(result.data);
+    userInfo = await UserInfoUtil.map2UserInfo(result.data);
     isMyself = (authorId == looker);
     setState(() {
       userInfo;

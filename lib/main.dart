@@ -132,7 +132,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   _getUserInfo() {
-    UserInfoUntil.getUserInfo().then((user) {
+    UserInfoUtil.getUserInfo().then((user) {
       if(user != null && user.userName != null) {
         setState(() {
           userName = user.userName;

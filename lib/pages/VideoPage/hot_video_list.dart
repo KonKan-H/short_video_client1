@@ -42,7 +42,7 @@ class GridViewState extends State {
   }
 
   _getUserInfo() {
-    UserInfoUntil.getUserInfo().then((userInfo) {
+    UserInfoUtil.getUserInfo().then((userInfo) {
       if(userInfo != null && userInfo.userId != null) {
         if(mounted) {
           setState(() {
@@ -134,30 +134,6 @@ class GridViewState extends State {
       header: WaterDropMaterialHeader(
         backgroundColor: ConstantData.MAIN_COLOR,
       ),
-      footer: CustomFooter(
-        builder: (BuildContext context,LoadStatus mode){
-          Widget body ;
-          if(mode==LoadStatus.idle){
-            body =  Text("pull up load");
-          }
-          else if(mode==LoadStatus.loading){
-            body =  CupertinoActivityIndicator();
-          }
-          else if(mode == LoadStatus.failed){
-            body = Text("Load Failed!Click retry!");
-          }
-          else if(mode == LoadStatus.canLoading){
-            body = Text("release to load more");
-          }
-          else{
-            body = Text("No more Data");
-          }
-          return Container(
-            height: 55.0,
-            child: Center(child:body),
-          );
-        },
-      ),
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,
@@ -199,6 +175,7 @@ class GridViewState extends State {
               child: Stack(
                 children: <Widget>[
                   Container(
+                    color: Colors.black,
                     alignment: Alignment.center,
                     child: Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
                   ),
@@ -207,7 +184,7 @@ class GridViewState extends State {
                       if(userId != null) {
                         video.looker = userId;
                       } else {
-                        UserInfoUntil.getUserInfo().then((userInfo) {
+                        UserInfoUtil.getUserInfo().then((userInfo) {
                           if (userInfo != null && userInfo.userName != null) {
                             setState(() {
                               video.looker = userInfo.userId;

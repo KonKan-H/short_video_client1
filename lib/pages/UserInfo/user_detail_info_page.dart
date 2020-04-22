@@ -54,7 +54,7 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
     });
   }
   _getUserInfo() {
-    UserInfoUntil.getUserInfo().then((userInfo) {
+    UserInfoUtil.getUserInfo().then((userInfo) {
       if(userInfo != null) {
         setState(() {
           id = userInfo.id;
@@ -258,8 +258,8 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
             print(result.msg);
             TsUtils.showShort(result.msg);
             if(result.data != null) {
-              UserInfo userInfo = await UserInfoUntil.map2UserInfo(result.data);
-              UserInfoUntil.saveUserInfo(userInfo);
+              UserInfo userInfo = await UserInfoUtil.map2UserInfo(result.data);
+              UserInfoUtil.saveUserInfo(userInfo);
               OsApplication.eventBus.fire(LoginEvent(userInfo.userId, userInfo.userName, userInfo.userAvatar,
                   userInfo.area, userInfo.sex, userInfo.age, userInfo.introduction));
             }

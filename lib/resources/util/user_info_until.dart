@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:short_video_client1/models/UserInfo.dart';
 
-class UserInfoUntil{
+class UserInfoUtil{
   static const USER_INFO_ID = 'user_info_id';
   static const USER_INFO_USER_ID = 'user_info_user_id';
   static const USER_INFO_NAME = 'user_info_name';

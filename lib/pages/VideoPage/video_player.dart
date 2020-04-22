@@ -71,7 +71,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   }
 
   _getUserInfo() {
-    UserInfoUntil.getUserInfo().then((userInfo) {
+    UserInfoUtil.getUserInfo().then((userInfo) {
       if(userInfo != null && userInfo.userName != null) {
         setState(() {
           id = userInfo.id;
@@ -91,6 +91,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   }
 
   _getLikeAndAttention() async {
+    if(userId == null) {
+      return;
+    }
     Result likeResult = await DioRequest.dioPost(URL.VIDEO_LIKE_OR_NOT, Video.model2map(video));
     Attention attention = new Attention();
     attention.userId = video.authorId;

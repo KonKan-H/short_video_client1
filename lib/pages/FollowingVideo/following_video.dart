@@ -4,6 +4,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:short_video_client1/app/OsApplication.dart';
 import 'package:short_video_client1/event/login_event.dart';
 import 'package:short_video_client1/models/Video.dart';
+import 'package:short_video_client1/pages/FollowingVideo/following_bj.dart';
 import 'package:short_video_client1/pages/VideoPage/video_player.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
@@ -41,7 +42,7 @@ class _FollowingVideoState extends State<FollowingVideo> {
   }
 
   _getUserInfo() {
-    UserInfoUntil.getUserInfo().then((userInfo) {
+    UserInfoUtil.getUserInfo().then((userInfo) {
       if(userInfo != null && userInfo.userId != null) {
         if(mounted) {
           setState(() {
@@ -106,7 +107,6 @@ class _FollowingVideoState extends State<FollowingVideo> {
           l.add(video);
         }
       } on Error catch(e) {
-        TsUtils.showShort("没有更多数据");
         TsUtils.logInfo("返回数据为空，已为最后一页");
       }
       if(mounted) {
@@ -128,7 +128,37 @@ class _FollowingVideoState extends State<FollowingVideo> {
     Widget widget;
     if (videoList == null || videoList.length == 0) {
       widget = Center(
-        child: Text("关注用户没有发布视频",),
+        child: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            Image.asset('images/bj.png', fit: BoxFit.cover,),
+            Center(
+              child: BlurRectWidget(
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      '关注用户没有发布视频',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+//                Padding(
+//                  padding: const EdgeInsets.only(top: 5.0),
+//                  child: Text(
+//                    "请先登录",
+//                    style: TextStyle(fontSize: 14, color: Colors.black87),
+//                    textAlign: TextAlign.justify,
+//                  ),
+//                ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       );
     } else {
       widget = SmartRefresher(
@@ -137,30 +167,6 @@ class _FollowingVideoState extends State<FollowingVideo> {
         header: WaterDropMaterialHeader(
           backgroundColor: ConstantData.MAIN_COLOR,
         ),
-        footer: CustomFooter(
-          builder: (BuildContext context,LoadStatus mode){
-            Widget body ;
-            if(mode==LoadStatus.idle){
-              body =  Text("pull up load");
-            }
-            else if(mode==LoadStatus.loading){
-              body =  CupertinoActivityIndicator();
-            }
-            else if(mode == LoadStatus.failed){
-              body = Text("Load Failed!Click retry!");
-            }
-            else if(mode == LoadStatus.canLoading){
-              body = Text("release to load more");
-            }
-            else{
-              body = Text("No more Data");
-            }
-            return Container(
-              height: 55.0,
-              child: Center(child:body),
-            );
-          },
-        ),
         controller: _refreshController,
         onRefresh: _onRefresh,
         onLoading: _onLoading,
@@ -168,9 +174,40 @@ class _FollowingVideoState extends State<FollowingVideo> {
       );
     }
     if(userId == null ) {
-      widget = Center(
-        child: Text('请先登录'),
-      );
+//      widget = Center(
+//        child: Text('请先登录'),
+//      );
+        widget = Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            Image.asset('images/bj.png', fit: BoxFit.cover,),
+            Center(
+              child: BlurRectWidget(
+                Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  '请先登录',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+//                Padding(
+//                  padding: const EdgeInsets.only(top: 5.0),
+//                  child: Text(
+//                    "请先登录",
+//                    style: TextStyle(fontSize: 14, color: Colors.black87),
+//                    textAlign: TextAlign.justify,
+//                  ),
+//                ),
+              ],
+            ),
+              ),
+            ),
+          ],
+        );
     }
     return Scaffold(
       appBar: new AppBar(
@@ -227,6 +264,7 @@ class _FollowingVideoState extends State<FollowingVideo> {
                 children: <Widget>[
                   Container(
                     alignment: Alignment.center,
+                    color: Colors.black,
                     child: Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
                   ),
                   InkWell(

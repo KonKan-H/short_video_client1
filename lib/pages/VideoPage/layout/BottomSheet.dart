@@ -364,6 +364,10 @@ class BottomReplyBar extends StatelessWidget {
         //IconButton(icon: Icon(Icons.email,color: Colors.grey[500],size: 50*rpx,),onPressed: (){showAtFriendPage(pCtx);},),
         IconButton(icon: Icon(Icons.face,color: Colors.grey[500],size: 50*rpx),
           onPressed: () async {
+            if(video.looker == null) {
+              TsUtils.showShort("请先登录");
+              return;
+            }
             if(_controller.text == null || _controller.text.length == 0) {
               TsUtils.showShort("评论内容为空");
               return;
