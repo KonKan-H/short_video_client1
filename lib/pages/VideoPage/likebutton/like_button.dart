@@ -105,7 +105,7 @@ class _LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
             child: GestureDetector(
               child: Icon(
                 widget.icon.icon,
-                color: isLiked ? widget.icon.color : Colors.grey,
+                color: isLiked ? widget.icon.color : Colors.white,
                 size: widget.width * 0.4,
               ),
               onTap: _onTap,

@@ -34,7 +34,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   _VideoPlayerPageState({Key key, @required this.video});
   final Video video;
   var userId, id, userName, userAvatar, sex, area, introduction, age, mobilePhone;
-  bool isLiked = false, isAttention;
+  bool isLiked, isAttention;
   double screenWidth;
   double screenHeight;
   List<Reply> replies = List();
@@ -43,7 +43,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 
   @override
   void initState() {
-    _getLikeAndAttention();
     super.initState();
     TsUtils.logInfo(ConstantData.VIDEO_FILE_URI + video.url);
     _videoPlayerController = VideoPlayerController.network(ConstantData.VIDEO_FILE_URI + video.url)
@@ -68,6 +67,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       }
     });
     _getReplyList();
+    _getLikeAndAttention();
   }
 
   _getUserInfo() {
@@ -91,20 +91,21 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   }
 
   _getLikeAndAttention() async {
-    if(userId == null) {
+    if(video.looker == null) {
       return;
     }
     Result likeResult = await DioRequest.dioPost(URL.VIDEO_LIKE_OR_NOT, Video.model2map(video));
     Attention attention = new Attention();
     attention.userId = video.authorId;
     attention.fansId = video.looker;
-    Result attentionResult = await DioRequest.dioPost(URL.USER_ATTENTION_OR_NOT,Attention.model2map(attention));
-    if(mounted) {
-      setState(() {
-        isLiked = likeResult.data;
-        isAttention = attentionResult.data;
-      });
-    }
+    DioRequest.dioPost(URL.USER_ATTENTION_OR_NOT,Attention.model2map(attention)).then((value) {
+      if(mounted) {
+        setState(() {
+          isLiked = likeResult.data;
+          isAttention = value.data;
+        });
+      }
+    });
   }
 
   @override
@@ -236,7 +237,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                         isLiked != null ? Container(
                           child: LikeButton(
                             width: 90.0,
-                            duration: Duration(seconds: 2),
+                            duration: Duration(seconds: 1),
                             circleStartColor: Color(0xffffff),
                             looker: userId,
                             video: video,
