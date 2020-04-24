@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 class TsUtils{
-  // md5 加密
+  /// md5 加密
   static String generateMd5(String data) {
     var content = new Utf8Encoder().convert(data);
     var digest = md5.convert(content);
@@ -33,6 +33,7 @@ class TsUtils{
   static void logInfo(String message) =>
       print('Info: {Infor Message: $message }');
 
+  ///数字处理
   static String dataDeal(int data) {
     if(data == null) {
       return 0.toString();
@@ -43,13 +44,14 @@ class TsUtils{
     return data.toString();
   }
 
+  ///日期处理
   static String dateDeal(String dateString) {
     DateTime dateTime = DateTime.parse(dateString).toLocal();
-//    String date = dateTime.toString();
     var format = new DateFormat("MM-dd HH:mm:ss");
     return format.format(dateTime);
   }
 
+  ///小弹窗
   static ProgressDialog showProgressDiolog(BuildContext context, String text) {
     ProgressDialog pr;
     pr = new ProgressDialog(context);

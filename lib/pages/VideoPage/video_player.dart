@@ -245,9 +245,17 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                           ),
                         ):Column(
                           children: <Widget>[
-                            Container(
-                                padding: EdgeInsets.fromLTRB(0, 7, 0, 0),
-                                child: Icon(Icons.favorite, color: Colors.white, size: 35,)
+                            Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                child: Container(
+                                    padding: EdgeInsets.fromLTRB(0, 7, 0, 0),
+                                    child: Icon(Icons.favorite, color: Colors.white, size: 35,)
+                                ),
+                                onTap: () {
+                                  TsUtils.showShort("请先登录");
+                                },
+                              ),
                             ),
                             Container(
                               child: Text("点赞", style: TextStyle(color: Colors.white, fontSize: 13, decoration: TextDecoration.none),),

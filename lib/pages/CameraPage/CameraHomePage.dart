@@ -86,7 +86,7 @@ class _MakeVideoState extends State<MakeVideo> {
                       Container(
                         child: Row(
                           children: <Widget>[
-                            Text('选择视频上传 ', style: TextStyle(fontSize: 16),),
+                            Text('选择视频上传(小于15MB) ', style: TextStyle(fontSize: 16),),
                             Text('*', style: TextStyle(color: Colors.red),)
                           ],
                         ),
@@ -133,7 +133,7 @@ class _MakeVideoState extends State<MakeVideo> {
                     children: <Widget>[
                       Container(
                         alignment: Alignment.topLeft,
-                        child: Text('选择封面上传 ', style: TextStyle(fontSize: 16),),
+                        child: Text('选择封面上传(小于15MB) ', style: TextStyle(fontSize: 16),),
                       ),
                       Container(
                         padding: EdgeInsets.all(10),
@@ -150,7 +150,6 @@ class _MakeVideoState extends State<MakeVideo> {
                                     color: Colors.grey[100],
                                     image: DecorationImage(
                                         image: NetworkImage(ConstantData.VIDEO_UPLOAD_PNG, scale: 4)
-//                                  image: FileImage(File('images/ic_arrow_add.png'))
                                     )
                                 ) : BoxDecoration(
                                     color: Colors.transparent,
@@ -202,13 +201,26 @@ class _MakeVideoState extends State<MakeVideo> {
                         TsUtils.showShort("选择上传视频");
                         return;
                       }
-                      ProgressDialog pr = TsUtils.showProgressDiolog(context, "视频上传中....");
-                      await pr.show();
-                      _uploadVideoInfo().then((result) {
-                        pr.hide();
+                      _video.length().then((value) async {
+                        if(value <= ConstantData.VIDEO_SIZE) {
+                          ProgressDialog pr = TsUtils.showProgressDiolog(context, "视频上传中....");
+                          await pr.show();
+                          _uploadVideoInfo().then((result) {
+                            pr.hide();
+                          });
+                          TsUtils.showShort("上传成功");
+                          Navigator.pop(context);
+                        } else {
+                          TsUtils.showShort("视频文件过大");
+                        }
+                        if(mounted) {
+                          setState(() {
+                            _video = null;
+                            _cover = null;
+                            _controller.text = null;
+                          });
+                        }
                       });
-                      TsUtils.showShort("上传成功");
-                      Navigator.pop(context);
                     },
                   ),
                 ),
