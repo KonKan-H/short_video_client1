@@ -165,7 +165,7 @@ class GridViewState extends State {
   Widget getItemWidget(Video video) {
     return Card(
       child: Container(
-        child: new Stack(
+        child: new Column(
           children: <Widget>[
             //封面
             new Container(
@@ -203,11 +203,11 @@ class GridViewState extends State {
             //头像
             Container(
               alignment: Alignment.bottomCenter,
+              height: 45,
               child: Stack(
                 children: <Widget>[
                   new Container(
-                    alignment: Alignment.bottomLeft,
-                    padding: EdgeInsets.fromLTRB(5, 0, 0, 5),
+                    padding: EdgeInsets.fromLTRB(5, 3, 0, 3),
                     child: new Container(
                       width: 40,
                       height: 40,

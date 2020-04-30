@@ -4,6 +4,7 @@ import 'package:short_video_client1/models/Result.dart';
 import 'package:short_video_client1/resources/net/Interceptors.dart';
 import 'package:short_video_client1/resources/tools.dart';
 import 'package:short_video_client1/resources/util/user_info_until.dart';
+import 'package:short_video_client1/resources/util/user_util.dart';
 
 class DioRequest {
 
@@ -93,7 +94,9 @@ class DioRequest {
 
    static _dioErrorDeal(DioError e) {
     if(e.message.contains("403")) {
-      TsUtils.showShort("token错误，请重新登录");
+      UserUntil.cleanUserInfo();
+      UserInfoUtil.cleanUserInfo();
+      TsUtils.showShort("token错误，强制退出");
     } else {
       TsUtils.showShort("权限受制，或请先登录");
     }

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/pages/common/user_info_page.dart';
+import 'package:short_video_client1/resources/common/bgWedget.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
@@ -76,7 +77,7 @@ class _MyAttentionsAndFansState extends State<MyAttentionsAndFans> {
       ),
       body: (userInfoList == null || userInfoList.length == 0) ? Center(
         child: Center(
-          child: Text('没有数据'),
+          child: bgWidget('没有数据'),
         ),
       ) : ListView.separated(
         itemCount: userInfoList.length,

@@ -217,7 +217,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
             ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(4.0),
             sliver: new SliverGrid( //Grid
               gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -246,8 +246,9 @@ class _UserInfoPageState extends State<UserInfoPage> {
   Widget getItemWidget(Video video) {
     return Card(
       child: Container(
-        child: new Stack(
+        child: new Column(
           children: <Widget>[
+            //封面
             new Container(
               height: ConstantData.VIDEO_HEIGHT,
               color: Colors.white70,
@@ -256,6 +257,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                 children: <Widget>[
                   Container(
                     alignment: Alignment.center,
+                    color: Colors.black,
                     child: Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
                   ),
                   InkWell(
@@ -271,11 +273,12 @@ class _UserInfoPageState extends State<UserInfoPage> {
             ),
             //头像
             Container(
+              alignment: Alignment.bottomCenter,
+              height: 45,
               child: Stack(
                 children: <Widget>[
                   new Container(
-                    alignment: Alignment.bottomLeft,
-                    padding: EdgeInsets.fromLTRB(5, 0, 0, 5),
+                    padding: EdgeInsets.fromLTRB(5, 3, 0, 3),
                     child: new Container(
                       width: 40,
                       height: 40,
@@ -320,7 +323,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
       ),
     );
   }
-
 }
 
 Future<bool> attentionUserYON(Attention attention, bool isAttention) async {

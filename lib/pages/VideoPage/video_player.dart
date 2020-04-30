@@ -258,7 +258,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                               ),
                             ),
                             Container(
-                              child: Text("点赞", style: TextStyle(color: Colors.white, fontSize: 13, decoration: TextDecoration.none),),
+                              child: Text((video.likes == null || video.likes == 0) ? "点赞" : video.likes.toString(), style: TextStyle(color: Colors.white, fontSize: 13, decoration: TextDecoration.none),),
                             )
                           ],
                         ),

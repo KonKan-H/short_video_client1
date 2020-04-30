@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:short_video_client1/models/Video.dart';
 import 'package:short_video_client1/pages/VideoPage/video_player.dart';
+import 'package:short_video_client1/resources/common/bgWedget.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
@@ -68,7 +69,7 @@ class _MyFavoriteVideoState extends State<MyFavoriteVideo> {
   Widget buildVideoList() {
     Widget layout;
     layout = (videoList == null || videoList.length == 0) ? Center(
-      child: Text("没有数据"),
+      child: bgWidget('没有数据'),
     ): GridView(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -96,8 +97,9 @@ class _MyFavoriteVideoState extends State<MyFavoriteVideo> {
   Widget getItemWidget(Video video) {
     return Card(
       child: Container(
-        child: new Stack(
+        child: new Column(
           children: <Widget>[
+            //封面
             Container(
               height: ConstantData.VIDEO_HEIGHT,
               color: Colors.white70,
@@ -134,11 +136,11 @@ class _MyFavoriteVideoState extends State<MyFavoriteVideo> {
             //头像
             Container(
               alignment: Alignment.bottomCenter,
+              height: 45,
               child: Stack(
                 children: <Widget>[
                   new Container(
-                    alignment: Alignment.bottomLeft,
-                    padding: EdgeInsets.fromLTRB(5, 0, 0, 5),
+                    padding: EdgeInsets.fromLTRB(5, 3, 0, 3),
                     child: new Container(
                       width: 40,
                       height: 40,

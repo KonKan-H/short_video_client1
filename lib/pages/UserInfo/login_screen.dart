@@ -29,28 +29,12 @@ class LoginScreen extends StatelessWidget {
     Result result = await DioRequest.dioPost(URL.USER_LOGIN, data);
     return Future.delayed(loginTime).then((_) async {
       if (result.code == 1) {
-        UserInfo userInfo = await UserInfoUtil.map2UserInfo(result.data);
-        Map<String, dynamic> data = {
-          "access_token": userInfo.accessToken
-        };
-        UserUntil.saveToke(data);
-        User user = User(userInfo.userId, userInfo.userName,
-            userInfo.userAvatar, userInfo.mobilePhone);
-        OsApplication.eventBus.fire(LoginEvent(
-            userInfo.userId,
-            user.userName,
-            user.userAvatar,
-            userInfo.age,
-            userInfo.sex,
-            userInfo.area,
-            userInfo.introduction,));
-        UserUntil.saveUserInfo(user);
-        UserInfoUtil.saveUserInfo(userInfo);
+        loginSuccess(result);
         TsUtils.showShort("登录成功");
         Navigator.pop(context);
         return null;
       } else {
-        return 'Username or password is incorrect';
+        return 'Username or password is incorrect or login is not allowed';
       }
     });
   }
@@ -62,11 +46,16 @@ class LoginScreen extends StatelessWidget {
     };
     Result result = await DioRequest.dioPost(URL.USER_REGISTER, data);
     return Future.delayed(loginTime).then((_) async {
-      if(result.code == 1) {
-        TsUtils.showShort("注册成功,请登录");
+      if(result.data == 1) {
+        TsUtils.showShort("注册成功");
+        Result r = await DioRequest.dioPost(URL.USER_LOGIN, data);
+        if (r.code == 1) {
+          loginSuccess(r);
+        }
 //        Navigator.of(context).pushReplacement(MaterialPageRoute(
 //          builder: (context) => LoginScreen(),
 //        ));
+        Navigator.pop(context);
         return null;
       } else {
         return 'Phone number has been registered';
@@ -229,4 +218,24 @@ class LoginScreen extends StatelessWidget {
       showDebugButtons: false,
     );
   }
+}
+
+void loginSuccess(Result result) async{
+  UserInfo userInfo = await UserInfoUtil.map2UserInfo(result.data);
+  Map<String, dynamic> data = {
+    "access_token": userInfo.accessToken
+  };
+  UserUntil.saveToke(data);
+  User user = User(userInfo.userId, userInfo.userName,
+      userInfo.userAvatar, userInfo.mobilePhone);
+  OsApplication.eventBus.fire(LoginEvent(
+    userInfo.userId,
+    user.userName,
+    user.userAvatar,
+    userInfo.age,
+    userInfo.sex,
+    userInfo.area,
+    userInfo.introduction,));
+  UserUntil.saveUserInfo(user);
+  UserInfoUtil.saveUserInfo(userInfo);
 }

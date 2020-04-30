@@ -6,6 +6,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/models/Video.dart';
 import 'package:short_video_client1/pages/VideoPage/video_player.dart';
+import 'package:short_video_client1/resources/common/bgWedget.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
@@ -118,7 +119,7 @@ class GridViewState extends State {
 //    Center(
 //      child: Text('没有数据',),
 //    )
-    CircularProgressIndicator()
+    bgWidget('没有数据')
         : SmartRefresher(
       enablePullUp: true,
       enablePullDown: true,
@@ -132,7 +133,8 @@ class GridViewState extends State {
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
 //          mainAxisSpacing: 8.0,
-            childAspectRatio: 0.5
+            childAspectRatio: 0.5,
+//            crossAxisSpacing: 0.2
         ),
         padding: const EdgeInsets.all(4.0),
         children: buildGridTileList(videoList),
@@ -156,7 +158,7 @@ class GridViewState extends State {
   Widget getItemWidget(Video video) {
     return Card(
       child: Container(
-        child: new Stack(
+        child: new Column(
           children: <Widget>[
             //封面
             Container(
@@ -206,11 +208,11 @@ class GridViewState extends State {
             //头像
             Container(
               alignment: Alignment.bottomCenter,
+              height: 45,
               child: Stack(
                 children: <Widget>[
                   new Container(
-                    alignment: Alignment.bottomLeft,
-                    padding: EdgeInsets.fromLTRB(5, 0, 0, 5),
+                    padding: EdgeInsets.fromLTRB(5, 3, 0, 3),
                     child: new Container(
                       width: 40,
                       height: 40,

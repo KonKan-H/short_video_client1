@@ -6,6 +6,7 @@ import 'package:short_video_client1/event/login_event.dart';
 import 'package:short_video_client1/models/Video.dart';
 import 'package:short_video_client1/pages/FollowingVideo/following_bj.dart';
 import 'package:short_video_client1/pages/VideoPage/video_player.dart';
+import 'package:short_video_client1/resources/common/bgWedget.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
@@ -128,37 +129,7 @@ class _FollowingVideoState extends State<FollowingVideo> {
     Widget widget;
     if (videoList == null || videoList.length == 0) {
       widget = Center(
-        child: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            Image.asset('images/bj.png', fit: BoxFit.cover,),
-            Center(
-              child: BlurRectWidget(
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      '关注用户没有发布视频',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-//                Padding(
-//                  padding: const EdgeInsets.only(top: 5.0),
-//                  child: Text(
-//                    "请先登录",
-//                    style: TextStyle(fontSize: 14, color: Colors.black87),
-//                    textAlign: TextAlign.justify,
-//                  ),
-//                ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+        child: bgWidget('关注用户没有发布视频'),
       );
     } else {
       widget = SmartRefresher(
@@ -177,37 +148,7 @@ class _FollowingVideoState extends State<FollowingVideo> {
 //      widget = Center(
 //        child: Text('请先登录'),
 //      );
-        widget = Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            Image.asset('images/bj.png', fit: BoxFit.cover,),
-            Center(
-              child: BlurRectWidget(
-                Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  '请先登录',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                ),
-//                Padding(
-//                  padding: const EdgeInsets.only(top: 5.0),
-//                  child: Text(
-//                    "请先登录",
-//                    style: TextStyle(fontSize: 14, color: Colors.black87),
-//                    textAlign: TextAlign.justify,
-//                  ),
-//                ),
-              ],
-            ),
-              ),
-            ),
-          ],
-        );
+        widget = bgWidget('请先登录');
     }
     return Scaffold(
       appBar: new AppBar(
@@ -254,7 +195,7 @@ class _FollowingVideoState extends State<FollowingVideo> {
   Widget getItemWidget(Video video) {
     return Card(
       child: Container(
-        child: new Stack(
+        child: new Column(
           children: <Widget>[
             new Container(
               height: ConstantData.VIDEO_HEIGHT,
@@ -280,11 +221,12 @@ class _FollowingVideoState extends State<FollowingVideo> {
             ),
             //头像
             Container(
+              alignment: Alignment.bottomCenter,
+              height: 45,
               child: Stack(
                 children: <Widget>[
                   new Container(
-                    alignment: Alignment.bottomLeft,
-                    padding: EdgeInsets.fromLTRB(5, 0, 0, 5),
+                    padding: EdgeInsets.fromLTRB(5, 3, 0, 3),
                     child: new Container(
                       width: 40,
                       height: 40,
