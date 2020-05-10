@@ -14,6 +14,7 @@ class Video{
   var looker;
   int currentPage;
   int pageSize;
+  int status;
 
   Video({
     this.id,
@@ -30,7 +31,8 @@ class Video{
     this.comments,
     this.looker,
     this.currentPage,
-    this.pageSize
+    this.pageSize,
+    this.status,
   });
 
   factory Video.formJson(Map<String, dynamic> json) {
@@ -49,7 +51,8 @@ class Video{
         comments:json['comments'],
         looker:json['looker'],
         currentPage: json['currentPage'],
-        pageSize: json['pageSize']
+        pageSize: json['pageSize'],
+        status: json['status'],
     );
   }
 
@@ -70,7 +73,8 @@ class Video{
       'commentss': video.comments,
       'looker' : video.looker,
       'currentPage' : video.currentPage,
-      'pageSize' : video.pageSize
+      'pageSize' : video.pageSize,
+        'status' : video.status
       };
       return map;
   }

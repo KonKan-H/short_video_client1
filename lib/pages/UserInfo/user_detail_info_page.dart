@@ -237,7 +237,7 @@ class _UserDetailInfoPageState extends State<UserDetailInfoPage> {
           onPressed: () async {
           if(_image != null) {
             _image.length().then((value) {
-              if (value / 1024 > (5 * 1024)) {
+              if (value / 1024 > (5 * 1024 * 1024)) {
                 TsUtils.showShort("头像选取过大，请重新选择");
                 return;
               }  

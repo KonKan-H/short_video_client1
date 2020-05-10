@@ -97,8 +97,6 @@ class DioRequest {
       UserUntil.cleanUserInfo();
       UserInfoUtil.cleanUserInfo();
       TsUtils.showShort("token错误，强制退出");
-    } else {
-      TsUtils.showShort("权限受制，或请先登录");
     }
    }
 }

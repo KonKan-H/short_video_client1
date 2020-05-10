@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/models/Video.dart';
+import 'package:short_video_client1/pages/FollowingVideo/following_bj.dart';
 import 'package:short_video_client1/pages/VideoPage/video_player.dart';
 import 'package:short_video_client1/resources/common/bgWedget.dart';
 import 'package:short_video_client1/resources/net/api.dart';
@@ -171,7 +172,34 @@ class GridViewState extends State {
                   Container(
                     color: Colors.black,
                     alignment: Alignment.center,
-                    child: Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
+                    child: Stack(
+                      children: <Widget>[
+                        Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
+                        Center(
+                          child: Offstage(
+                            offstage: video.status == 1,
+                            child: BlurRectWidget(
+                              Container(
+                                width: 60,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      video.status == 0 ? '违规视频，已被管理员封禁':'审核中',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ),
+                          )
+                        ),
+                      ],
+                    )
                   ),
                   InkWell(
                     onTap: () {

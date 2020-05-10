@@ -6,6 +6,7 @@ import 'package:short_video_client1/event/login_event.dart';
 import 'package:short_video_client1/models/UserInfo.dart';
 import 'package:short_video_client1/models/Video.dart';
 import 'package:short_video_client1/pages/VideoPage/video_player.dart';
+import 'package:short_video_client1/resources/common/bgWedget.dart';
 import 'package:short_video_client1/resources/net/api.dart';
 import 'package:short_video_client1/resources/net/request.dart';
 import 'package:short_video_client1/resources/strings.dart';
@@ -127,7 +128,7 @@ class GridViewState extends State {
 //    Center(
 //      child: Text('没有数据',),
 //    )
-    CircularProgressIndicator()
+    bgWidget('没有数据')
         : SmartRefresher(
       enablePullUp: true,
       enablePullDown: true,
