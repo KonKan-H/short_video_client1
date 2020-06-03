@@ -24,6 +24,7 @@ class LoginScreen extends StatelessWidget {
   Future<String> _loginUser(LoginData loginData) async {
     Map<String, dynamic> data = {
       "mobilePhone": loginData.name,
+      //md5加密用户密码
       "password": TsUtils.generateMd5(loginData.password)
     };
     Result result = await DioRequest.dioPost(URL.USER_LOGIN, data);
@@ -225,6 +226,7 @@ void loginSuccess(Result result) async{
   Map<String, dynamic> data = {
     "access_token": userInfo.accessToken
   };
+  //保存token
   UserUntil.saveToke(data);
   User user = User(userInfo.userId, userInfo.userName,
       userInfo.userAvatar, userInfo.mobilePhone);
@@ -236,6 +238,7 @@ void loginSuccess(Result result) async{
     userInfo.sex,
     userInfo.area,
     userInfo.introduction,));
+  //保存用户信息
   UserUntil.saveUserInfo(user);
   UserInfoUtil.saveUserInfo(userInfo);
 }

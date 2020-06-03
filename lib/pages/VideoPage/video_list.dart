@@ -174,7 +174,9 @@ class GridViewState extends State {
                     alignment: Alignment.center,
                     child: Stack(
                       children: <Widget>[
-                        Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
+                        Center(
+                          child: Image.network(ConstantData.COVER_FILE_URI + video.cover, fit: BoxFit.cover,),
+                        ),
                         Center(
                           child: Offstage(
                             offstage: video.status == 1,

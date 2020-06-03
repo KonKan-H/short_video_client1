@@ -82,7 +82,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
     Map<String, dynamic> data = {
       "userId" : authorId
     };
-    DioRequest.dioPost(URL.GET_VIDEO_LIST, data).then((result) {
+    DioRequest.dioPost(URL.GET_USER_VIDEO_LIST, data).then((result) {
       List<Video> l = List();
       print(result.data);
       Video video;

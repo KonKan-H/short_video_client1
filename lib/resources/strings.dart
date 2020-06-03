@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class ConstantData{
 //  static const String URL_BASE = 'http://10.4.250.26';
-  static const String URL_BASE = 'http://192.168.43.93';
-//  static const String URL_BASE = 'http://112.126.82.137';
+//  static const String URL_BASE = 'http://192.168.43.93';
+  static const String URL_BASE = 'http://112.126.82.137';
 
   static const String URL_HEADER_PORT = URL_BASE + ":8080/";
 

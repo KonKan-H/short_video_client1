@@ -4,9 +4,9 @@ class URL{
   //10.20.8.155为服务端 IP地址
   //static const String BASE_URL = 'http://10.20.8.155:9250/v3';
   //dev uat
-  static const String BASE_URL = ConstantData.URL_BASE + ':9250/v3';
+//  static const String BASE_URL = ConstantData.URL_BASE + ':9250/v3';
   //prod
-//  static const String BASE_URL = ConstantData.URL_BASE + ':9025/v3';
+  static const String BASE_URL = ConstantData.URL_BASE + ':9025/v3';
 
   //注册
   static const String USER_REGISTER = BASE_URL + '/v1/registration/api';
@@ -22,6 +22,9 @@ class URL{
 
   //获取视频
   static const String GET_VIDEO_LIST = BASE_URL + '/v1/video/init/api';
+
+  //获取用户视频
+  static const String GET_USER_VIDEO_LIST = BASE_URL + '/v1/video/user/api';
 
   //点赞
   static const String VIDEO_LIKE = BASE_URL + '/v1/like/api';
